@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Approach to Acute Abdominal Pain — Interactive Clinical Guide</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    .region-shape { transition: all 0.2s ease; cursor: pointer; }
+    .region-shape:hover { filter: brightness(0.95); stroke-width: 2.5; }
+    .region-active { stroke: #0f766e !important; stroke-width: 3 !important; filter: drop-shadow(0 4px 10px rgba(15, 118, 110, 0.25)); }
+    .fade-in { animation: fadeIn 0.22s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- Top Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-teal-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">
+          +
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">Approach to Acute Abdominal Pain</h1>
+          <p class="text-xs text-slate-500">Step-by-step interactive clinical reasoning guide</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-full text-xs font-medium text-slate-700">
+          <span>Mastery Progress:</span>
+          <span id="progress-text" class="font-bold text-teal-700">1 / 5 Steps</span>
+        </div>
+        <button id="reset-progress-btn" type="button" class="text-xs font-medium text-slate-500 hover:text-slate-800 px-2.5 py-1.5 rounded-lg hover:bg-slate-100 transition">
+          Reset
+        </button>
+      </div>
+    </div>
+
+    <!-- Step Navigation Bar -->
+    <nav class="bg-slate-50/80 border-t border-slate-200/80 overflow-x-auto no-scrollbar">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center gap-1.5 py-2" id="step-nav">
+        <!-- Populated by JS -->
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6">
+    <div id="step-container" class="fade-in">
+      <!-- Active Step Content Rendered Here -->
+    </div>
+  </main>
+
+  <!-- Bottom Step Footer -->
+  <footer class="bg-white border-t border-slate-200 mt-auto">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
+      <button id="prev-step-btn" type="button" class="px-4 py-2 rounded-xl border border-slate-300 text-sm font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+        ← Previous Step
+      </button>
+      <div class="flex items-center gap-2">
+        <button id="mark-complete-btn" type="button" class="px-3.5 py-2 rounded-xl bg-teal-50 text-teal-700 border border-teal-200 text-xs sm:text-sm font-semibold hover:bg-teal-100 transition">
+          Mark Step Complete
+        </button>
+        <button id="next-step-btn" type="button" class="px-4 py-2 rounded-xl bg-teal-600 text-white text-sm font-semibold hover:bg-teal-700 disabled:opacity-40 disabled:cursor-not-allowed transition shadow-sm">
+          Next Step →
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // =========================================================
+    // CLINICAL DATA (Grounded in Structured Approach Framework)
+    // =========================================================
+    const STEPS = [
+      { id: 1, short: "1. Anatomy & Map", title: "Step 1: Anatomical Frameworks & Pain Mapping" },
+      { id: 2, short: "2. RUQ & Rare DDx", title: "Step 2: RUQ Deep Dive, Generalized & Rare Causes" },
+      { id: 3, short: "3. Workup & Labs", title: "Step 3: History, Physical Exam, Labs & Imaging" },
+      { id: 4, short: "4. Illness Scripts", title: "Step 4: Illness Scripts Comparator" },
+      { id: 5, short: "5. Red Flags & Cases", title: "Step 5: Surgical Abdomen, Shock & Case Simulator" }
+    ];
+
+    const NINE_REGIONS = {
+      ruq: {
+        name: "Right Upper Quadrant (RUQ)",
+        summary: "Primarily hepatobiliary structures, plus referred intrathoracic or subdiaphragmatic pathology.",
+        structures: ["Liver", "Gallbladder & Biliary Tree", "Right Lower Lobe (referred)", "Subdiaphragmatic space"],
+        diagnoses: [
+          "Acute viral hepatitis & liver abscess",
+          "Alcohol / medication-induced hepatitis, hepatic congestion (HF), Budd-Chiari syndrome",
+          "Biliary colic (gallstones) & Choledocholithiasis",
+          "Acute cholecystitis & Acute cholangitis",
+          "Referred pain: Right lower lobe pneumonia",
+          "Right-sided subdiaphragmatic abscess"
+        ],
+        radiation: "Hepatic and biliary pathology often radiates to the right shoulder."
+      },
+      epigastric: {
+        name: "Epigastric Region",
+        summary: "Classic site for foregut structures and upper GI/pancreatic disease—always consider cardiac referral.",
+        structures: ["Esophagus / Stomach", "Duodenum", "Pancreas", "Heart (referred)"],
+        diagnoses: [
+          "Gastroesophageal reflux disease (GERD)",
+          "Gastritis",
+          "Peptic ulcer disease (PUD)",
+          "Gastroparesis (most commonly a complication of diabetes)",
+          "Pancreatitis",
+          "Referred pain from Acute Coronary Syndrome (ACS)"
+        ],
+        radiation: "PUD and pancreatitis can radiate to the back (pancreatitis classically straight backwards)."
+      },
+      luq: {
+        name: "Left Upper Quadrant (LUQ)",
+        summary: "Dominated by splenic pathology and referred left-sided thoracic/subdiaphragmatic disease.",
+        structures: ["Spleen", "Subdiaphragmatic space", "Left Lower Lobe (referred)"],
+        diagnoses: [
+          "Splenic infarct",
+          "Splenic abscess",
+          "Splenic rupture",
+          "Subdiaphragmatic abscess",
+          "Referred pain from Left lower lobe pneumonia"
+        ],
+        radiation: "May refer toward the left shoulder if diaphragmatic irritation is present."
+      },
+      rflank: {
+        name: "Right Flank",
+        summary: "Retroperitoneal urinary tract structures.",
+        structures: ["Right Kidney", "Right Ureter", "Perinephric space"],
+        diagnoses: [
+          "Nephrolithiasis (kidney stone)",
+          "Pyelonephritis (kidney infection)",
+          "Perinephric abscess"
+        ],
+        radiation: "Pyelonephritis radiates around the flank to the lateral back; nephrolithiasis radiates to the groin."
+      },
+      periumbilical: {
+        name: "Periumbilical (Center)",
+        summary: "Midgut visceral pain zone—ranges from benign gastroenteritis to vascular catastrophes.",
+        structures: ["Small Bowel", "Mesenteric Vessels", "Abdominal Aorta", "Appendix (early visceral phase)"],
+        diagnoses: [
+          "Simple viral gastroenteritis (most common)",
+          "Small bowel obstruction (SBO)",
+          "Mesenteric ischemia ('angina of the gut')",
+          "Ruptured abdominal aortic aneurysm (AAA)",
+          "Early appendicitis (before somatic migration to RLQ)"
+        ],
+        radiation: "AAA classically radiates straight backwards."
+      },
+      lflank: {
+        name: "Left Flank",
+        summary: "Retroperitoneal urinary tract structures.",
+        structures: ["Left Kidney", "Left Ureter", "Perinephric space"],
+        diagnoses: [
+          "Nephrolithiasis (kidney stone)",
+          "Pyelonephritis (kidney infection)",
+          "Perinephric abscess"
+        ],
+        radiation: "Pyelonephritis radiates around the flank to the lateral back; nephrolithiasis radiates to the groin."
+      },
+      rlq: {
+        name: "Right Lower Quadrant (RLQ)",
+        summary: "Classic location for appendicitis plus pelvic/gonadal emergencies.",
+        structures: ["Appendix", "Right Ovary / Fallopian Tube", "Right Testicle (referred/cord)", "Cecum"],
+        diagnoses: [
+          "Appendicitis (RLQ only, unless unusual anatomic variation)",
+          "Ovarian or testicular torsion",
+          "Ruptured ovarian cyst",
+          "Tubo-ovarian abscess (TOA)",
+          "Ectopic pregnancy",
+          "Diverticulitis (less common on right than left)"
+        ],
+        radiation: "Appendicitis classically migrates from periumbilical (visceral) to RLQ (parietal)."
+      },
+      suprapubic: {
+        name: "Suprapubic (Hypogastric)",
+        summary: "Bladder and pelvic reproductive organs—never miss ectopic pregnancy.",
+        structures: ["Urinary Bladder", "Uterus & Adnexa"],
+        diagnoses: [
+          "Cystitis / simple urinary tract infection (UTI)",
+          "Pelvic inflammatory disease (PID — severe complication of STIs)",
+          "Ectopic pregnancy (embryo implanted outside uterus; non-viable and life-threatening)"
+        ],
+        radiation: "Can be widespread across the lower pelvis."
+      },
+      llq: {
+        name: "Left Lower Quadrant (LLQ)",
+        summary: "Most common site for diverticulitis, plus pelvic/gonadal emergencies.",
+        structures: ["Sigmoid / Descending Colon", "Left Ovary / Fallopian Tube", "Left Testicle (referred/cord)"],
+        diagnoses: [
+          "Diverticulitis (much more common on left than right)",
+          "Ovarian or testicular torsion",
+          "Ruptured ovarian cyst",
+          "Tubo-ovarian abscess (TOA)",
+          "Ectopic pregnancy"
+        ],
+        radiation: "Pelvic/gonadal pain can radiate broadly into the lower abdomen or groin."
+      }
+    };
+
+    const FOUR_QUADRANTS = {
+      ruq_q: { name: "Right Upper Quadrant (4-Q)", items: ["Liver & biliary tree (hepatitis, abscess, biliary colic, cholecystitis, cholangitis)", "RLL pneumonia & subdiaphragmatic abscess", "Hepatic congestion / Budd-Chiari"] },
+      luq_q: { name: "Left Upper Quadrant (4-Q)", items: ["Spleen (infarct, abscess, rupture)", "Subdiaphragmatic abscess", "LLL pneumonia", "Gastric / pancreatic tail pathology"] },
+      rlq_q: { name: "Right Lower Quadrant (4-Q)", items: ["Appendicitis", "Ovarian/testicular torsion, ruptured cyst, TOA, ectopic pregnancy", "Nephrolithiasis / UTI"] },
+      llq_q: { name: "Left Lower Quadrant (4-Q)", items: ["Diverticulitis", "Ovarian/testicular torsion, ruptured cyst, TOA, ectopic pregnancy", "Nephrolithiasis / UTI"] }
+    };
+
+    const APPENDICITIS_PHASES = [
+      {
+        phase: "Phase 1: Early (Visceral Fibers)",
+        location: "Periumbilical",
+        character: "Vague, poorly localized discomfort",
+        exam: "Not yet associated with focal RLQ tenderness",
+        mechanism: "Triggered purely by visceral pain fibers from luminal distension/inflammation."
+      },
+      {
+        phase: "Phase 2: Parietal Peritoneal Inflammation",
+        location: "Right Lower Quadrant (RLQ)",
+        character: "Sharper, localized pain",
+        exam: "Significant focal tenderness (McBurney's point: 1/3 distance from ASIS to umbilicus)",
+        mechanism: "Peritoneum overlying the appendix becomes inflamed, activating somatic pain fibers."
+      },
+      {
+        phase: "Phase 3: Late (Perforation)",
+        location: "Generalized / Diffuse",
+        character: "Severe diffuse abdominal pain",
+        exam: "Peritoneal signs (rigidity, rebound, guarding) from secondary peritonitis",
+        mechanism: "Delayed identification/treatment leads to appendiceal perforation and diffuse peritonitis."
+      }
+    ];
+
+    const RADIATION_PATTERNS = [
+      { condition: "Pyelonephritis", pattern: "Around the flank → Lateral back", badge: "Flank" },
+      { condition: "Nephrolithiasis", pattern: "Flank → Groin", badge: "Flank" },
+      { condition: "Hepatic & Biliary Pathology", pattern: "RUQ → Right shoulder", badge: "RUQ" },
+      { condition: "Pancreatitis & AAA", pattern: "Epigastric / Periumbilical → Straight backwards", badge: "Midline" }
+    ];
+
+    const RUQ_TREE = [
+      {
+        category: "Liver (Hepatic)",
+        subgroups: [
+          { type: "Infectious", color: "amber", items: ["Acute viral hepatitis", "Liver abscess"] },
+          { type: "Non-Infectious", color: "sky", items: ["Alcohol-induced hepatitis", "Medication-induced hepatitis", "Hepatic congestion (from heart failure)", "Budd-Chiari syndrome (hepatic vein obstruction)"] }
+        ]
+      },
+      {
+        category: "Biliary System",
+        subgroups: [
+          { type: "Infectious", color: "amber", items: ["Acute cholecystitis (gallbladder inflammation & infection)", "Acute cholangitis (common bile duct inflammation & infection)"] },
+          { type: "Non-Infectious", color: "sky", items: ["Biliary colic (simple gallstones in gallbladder)", "Choledocholithiasis (gallstone trapped in or passing through CBD)"] }
+        ]
+      },
+      {
+        category: "Other / Referred",
+        subgroups: [
+          { type: "Extrabiliary", color: "slate", items: ["Referred pain from Right Lower Lobe (RLL) pneumonia", "Right-sided subdiaphragmatic abscess"] }
+        ]
+      }
+    ];
+
+    const GENERALIZED_CAUSES = [
+      { name: "Inflammatory Bowel Disease (IBD)", note: "Can present with diffuse or poorly localized abdominal pain." },
+      { name: "Infectious Colitis (e.g., C. difficile)", note: "Diffuse cramping, diarrhea, systemic inflammatory signs." },
+      { name: "Spontaneous Bacterial Peritonitis (SBP)", note: "Occurs specifically in patients with chronic ascites." },
+      { name: "Secondary Peritonitis", note: "Typically occurs from bowel perforation; causes diffuse peritoneal signs." },
+      { name: "Diabetic Ketoacidosis (DKA)", note: "Metabolic cause of generalized acute abdominal pain." }
+    ];
+
+    const RARE_CAUSES = [
+      { name: "Adrenal Insufficiency", pearl: "Can mimic an acute abdomen with hypotension and abdominal pain." },
+      { name: "Acute Intermittent Porphyria", pearl: "Classic rare metabolic cause of severe unexplained abdominal pain." },
+      { name: "Abdominal Migraine", pearl: "Episodic central abdominal pain without structural GI disease." },
+      { name: "Angioedema (Intestinal)", pearl: "Often surprises clinicians—same mucosal swelling seen in face/throat can occur in the gut." },
+      { name: "Colonic Pseudo-obstruction", pearl: "Marked colonic dilation without mechanical obstruction." },
+      { name: "Herpes Zoster", pearl: "Neuropathic pain can precede the unilateral vesicular rash by a few days." },
+      { name: "Rectus Sheath Hematoma", pearl: "Abdominal wall etiology mimicking intra-abdominal pathology." }
+    ];
+
+    const WORKUP_STAGES = [
+      {
+        id: "history",
+        title: "1. Focused History",
+        items: [
+          { label: "Chronology — Acuity of Onset", detail: "Extremely abrupt onset suggests bowel perforation or vascular catastrophe (intra-abdominal thromboembolism, ruptured AAA, ovarian/testicular torsion)." },
+          { label: "Duration & Pattern (Episodic vs. Continuous)", detail: "Episodic pain generally suggests less imminently dangerous pathology (biliary colic, PUD, GERD, chronic mesenteric ischemia, gastroparesis). CAVEAT: Intermittent epigastric pain can be an atypical presentation of ACS." },
+          { label: "Location, Radiation & Exacerbating Factors", detail: "Pain related to food intake suggests upper GI, pancreatic, or biliary pathology." },
+          { label: "Associated Symptoms", detail: "Nausea/vomiting, diarrhea/constipation, GI bleed, lack of flatus/passing gas, fever, jaundice, dysuria, hematuria." },
+          { label: "Background Histories", detail: "PMH/PSH, Gynecological history, Medications, Sexual history (STI risk), Substance use (especially alcohol), Travel, General exposures." }
+        ]
+      },
+      {
+        id: "exam",
+        title: "2. Physical Exam",
+        items: [
+          { label: "Vital Signs First", detail: "Always assess hemodynamic stability before anything else." },
+          { label: "Thorough Abdominal Exam", detail: "Inspect, auscultate, percuss, and palpate for tenderness, guarding, rigidity, and peritoneal signs." },
+          { label: "Pelvic Exam (When Indicated)", detail: "Perform if any reproductive pathology is on the differential for a female patient." },
+          { label: "Cardiac & Pulmonary Exams", detail: "Essential because cardiac and pulmonary diseases (e.g., ACS, lower lobe pneumonia) can refer to the upper abdomen." },
+          { label: "Rectal Exam Pearl", detail: "Generally NOT indicated unless anorectal or prostatic disease is specifically suspected." }
+        ]
+      },
+      {
+        id: "labs",
+        title: "3. Targeted Labs",
+        items: [
+          { label: "Core Panel: CBC, LFTs, Metabolic Panel, Lipase", detail: "Lipase specifically helps identify pancreatitis. Avoid amylase—it is nonspecific and does not contribute useful information." },
+          { label: "Urine hCG (Pregnancy Screen)", detail: "Order in EVERY woman of childbearing age, even if she reports no sexual activity—ectopic pregnancy cannot be missed." },
+          { label: "Lactate", detail: "Order if acute bowel ischemia is suspected; elevated lactate is consistent with infarction." },
+          { label: "Troponin & ECG", detail: "Rule out ACS unless the patient is young, healthy, and has no cardiovascular risk factors." },
+          { label: "UA ± Urine Culture", detail: "Order if the patient reports dysuria or hematuria." }
+        ]
+      },
+      {
+        id: "imaging",
+        title: "4. Imaging",
+        items: [
+          { label: "Chest X-Ray (CXR)", detail: "Order for upper abdominal pain or concurrent pulmonary symptoms (upright CXR also helps detect free air)." },
+          { label: "CT & Ultrasound", detail: "While clinicians often over-rely on imaging in medicine, acute abdominal pain is NOT one of them—CT, RUQ ultrasound, and targeted imaging are frequently indispensable." }
+        ]
+      }
+    ];
+
+    const ILLNESS_SCRIPTS = {
+      midline: [
+        {
+          id: "pud",
+          name: "Peptic Ulcer Disease (PUD)",
+          pain: "Epigastric, occasionally radiating to the back; may be triggered by eating.",
+          associated: "Occasionally nausea/vomiting and/or overt GI bleeding (e.g., melena), though usually absent.",
+          risks: "NSAID use, H. pylori infection.",
+          exam: "Mild-to-moderate epigastric tenderness. Peritoneal signs = likely perforated ulcer → needs a surgeon.",
+          labs: "Routine blood tests usually unremarkable unless significant bleeding.",
+          dx: "EGD (supplemented with H. pylori testing)."
+        },
+        {
+          id: "gastro",
+          name: "Gastroenteritis",
+          pain: "Typically periumbilical, often cramping.",
+          associated: "Nausea, vomiting, diarrhea, fever.",
+          risks: "No major risk factors outside of an outbreak.",
+          exam: "Mild-to-moderate periumbilical or generalized tenderness; NO rigidity or peritoneal signs; signs of dehydration common.",
+          labs: "Only typical abnormality is elevated WBC count.",
+          dx: "Clinical diagnosis (no imaging/endoscopy needed); stool PCR panels used in some centers for pathogen ID."
+        },
+        {
+          id: "sbo",
+          name: "Small Bowel Obstruction (SBO)",
+          pain: "Typically periumbilical and crampy.",
+          associated: "Nausea, vomiting, abdominal distension, absence of flatus.",
+          risks: "Prior abdominal/pelvic surgery, hernias, foreign body ingestion, IBD, intestinal tumor.",
+          exam: "Abdominal distension, high-pitched rushing bowel sounds, dehydration; peritoneal signs suggest perforation or infarction.",
+          labs: "Electrolyte disturbances / hemoconcentration from dehydration.",
+          dx: "CT scan (identifies obstruction location & cause). If CT unavailable: upright & supine abdominal films ± upright CXR for free air."
+        },
+        {
+          id: "appendicitis",
+          name: "Appendicitis",
+          pain: "Classically RLQ, often begins periumbilical. Severe generalized pain suggests perforation.",
+          associated: "Nausea, vomiting, and anorexia usually FOLLOW onset of pain (not before).",
+          risks: "No major modifiable risk factors.",
+          exam: "McBurney's point tenderness (1/3 distance from ASIS to umbilicus); Rovsing's, Psoas, Obturator signs; often febrile; peritoneal signs = perforation.",
+          labs: "Elevated WBC count and elevated CRP.",
+          dx: "Alvarado score (clinical prediction rule) + CT or Ultrasound (institution/situation dependent)."
+        },
+        {
+          id: "pancreatitis",
+          name: "Pancreatitis",
+          pain: "Epigastric radiating to the back; exacerbated by eating, relieved by sitting up & leaning forward.",
+          associated: "Usually nausea & vomiting; dyspnea is more common here than in other midline scripts.",
+          risks: "Alcohol & gallstones (majority); less common: ERCP, hypertriglyceridemia, medications.",
+          exam: "Severe cases: shock; periumbilical or flank ecchymosis (suggests hemorrhage from pancreatic necrosis).",
+          labs: "Very elevated lipase (typically > 3× upper limit of normal).",
+          dx: "Clinical + Lipase (>3× ULN); CT not required for diagnosis but assesses complications & pancreatic duct gallstones."
+        }
+      ],
+      ruq: [
+        {
+          id: "biliary_colic",
+          name: "Biliary Colic",
+          pain: "Episodic RUQ pain lasting 30 minutes to several hours; often triggered by eating.",
+          associated: "NO associated jaundice.",
+          risks: "Female sex, pregnancy, obesity, rapid weight loss, diabetes.",
+          exam: "Usually unremarkable.",
+          labs: "Routine blood tests usually unremarkable.",
+          dx: "RUQ ultrasound shows gallstones (non-emergent study if classic presentation)."
+        },
+        {
+          id: "cholecystitis",
+          name: "Acute Cholecystitis",
+          pain: "Progressive RUQ pain over hours.",
+          associated: "Nausea & vomiting common; NO jaundice (CBD not involved).",
+          risks: "Known pre-existing gallstones.",
+          exam: "Often febrile; Murphy's sign (↑ RUQ tenderness on inspiration) or Sonographic Murphy's sign (more specific).",
+          labs: "Elevated WBC count with normal or near-normal LFTs.",
+          dx: "RUQ ultrasound (definitive diagnosis)."
+        },
+        {
+          id: "cholangitis",
+          name: "Acute Cholangitis",
+          pain: "Similar to acute cholecystitis.",
+          associated: "Nausea & vomiting common; JAUNDICE occurs.",
+          risks: "Benign biliary strictures, malignant biliary obstruction (e.g., pancreatic tumors), gallstones.",
+          exam: "Patients generally appear MORE ILL than other RUQ causes (less obvious in elderly or immunosuppressed).",
+          labs: "High WBC, high bilirubin (predominantly direct/conjugated), high alkaline phosphatase, ± mild-moderate AST/ALT elevation.",
+          dx: "If high pretest probability → proceed directly to ERCP; otherwise RUQ ultrasound."
+        },
+        {
+          id: "hepatitis",
+          name: "Acute Hepatitis",
+          pain: "Similar to acute cholangitis, though onset is often slightly more prolonged.",
+          associated: "Variable liver dysfunction symptoms depending on severity & acuity.",
+          risks: "Hepatitis viruses (esp. A), alcohol, acetaminophen toxicity, autoimmune hepatitis.",
+          exam: "Fever sometimes present; variable signs of liver dysfunction.",
+          labs: "High WBC, extremely elevated AST & ALT (often >1,000), high alk phos, high bilirubin (direct ≈ indirect), elevated INR.",
+          dx: "Hepatitis virus serologies, acetaminophen level (needs known ingestion time), autoimmune antibodies if unclear."
+        }
+      ]
+    };
+
+    const SURGICAL_SIGNS = [
+      { id: "rigidity", label: "Rigidity (Involuntary Guarding)", note: "The single most concerning abdominal physical exam finding." },
+      { id: "severe_tenderness", label: "Unusually Severe Tenderness to Palpation", note: "Out of proportion or marked focal/diffuse tenderness." },
+      { id: "rebound", label: "Rebound Tenderness", note: "Pain on quick release of pressure is worse than slow pressure applied." },
+      { id: "cough", label: "Positive Cough Test", note: "Pain worsens when the patient coughs." },
+      { id: "bed_bump", label: "Bed Bump Test", note: "Pain worsens when examiner bumps the bed hard (works best on a gurney)." },
+      { id: "heel_strike", label: "Heel Strike / Jump Test", note: "Pain worsens when firmly striking the heel (or standing & jumping in place)." },
+      { id: "absent_bs", label: "Absent Bowel Sounds", note: "Suggests ileus / advanced peritoneal irritation." }
+    ];
+
+    const SHOCK_CAUSES = [
+      { name: "Acute Cholangitis", tag: "Sepsis" },
+      { name: "Bowel Perforation", tag: "Peritonitis / Sepsis" },
+      { name: "Bowel Infarction", tag: "Vascular / Necrosis" },
+      { name: "Ruptured Ectopic Pregnancy", tag: "Hemorrhage" },
+      { name: "Ruptured AAA", tag: "Hemorrhage (Extraperitoneal)" },
+      { name: "Splenic Rupture", tag: "Hemorrhage" },
+      { name: "Massive GI Bleed", tag: "Hemorrhage" },
+      { name: "Acute Myocardial Infarction (AMI)", tag: "Cardiogenic / Referred" }
+    ];
+
+    const CASES = [
+      {
+        vignette: "A 52-year-old man with a history of alcohol use presents with severe epigastric pain radiating straight to his back. It worsened after dinner and feels slightly better when he sits up and leans forward. He has nausea, vomiting, and mild dyspnea.",
+        question: "Which lab test is most specific to confirm your primary suspected diagnosis, and what threshold supports it?",
+        options: [
+          "Serum amylase > 2× upper limit of normal",
+          "Serum lipase > 3× upper limit of normal",
+          "Elevated CRP + Alvarado score",
+          "Direct bilirubin predominance + high alkaline phosphatase"
+        ],
+        correct: 1,
+        explanation: "Classic acute pancreatitis (epigastric pain radiating straight back, relieved by leaning forward, associated with dyspnea/nausea/vomiting, alcohol risk). Lipase (>3× ULN) is the key lab; amylase is nonspecific and unhelpful."
+      },
+      {
+        vignette: "A 24-year-old woman presents with acute suprapubic and RLQ pain and lightheadedness (BP 84/52, HR 122). She states she has not been sexually active recently.",
+        question: "What is the most critical immediate test you must order regardless of her reported sexual history?",
+        options: [
+          "Rectal exam to rule out prostatic/anorectal disease",
+          "Stool PCR panel",
+          "Urine hCG",
+          "Upright abdominal X-ray"
+        ],
+        correct: 2,
+        explanation: "Always obtain a urine hCG in any woman of childbearing age—even if she reports no sexual activity. Ruptured ectopic pregnancy is a life-threatening cause of abdominal pain with shock that you cannot afford to miss."
+      },
+      {
+        vignette: "A 68-year-old man presents with RUQ pain, fever, nausea, vomiting, and new jaundice. He appears notably ill. Labs show high WBC, predominantly direct (conjugated) bilirubin, and markedly elevated alkaline phosphatase.",
+        question: "If your pretest probability for this diagnosis is high, what is the most direct diagnostic/therapeutic next step?",
+        options: [
+          "Proceed directly to ERCP",
+          "Discharge with non-emergent outpatient RUQ ultrasound",
+          "Check acetaminophen level only",
+          "Order EGD for H. pylori"
+        ],
+        correct: 0,
+        explanation: "This is acute cholangitis (RUQ pain + fever + jaundice + ill-appearing + cholestatic LFTs with direct bilirubin & high alk phos). When pretest probability is high, proceed directly to ERCP."
+      },
+      {
+        vignette: "A 61-year-old woman with a history of prior pelvic surgery presents with crampy periumbilical pain, nausea, vomiting, abdominal distension, and no flatus for 24 hours. Exam shows high-pitched rushing bowel sounds without peritoneal signs.",
+        question: "Which imaging study should be ordered next to identify the location and potential cause?",
+        options: [
+          "No imaging needed; treat clinically as viral gastroenteritis",
+          "CT scan of the abdomen",
+          "HIDA / RUQ ultrasound",
+          "EGD"
+        ],
+        correct: 1,
+        explanation: "Small bowel obstruction (crampy periumbilical pain, vomiting, distension, absent flatus, prior surgery, high-pitched rushing bowel sounds). All patients with suspected SBO should get a CT to localize the obstruction and identify causes (plain films are an alternative if CT is unavailable)."
+      },
+      {
+        vignette: "A 74-year-old smoker presents with sudden, extremely abrupt periumbilical pain radiating straight to his back, accompanied by hypotension (BP 78/48). On abdominal exam, there is no rigidity or rebound tenderness.",
+        question: "Why might rigidity and peritoneal signs be absent despite a life-threatening surgical emergency?",
+        options: [
+          "Because episodic pain is always benign",
+          "Because extraperitoneal emergencies like a ruptured AAA do not always present with a 'surgical abdomen'",
+          "Because periumbilical pain only represents viral gastroenteritis",
+          "Because elderly patients cannot develop pancreatitis"
+        ],
+        correct: 1,
+        explanation: "Abrupt onset + back radiation + shock in an older adult strongly points to a ruptured AAA. Not every surgical emergency presents with a classic 'surgical abdomen' (rigidity/peritoneal signs), especially extraperitoneal emergencies like a ruptured AAA."
+      }
+    ];
+
+    // =========================================================
+    // APPLICATION STATE
+    // =========================================================
+    const state = {
+      currentStep: 1,
+      completedSteps: new Set(),
+      // Step 1
+      mapMode: "9region", // "9region" | "4quadrant"
+      selectedRegion: "ruq",
+      selectedQuadrant: "ruq_q",
+      appPhaseIndex: 0,
+      showRadiation: false,
+      // Step 2
+      ruqFilter: "all", // "all" | "Infectious" | "Non-Infectious"
+      // Step 3
+      activeWorkupTab: "history",
+      checkedPearls: new Set(),
+      // Step 4
+      scriptGroup: "midline", // "midline" | "ruq"
+      selectedScripts: new Set(["pud", "appendicitis", "pancreatitis"]),
+      quizBlindMode: false,
+      revealedCells: new Set(),
+      // Step 5
+      checkedSurgicalSigns: new Set(),
+      caseIndex: 0,
+      caseAnswers: {} // { [caseIdx]: optionIdx }
+    };
+
+    try {
+      const saved = localStorage.getItem("aap_guide_completed");
+      if (saved) JSON.parse(saved).forEach(id => state.completedSteps.add(id));
+    } catch (e) {}
+
+    function saveProgress() {
+      try {
+        localStorage.setItem("aap_guide_completed", JSON.stringify([...state.completedSteps]));
+      } catch (e) {}
+    }
+
+    // =========================================================
+    // RENDERING ENGINE
+    // =========================================================
+    function renderNav() {
+      const nav = document.getElementById("step-nav");
+      nav.innerHTML = STEPS.map(s => {
+        const isActive = state.currentStep === s.id;
+        const isDone = state.completedSteps.has(s.id);
+        return `
+          <button type="button" data-step="${s.id}" class="step-tab shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition ${
+            isActive
+              ? "bg-teal-600 text-white shadow-sm"
+              : isDone
+                ? "bg-teal-50 text-teal-800 border border-teal-200 hover:bg-teal-100"
+                : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100"
+          }">
+            ${isDone && !isActive ? '<span class="text-teal-600">✓</span>' : ''}
+            <span>${s.short}</span>
+          </button>
+        `;
+      }).join("");
+
+      nav.querySelectorAll(".step-tab").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.currentStep = Number(btn.dataset.step);
+          renderAll();
+        });
+      });
+
+      const pctText = document.getElementById("progress-text");
+      pctText.textContent = `${state.completedSteps.size} / ${STEPS.length} Completed`;
+
+      document.getElementById("prev-step-btn").disabled = state.currentStep === 1;
+      document.getElementById("next-step-btn").disabled = state.currentStep === STEPS.length;
+
+      const markBtn = document.getElementById("mark-complete-btn");
+      if (state.completedSteps.has(state.currentStep)) {
+        markBtn.textContent = "✓ Step Completed";
+        markBtn.className = "px-3.5 py-2 rounded-xl bg-emerald-600 text-white text-xs sm:text-sm font-semibold hover:bg-emerald-700 transition";
+      } else {
+        markBtn.textContent = "Mark Step Complete";
+        markBtn.className = "px-3.5 py-2 rounded-xl bg-teal-50 text-teal-700 border border-teal-200 text-xs sm:text-sm font-semibold hover:bg-teal-100 transition";
+      }
+    }
+
+    function renderStep1() {
+      const is9 = state.mapMode === "9region";
+      const activeData = is9 ? NINE_REGIONS[state.selectedRegion] : FOUR_QUADRANTS[state.selectedQuadrant];
+      const phase = APPENDICITIS_PHASES[state.appPhaseIndex];
+
+      return `
+        <div class="space-y-6">
+          <!-- Intro Banner -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+              <h2 class="text-lg sm:text-xl font-bold text-slate-900">Step 1: Anatomical Frameworks & Pain Mapping</h2>
+              <div class="inline-flex rounded-xl bg-slate-100 p-1">
+                <button type="button" id="mode-9" class="px-3 py-1 rounded-lg text-xs font-semibold transition ${is9 ? "bg-white text-teal-700 shadow-sm" : "text-slate-600"}">9-Region (Preferred)</button>
+                <button type="button" id="mode-4" class="px-3 py-1 rounded-lg text-xs font-semibold transition ${!is9 ? "bg-white text-teal-700 shadow-sm" : "text-slate-600"}">4-Quadrant</button>
+              </div>
+            </div>
+            <p class="text-sm text-slate-600">
+              Diagnostic frameworks for acute abdominal pain are organized by <strong>anatomic region</strong> (most common) or by organ system. Click any region on the body map below to inspect underlying structures and key diagnoses.
+            </p>
+          </div>
+
+          <!-- Interactive Abdomen Map + Details -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <!-- SVG Map Card -->
+            <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col items-center">
+              <div class="w-full flex items-center justify-between mb-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Interactive Abdomen</span>
+                <button type="button" id="toggle-radiation-btn" class="text-xs font-semibold px-2.5 py-1 rounded-lg border transition ${state.showRadiation ? "bg-amber-50 border-amber-300 text-amber-800" : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"}">
+                  ${state.showRadiation ? "Hide Radiation Pearls" : "Show Radiation Pearls"}
+                </button>
+              </div>
+
+              ${is9 ? `
+              <svg viewBox="0 0 300 320" class="w-full max-w-[290px] select-none">
+                <!-- Torso outline -->
+                <path d="M55,20 Q150,5 245,20 L260,295 Q150,315 40,295 Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+                <!-- 9 Regions Grid (Patient's Right is Viewer's Left!) -->
+                <!-- Row 1: RUQ, Epigastric, LUQ -->
+                <rect x="48" y="35" width="68" height="82" rx="8" fill="${state.selectedRegion === 'ruq' ? '#ccfbf1' : '#e2e8f0'}" stroke="#94a3b8" stroke-width="1.5" class="region-shape ${state.selectedRegion === 'ruq' ? 'region-active' : ''}" data-region="ruq"/>
+                <text x="82" y="74" text-anchor="middle" font-size="11" font-weight="700" fill="#0f172a" pointer-events="none">RUQ</text>
+                <text x="82" y="88" text-anchor="middle" font-size="8.5" fill="#475569" pointer-events="none">Liver / Biliary</text>
+
+                <rect x="118" y="35" width="64" height="82" rx="8" fill="${state.selectedRegion === 'epigastric' ? '#ccfbf1' : '#e2e8f0'}" stroke="#94a3b8" stroke-width="1.5" class="region-shape ${state.selectedRegion === 'epigastric' ? 'region-active' : ''}" data-region="epigastric"/>
+                <text x="150" y="74" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f172a" pointer-events="none">Epigastric</text>
+                <text x="150" y="88" text-anchor="middle" font-size="8.5" fill="#475569" pointer-events="none">Foregut / ACS</text>
+
+                <rect x="184" y="35" width="68" height="82" rx="8" fill="${state.selectedRegion === 'luq' ? '#ccfbf1' : '#e2e8f0'}" stroke="#94a3b8" stroke-width="1.5" class="region-shape ${state.selectedRegion === 'luq' ? 'region-active' : ''}" data-region="luq"/>
+                <text x="218" y="74" text-anchor="middle" font-size="11" font-weight="700" fill="#0f172a" pointer-events="none">LUQ</text>
+                <text x="218" y="88" text-anchor="middle" font-size="8.5" fill="#475569" pointer-events="none">Spleen</text>
+
+                <!-- Row 2: R Flank, Periumbilical, L Flank -->
+                <rect x="48" y="121" width="68" height="82" rx="8" fill="${state.selectedRegion === 'rflank' ? '#ccfbf1' : '#e2e8f0'}" stroke="#94a3b8" stroke-width="1.5" class="region-shape ${state.selectedRegion === 'rflank' ? 'region-active' : ''}" data-region="rflank"/>
+                <text x="82" y="160" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f172a" pointer-events="none">R Flank</text>
+                <text x="82" y="174" text-anchor="middle" font-size="8.5" fill="#475569" pointer-events="none">Kidney</text>
+
+                <rect x="118" y="121" width="64" height="82" rx="8" fill="${state.selectedRegion === 'periumbilical' ? '#ccfbf1' : '#e2e8f0'}" stroke="#94a3b8" stroke-width="1.5" class="region-shape ${state.selectedRegion === 'periumbilical' ? 'region-active' : ''}" data-region="periumbilical"/>
+                <circle cx="150" cy="148" r="4" fill="#64748b" pointer-events="none"/>
+                <text x="150" y="168" text-anchor="middle" font-size="9.5" font-weight="700" fill="#0f172a" pointer-events="none">Periumbilical</text>
+                <text x="150" y="182" text-anchor="middle" font-size="8" fill="#475569" pointer-events="none">Midgut / AAA</text>
+
+                <rect x="184" y="121" width="68" height="82" rx="8" fill="${state.selectedRegion === 'lflank' ? '#ccfbf1' : '#e2e8f0'}" stroke="#94a3b8" stroke-width="1.5" class="region-shape ${state.selectedRegion === 'lflank' ? 'region-active' : ''}" data-region="lflank"/>
+                <text x="218" y="160" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f172a" pointer-events="none">L Flank</text>
+                <text x="218" y="174" text-anchor="middle" font-size="8.5" fill="#475569" pointer-events="none">Kidney</text>
+
+                <!-- Row 3: RLQ, Suprapubic, LLQ -->
+                <rect x="48" y="207" width="68" height="82" rx="8" fill="${state.selectedRegion === 'rlq' ? '#ccfbf1' : '#e2e8f0'}" stroke="#94a3b8" stroke-width="1.5" class="region-shape ${state.selectedRegion === 'rlq' ? 'region-active' : ''}" data-region="rlq"/>
+                <text x="82" y="246" text-anchor="middle" font-size="11" font-weight="700" fill="#0f172a" pointer-events="none">RLQ</text>
+                <text x="82" y="260" text-anchor="middle" font-size="8.5" fill="#475569" pointer-events="none">Appendix</text>
+
+                <rect x="118" y="207" width="64" height="82" rx="8" fill="${state.selectedRegion === 'suprapubic' ? '#ccfbf1' : '#e2e8f0'}" stroke="#94a3b8" stroke-width="1.5" class="region-shape ${state.selectedRegion === 'suprapubic' ? 'region-active' : ''}" data-region="suprapubic"/>
+                <text x="150" y="246" text-anchor="middle" font-size="10" font-weight="700" fill="#0f172a" pointer-events="none">Suprapubic</text>
+                <text x="150" y="260" text-anchor="middle" font-size="8.5" fill="#475569" pointer-events="none">Bladder / Gyn</text>
+
+                <rect x="184" y="207" width="68" height="82" rx="8" fill="${state.selectedRegion === 'llq' ? '#ccfbf1' : '#e2e8f0'}" stroke="#94a3b8" stroke-width="1.5" class="region-shape ${state.selectedRegion === 'llq' ? 'region-active' : ''}" data-region="llq"/>
+                <text x="218" y="246" text-anchor="middle" font-size="11" font-weight="700" fill="#0f172a" pointer-events="none">LLQ</text>
+                <text x="218" y="260" text-anchor="middle" font-size="8.5" fill="#475569" pointer-events="none">Diverticulitis</text>
+
+                <!-- Orientation labels -->
+                <text x="54" y="28" font-size="9" font-weight="700" fill="#64748b">PATIENT RIGHT</text>
+                <text x="246" y="28" text-anchor="end" font-size="9" font-weight="700" fill="#64748b">PATIENT LEFT</text>
+              </svg>
+              ` : `
+              <svg viewBox="0 0 300 320" class="w-full max-w-[290px] select-none">
+                <path d="M55,20 Q150,5 245,20 L260,295 Q150,315 40,295 Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+                <rect x="48" y="38" width="100" height="122" rx="10" fill="${state.selectedQuadrant === 'ruq_q' ? '#ccfbf1' : '#e2e8f0'}" stroke="#94a3b8" stroke-width="1.5" class="region-shape ${state.selectedQuadrant === 'ruq_q' ? 'region-active' : ''}" data-quad="ruq_q"/>
+                <text x="98" y="102" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a" pointer-events="none">RUQ</text>
+
+                <rect x="152" y="38" width="100" height="122" rx="10" fill="${state.selectedQuadrant === 'luq_q' ? '#ccfbf1' : '#e2e8f0'}" stroke="#94a3b8" stroke-width="1.5" class="region-shape ${state.selectedQuadrant === 'luq_q' ? 'region-active' : ''}" data-quad="luq_q"/>
+                <text x="202" y="102" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a" pointer-events="none">LUQ</text>
+
+                <rect x="48" y="164" width="100" height="122" rx="10" fill="${state.selectedQuadrant === 'rlq_q' ? '#ccfbf1' : '#e2e8f0'}" stroke="#94a3b8" stroke-width="1.5" class="region-shape ${state.selectedQuadrant === 'rlq_q' ? 'region-active' : ''}" data-quad="rlq_q"/>
+                <text x="98" y="228" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a" pointer-events="none">RLQ</text>
+
+                <rect x="152" y="164" width="100" height="122" rx="10" fill="${state.selectedQuadrant === 'llq_q' ? '#ccfbf1' : '#e2e8f0'}" stroke="#94a3b8" stroke-width="1.5" class="region-shape ${state.selectedQuadrant === 'llq_q' ? 'region-active' : ''}" data-quad="llq_q"/>
+                <text x="202" y="228" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a" pointer-events="none">LLQ</text>
+
+                <circle cx="150" cy="162" r="7" fill="#0f766e" stroke="#fff" stroke-width="2" pointer-events="none"/>
+                <text x="54" y="28" font-size="9" font-weight="700" fill="#64748b">PATIENT RIGHT</text>
+                <text x="246" y="28" text-anchor="end" font-size="9" font-weight="700" fill="#64748b">PATIENT LEFT</text>
+              </svg>
+              `}
+            </div>
+
+            <!-- Selected Region Detail Panel -->
+            <div class="lg:col-span-7 space-y-4">
+              <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span class="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-1 rounded-full">Selected Zone</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-1">${activeData.name}</h3>
+                ${is9 ? `
+                  <p class="text-sm text-slate-600 mb-4">${activeData.summary}</p>
+                  <div class="mb-4">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Key Underlying Structures</h4>
+                    <div class="flex flex-wrap gap-1.5">
+                      ${activeData.structures.map(st => `<span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-medium">${st}</span>`).join("")}
+                    </div>
+                  </div>
+                  <div class="mb-4">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Differential Diagnoses</h4>
+                    <ul class="space-y-1.5">
+                      ${activeData.diagnoses.map(d => `<li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-teal-600 font-bold mt-0.5">•</span><span>${d}</span></li>`).join("")}
+                    </ul>
+                  </div>
+                  <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-900">
+                    <strong>Radiation / Migration Pearl:</strong> ${activeData.radiation}
+                  </div>
+                ` : `
+                  <p class="text-xs text-slate-500 mb-3">4-Quadrant framework uses the umbilicus as the centerpoint. Switch to 9-Region for finer localization.</p>
+                  <ul class="space-y-2">
+                    ${activeData.items.map(d => `<li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-teal-600 font-bold mt-0.5">•</span><span>${d}</span></li>`).join("")}
+                  </ul>
+                `}
+              </div>
+
+              ${state.showRadiation ? `
+                <div class="bg-amber-50/80 rounded-2xl border border-amber-200 p-4 shadow-sm fade-in">
+                  <h4 class="text-sm font-bold text-amber-900 mb-2.5">Classic Pain Radiation Patterns</h4>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    ${RADIATION_PATTERNS.map(r => `
+                      <div class="bg-white rounded-xl p-3 border border-amber-200/70">
+                        <div class="text-xs font-bold text-slate-900">${r.condition}</div>
+                        <div class="text-xs text-amber-800 mt-0.5">${r.pattern}</div>
+                      </div>
+                    `).join("")}
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+
+          <!-- Appendicitis Migratory Pattern + Visceral vs Somatic Caveat -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Appendicitis 3-Phase Stepper -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <h3 class="text-base font-bold text-slate-900">Classic Migratory Pain: Appendicitis</h3>
+                <span class="text-xs font-semibold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full">3 Phases</span>
+              </div>
+              <div class="flex gap-1.5 mb-4">
+                ${APPENDICITIS_PHASES.map((p, idx) => `
+                  <button type="button" data-phase="${idx}" class="app-phase-btn flex-1 py-2 px-2 rounded-xl text-xs font-semibold border transition ${
+                    state.appPhaseIndex === idx ? "bg-teal-600 text-white border-teal-600" : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
+                  }">
+                    Phase ${idx + 1}
+                  </button>
+                `).join("")}
+              </div>
+              <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-sm font-bold text-slate-900">${phase.phase}</span>
+                  <span class="text-xs font-bold px-2 py-0.5 rounded-md bg-teal-100 text-teal-800">${phase.location}</span>
+                </div>
+                <p class="text-xs text-slate-700"><strong>Pain:</strong> ${phase.character}</p>
+                <p class="text-xs text-slate-700"><strong>Exam:</strong> ${phase.exam}</p>
+                <p class="text-xs text-slate-500"><strong>Mechanism:</strong> ${phase.mechanism}</p>
+              </div>
+            </div>
+
+            <!-- Visceral vs Somatic Caveat -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+              <h3 class="text-base font-bold text-slate-900 mb-2">Important Caveat: Pain Doesn't Always Map Neatly</h3>
+              <p class="text-xs text-slate-600 mb-3">
+                <strong>Visceral pain fibers</strong> are poorly localized compared to <strong>somatic fibers</strong> innervating the peritoneum:
+              </p>
+              <div class="space-y-2 text-xs">
+                <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex justify-between gap-2">
+                  <span class="font-bold text-slate-800">Foregut structures</span>
+                  <span class="text-slate-600 text-right">Usually epigastric, but can be RUQ, LUQ, or periumbilical</span>
+                </div>
+                <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex justify-between gap-2">
+                  <span class="font-bold text-slate-800">Midgut structures</span>
+                  <span class="text-slate-600 text-right">Can extend into epigastrium & suprapubic regions</span>
+                </div>
+                <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex justify-between gap-2">
+                  <span class="font-bold text-slate-800">Hindgut structures</span>
+                  <span class="text-slate-600 text-right">Can cause pain throughout half the abdomen</span>
+                </div>
+                <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex justify-between gap-2">
+                  <span class="font-bold text-slate-800">GU / Reproductive & Hepatobiliary</span>
+                  <span class="text-slate-600 text-right">Can be widespread or extend outside the RUQ</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderStep2() {
+      return `
+        <div class="space-y-6">
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h2 class="text-lg sm:text-xl font-bold text-slate-900">Step 2: RUQ Deep Dive, Generalized & Rare Causes</h2>
+                <p class="text-sm text-slate-600 mt-1">
+                  The RUQ contains complex hepatobiliary pathologies. Organize them by <strong>organ</strong> and <strong>infectious vs. non-infectious</strong> etiology.
+                </p>
+              </div>
+              <div class="inline-flex rounded-xl bg-slate-100 p-1">
+                ${["all", "Infectious", "Non-Infectious"].map(f => `
+                  <button type="button" data-ruqfilter="${f}" class="ruq-filter-btn px-3 py-1 rounded-lg text-xs font-semibold transition ${
+                    state.ruqFilter === f ? "bg-white text-teal-700 shadow-sm" : "text-slate-600"
+                  }">${f === "all" ? "All Etiologies" : f}</button>
+                `).join("")}
+              </div>
+            </div>
+          </div>
+
+          <!-- RUQ Tree -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            ${RUQ_TREE.map(branch => {
+              const filteredSubs = branch.subgroups.filter(sg => state.ruqFilter === "all" || sg.type === state.ruqFilter || sg.type === "Extrabiliary");
+              return `
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col">
+                  <h3 class="text-base font-bold text-slate-900 pb-3 border-b border-slate-100 mb-3">${branch.category}</h3>
+                  <div class="space-y-4 flex-1">
+                    ${filteredSubs.map(sg => `
+                      <div>
+                        <span class="inline-block text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md mb-2 ${
+                          sg.color === 'amber' ? 'bg-amber-100 text-amber-800' : sg.color === 'sky' ? 'bg-sky-100 text-sky-800' : 'bg-slate-100 text-slate-700'
+                        }">${sg.type}</span>
+                        <ul class="space-y-1.5">
+                          ${sg.items.map(it => `<li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-teal-600 font-bold">•</span><span>${it}</span></li>`).join("")}
+                        </ul>
+                      </div>
+                    `).join("")}
+                  </div>
+                </div>
+              `;
+            }).join("")}
+          </div>
+
+          <!-- Generalized & Rare Causes -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+              <h3 class="text-base font-bold text-slate-900 mb-3">Generalized / Poorly Localized Etiologies</h3>
+              <div class="space-y-2.5">
+                ${GENERALIZED_CAUSES.map(c => `
+                  <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                    <div class="text-sm font-bold text-slate-900">${c.name}</div>
+                    <div class="text-xs text-slate-600 mt-0.5">${c.note}</div>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-base font-bold text-slate-900">Rare ("Don't Forget") Causes</h3>
+                <span class="text-xs font-semibold text-rose-700 bg-rose-50 px-2.5 py-0.5 rounded-full">High-Yield Pearls</span>
+              </div>
+              <div class="space-y-2.5">
+                ${RARE_CAUSES.map(c => `
+                  <div class="p-3 rounded-xl bg-rose-50/40 border border-rose-200/70">
+                    <div class="text-sm font-bold text-slate-900">${c.name}</div>
+                    <div class="text-xs text-slate-700 mt-0.5">${c.pearl}</div>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderStep3() {
+      const activeStage = WORKUP_STAGES.find(w => w.id === state.activeWorkupTab);
+      return `
+        <div class="space-y-6">
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+            <h2 class="text-lg sm:text-xl font-bold text-slate-900">Step 3: Step-by-Step Clinical Evaluation</h2>
+            <p class="text-sm text-slate-600 mt-1">
+              Move systematically from <strong>History → Physical Exam → Labs → Imaging</strong>. Check off each clinical pearl as you review it.
+            </p>
+            <div class="flex flex-wrap gap-2 mt-4">
+              ${WORKUP_STAGES.map(st => `
+                <button type="button" data-workup="${st.id}" class="workup-tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition ${
+                  state.activeWorkupTab === st.id ? "bg-teal-600 text-white border-teal-600 shadow-sm" : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                }">${st.title}</button>
+              `).join("")}
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-bold text-slate-900">${activeStage.title}</h3>
+              <span class="text-xs text-slate-500">Click items to mark reviewed</span>
+            </div>
+            <div class="space-y-3">
+              ${activeStage.items.map((item, idx) => {
+                const key = `${activeStage.id}_${idx}`;
+                const checked = state.checkedPearls.has(key);
+                return `
+                  <label class="flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition ${
+                    checked ? "bg-teal-50/70 border-teal-300" : "bg-slate-50 border-slate-200 hover:bg-slate-100/70"
+                  }">
+                    <input type="checkbox" data-pearl="${key}" class="pearl-checkbox mt-1 h-4 w-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500" ${checked ? "checked" : ""}/>
+                    <div>
+                      <div class="text-sm font-bold text-slate-900">${item.label}</div>
+                      <div class="text-sm text-slate-600 mt-1 leading-relaxed">${item.detail}</div>
+                    </div>
+                  </label>
+                `;
+              }).join("")}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderStep4() {
+      const scripts = ILLNESS_SCRIPTS[state.scriptGroup];
+      const activeList = scripts.filter(s => state.selectedScripts.has(s.id));
+      const rows = [
+        { key: "pain", label: "Pain & Chronology" },
+        { key: "associated", label: "Associated Symptoms" },
+        { key: "risks", label: "Risk Factors / Etiology" },
+        { key: "exam", label: "Physical Exam" },
+        { key: "labs", label: "Key Labs" },
+        { key: "dx", label: "Diagnostic Test" }
+      ];
+
+      return `
+        <div class="space-y-6">
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h2 class="text-lg sm:text-xl font-bold text-slate-900">Step 4: Illness Scripts Comparator</h2>
+                <p class="text-sm text-slate-600 mt-1">
+                  Compare classic presentations side-by-side, or turn on <strong>Self-Test Mode</strong> to hide cells and recall features before clicking to reveal.
+                </p>
+              </div>
+              <div class="flex flex-wrap items-center gap-2">
+                <div class="inline-flex rounded-xl bg-slate-100 p-1">
+                  <button type="button" id="sg-midline" class="px-3 py-1 rounded-lg text-xs font-semibold transition ${state.scriptGroup === 'midline' ? 'bg-white text-teal-700 shadow-sm' : 'text-slate-600'}">General / Midline (5)</button>
+                  <button type="button" id="sg-ruq" class="px-3 py-1 rounded-lg text-xs font-semibold transition ${state.scriptGroup === 'ruq' ? 'bg-white text-teal-700 shadow-sm' : 'text-slate-600'}">RUQ Causes (4)</button>
+                </div>
+                <button type="button" id="toggle-blind-btn" class="px-3 py-1.5 rounded-xl text-xs font-semibold border transition ${
+                  state.quizBlindMode ? "bg-indigo-600 text-white border-indigo-600" : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50"
+                }">
+                  ${state.quizBlindMode ? "Self-Test Mode: ON" : "Self-Test Mode: OFF"}
+                </button>
+              </div>
+            </div>
+
+            <!-- Diagnosis Filter Chips -->
+            <div class="flex flex-wrap gap-2 mt-4">
+              ${scripts.map(s => {
+                const on = state.selectedScripts.has(s.id);
+                return `
+                  <button type="button" data-script="${s.id}" class="script-chip px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+                    on ? "bg-teal-50 text-teal-800 border-teal-300" : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100"
+                  }">
+                    ${on ? "✓ " : "+ "}${s.name}
+                  </button>
+                `;
+              }).join("")}
+            </div>
+          </div>
+
+          <!-- Comparison Table -->
+          ${activeList.length === 0 ? `
+            <div class="bg-white rounded-2xl border border-slate-200 p-8 text-center text-sm text-slate-500">
+              Select at least one diagnosis above to compare its illness script.
+            </div>
+          ` : `
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-x-auto">
+              <table class="w-full text-left border-collapse min-w-[640px]">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-slate-200">
+                    <th class="p-3.5 text-xs font-bold uppercase tracking-wider text-slate-500 w-40">Feature</th>
+                    ${activeList.map(s => `<th class="p-3.5 text-sm font-bold text-slate-900 border-l border-slate-200">${s.name}</th>`).join("")}
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                  ${rows.map(r => `
+                    <tr>
+                      <td class="p-3.5 text-xs font-bold text-slate-700 bg-slate-50/50 align-top">${r.label}</td>
+                      ${activeList.map(s => {
+                        const cellKey = `${s.id}_${r.key}`;
+                        const hidden = state.quizBlindMode && !state.revealedCells.has(cellKey);
+                        return `
+                          <td class="p-3.5 text-xs sm:text-sm text-slate-700 border-l border-slate-200 align-top">
+                            ${hidden ? `
+                              <button type="button" data-cell="${cellKey}" class="reveal-cell-btn w-full py-2 px-3 rounded-lg bg-indigo-50 text-indigo-700 font-semibold text-xs hover:bg-indigo-100 transition">
+                                Click to Reveal
+                              </button>
+                            ` : s[r.key]}
+                          </td>
+                        `;
+                      }).join("")}
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    function renderStep5() {
+      const signCount = state.checkedSurgicalSigns.size;
+      const c = CASES[state.caseIndex];
+      const chosen = state.caseAnswers[state.caseIndex];
+      const answered = chosen !== undefined;
+
+      return `
+        <div class="space-y-6">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Surgical Abdomen Interactive Bedside Checklist -->
+            <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <h2 class="text-lg font-bold text-slate-900">Surgical Abdomen Bedside Checklist</h2>
+                <span class="text-xs font-bold px-2.5 py-1 rounded-full ${signCount >= 2 ? 'bg-rose-100 text-rose-800' : 'bg-slate-100 text-slate-600'}">
+                  ${signCount} Selected
+                </span>
+              </div>
+              <p class="text-xs text-slate-600 mb-3">
+                A <strong>surgical abdomen</strong> implies emergent surgical evaluation. None of these findings in isolation is diagnostic, but <strong>multiple findings</strong> + consistent history strongly suggest a surgical emergency.
+              </p>
+
+              <div class="space-y-2 mb-4">
+                ${SURGICAL_SIGNS.map(sg => {
+                  const on = state.checkedSurgicalSigns.has(sg.id);
+                  return `
+                    <label class="flex items-start gap-2.5 p-2.5 rounded-xl border cursor-pointer transition ${on ? 'bg-rose-50 border-rose-300' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'}">
+                      <input type="checkbox" data-surg="${sg.id}" class="surg-checkbox mt-0.5 h-4 w-4 rounded border-slate-300 text-rose-600" ${on ? 'checked' : ''}/>
+                      <div>
+                        <div class="text-xs font-bold text-slate-900">${sg.label}</div>
+                        <div class="text-xs text-slate-600">${sg.note}</div>
+                      </div>
+                    </label>
+                  `;
+                }).join("")}
+              </div>
+
+              <div class="p-3 rounded-xl border text-xs ${signCount >= 2 ? 'bg-rose-600 text-white border-rose-700' : 'bg-amber-50 text-amber-900 border-amber-200'}">
+                ${signCount >= 2
+                  ? '<strong>Action Alert:</strong> Multiple peritoneal/surgical signs present—obtain emergent surgical consultation!'
+                  : '<strong>Critical Caveat:</strong> Not every surgical emergency has a surgical abdomen (e.g., extraperitoneal emergencies like a ruptured AAA).'}
+              </div>
+            </div>
+
+            <!-- Shock Differential -->
+            <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="text-base font-bold text-slate-900">Abdominal Pain + Shock</h3>
+                <span class="text-xs font-bold bg-rose-100 text-rose-800 px-2.5 py-0.5 rounded-full">8 Must-Not-Miss</span>
+              </div>
+              <p class="text-xs text-slate-600 mb-3">
+                Always prioritize these 8 life-threatening conditions when a patient presents with abdominal pain and shock:
+              </p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2">
+                ${SHOCK_CAUSES.map((sc, i) => `
+                  <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                    <span class="text-xs font-bold text-slate-900">${i + 1}. ${sc.name}</span>
+                    <span class="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-rose-50 text-rose-700">${sc.tag}</span>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Case Simulator -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+              <div>
+                <h3 class="text-lg font-bold text-slate-900">Clinical Case Simulator</h3>
+                <p class="text-xs text-slate-500">Apply your step-by-step approach to 5 bedside vignettes</p>
+              </div>
+              <div class="flex items-center gap-1.5">
+                ${CASES.map((_, idx) => {
+                  const ans = state.caseAnswers[idx];
+                  const isCorrect = ans === CASES[idx].correct;
+                  return `
+                    <button type="button" data-case="${idx}" class="case-nav-btn w-8 h-8 rounded-lg text-xs font-bold border transition ${
+                      state.caseIndex === idx
+                        ? "bg-teal-600 text-white border-teal-600"
+                        : ans !== undefined
+                          ? isCorrect ? "bg-emerald-50 text-emerald-700 border-emerald-300" : "bg-rose-50 text-rose-700 border-rose-300"
+                          : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
+                    }">${idx + 1}</button>
+                  `;
+                }).join("")}
+              </div>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 mb-4">
+              <div class="text-xs font-bold uppercase tracking-wider text-teal-700 mb-1">Case ${state.caseIndex + 1} of ${CASES.length}</div>
+              <p class="text-sm text-slate-800 leading-relaxed">${c.vignette}</p>
+            </div>
+
+            <p class="text-sm font-bold text-slate-900 mb-3">${c.question}</p>
+
+            <div class="space-y-2 mb-4">
+              ${c.options.map((opt, idx) => {
+                let cls = "bg-white border-slate-200 hover:bg-slate-50 text-slate-800";
+                if (answered) {
+                  if (idx === c.correct) cls = "bg-emerald-50 border-emerald-400 text-emerald-900 font-semibold";
+                  else if (idx === chosen) cls = "bg-rose-50 border-rose-400 text-rose-900";
+                  else cls = "bg-slate-50 border-slate-200 text-slate-400";
+                }
+                return `
+                  <button type="button" data-opt="${idx}" ${answered ? "disabled" : ""} class="case-opt-btn w-full text-left p-3.5 rounded-xl border text-sm transition ${cls}">
+                    <span class="font-bold mr-2">${String.fromCharCode(65 + idx)}.</span>${opt}
+                  </button>
+                `;
+              }).join("")}
+            </div>
+
+            ${answered ? `
+              <div class="p-4 rounded-xl border fade-in ${chosen === c.correct ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-amber-50 border-amber-200 text-amber-900'}">
+                <div class="text-xs font-bold uppercase tracking-wider mb-1">
+                  ${chosen === c.correct ? "✓ Correct Clinical Reasoning" : "Review Reasoning"}
+                </div>
+                <p class="text-sm leading-relaxed">${c.explanation}</p>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    function attachStepListeners() {
+      // Step 1
+      const m9 = document.getElementById("mode-9");
+      const m4 = document.getElementById("mode-4");
+      if (m9) m9.addEventListener("click", () => { state.mapMode = "9region"; renderAll(); });
+      if (m4) m4.addEventListener("click", () => { state.mapMode = "4quadrant"; renderAll(); });
+
+      const radBtn = document.getElementById("toggle-radiation-btn");
+      if (radBtn) radBtn.addEventListener("click", () => { state.showRadiation = !state.showRadiation; renderAll(); });
+
+      document.querySelectorAll("[data-region]").forEach(el => {
+        el.addEventListener("click", () => { state.selectedRegion = el.dataset.region; renderAll(); });
+      });
+      document.querySelectorAll("[data-quad]").forEach(el => {
+        el.addEventListener("click", () => { state.selectedQuadrant = el.dataset.quad; renderAll(); });
+      });
+      document.querySelectorAll(".app-phase-btn").forEach(el => {
+        el.addEventListener("click", () => { state.appPhaseIndex = Number(el.dataset.phase); renderAll(); });
+      });
+
+      // Step 2
+      document.querySelectorAll(".ruq-filter-btn").forEach(el => {
+        el.addEventListener("click", () => { state.ruqFilter = el.dataset.ruqfilter; renderAll(); });
+      });
+
+      // Step 3
+      document.querySelectorAll(".workup-tab-btn").forEach(el => {
+        el.addEventListener("click", () => { state.activeWorkupTab = el.dataset.workup; renderAll(); });
+      });
+      document.querySelectorAll(".pearl-checkbox").forEach(el => {
+        el.addEventListener("change", () => {
+          if (el.checked) state.checkedPearls.add(el.dataset.pearl);
+          else state.checkedPearls.delete(el.dataset.pearl);
+          renderAll();
+        });
+      });
+
+      // Step 4
+      const sgMid = document.getElementById("sg-midline");
+      const sgRuq = document.getElementById("sg-ruq");
+      const blindBtn = document.getElementById("toggle-blind-btn");
+      if (sgMid) sgMid.addEventListener("click", () => {
+        state.scriptGroup = "midline";
+        state.selectedScripts = new Set(["pud", "appendicitis", "pancreatitis"]);
+        renderAll();
+      });
+      if (sgRuq) sgRuq.addEventListener("click", () => {
+        state.scriptGroup = "ruq";
+        state.selectedScripts = new Set(["biliary_colic", "cholecystitis", "cholangitis", "hepatitis"]);
+        renderAll();
+      });
+      if (blindBtn) blindBtn.addEventListener("click", () => {
+        state.quizBlindMode = !state.quizBlindMode;
+        state.revealedCells.clear();
+        renderAll();
+      });
+      document.querySelectorAll(".script-chip").forEach(el => {
+        el.addEventListener("click", () => {
+          const id = el.dataset.script;
+          if (state.selectedScripts.has(id)) state.selectedScripts.delete(id);
+          else state.selectedScripts.add(id);
+          renderAll();
+        });
+      });
+      document.querySelectorAll(".reveal-cell-btn").forEach(el => {
+        el.addEventListener("click", () => {
+          state.revealedCells.add(el.dataset.cell);
+          renderAll();
+        });
+      });
+
+      // Step 5
+      document.querySelectorAll(".surg-checkbox").forEach(el => {
+        el.addEventListener("change", () => {
+          if (el.checked) state.checkedSurgicalSigns.add(el.dataset.surg);
+          else state.checkedSurgicalSigns.delete(el.dataset.surg);
+          renderAll();
+        });
+      });
+      document.querySelectorAll(".case-nav-btn").forEach(el => {
+        el.addEventListener("click", () => {
+          state.caseIndex = Number(el.dataset.case);
+          renderAll();
+        });
+      });
+      document.querySelectorAll(".case-opt-btn").forEach(el => {
+        el.addEventListener("click", () => {
+          state.caseAnswers[state.caseIndex] = Number(el.dataset.opt);
+          renderAll();
+        });
+      });
+    }
+
+    function renderAll() {
+      renderNav();
+      const container = document.getElementById("step-container");
+      if (state.currentStep === 1) container.innerHTML = renderStep1();
+      else if (state.currentStep === 2) container.innerHTML = renderStep2();
+      else if (state.currentStep === 3) container.innerHTML = renderStep3();
+      else if (state.currentStep === 4) container.innerHTML = renderStep4();
+      else if (state.currentStep === 5) container.innerHTML = renderStep5();
+      attachStepListeners();
+    }
+
+    // Global Footer & Reset Controls
+    document.getElementById("prev-step-btn").addEventListener("click", () => {
+      if (state.currentStep > 1) {
+        state.currentStep--;
+        renderAll();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
+
+    document.getElementById("next-step-btn").addEventListener("click", () => {
+      state.completedSteps.add(state.currentStep);
+      saveProgress();
+      if (state.currentStep < STEPS.length) {
+        state.currentStep++;
+        renderAll();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
+
+    document.getElementById("mark-complete-btn").addEventListener("click", () => {
+      if (state.completedSteps.has(state.currentStep)) state.completedSteps.delete(state.currentStep);
+      else state.completedSteps.add(state.currentStep);
+      saveProgress();
+      renderAll();
+    });
+
+    document.getElementById("reset-progress-btn").addEventListener("click", () => {
+      state.completedSteps.clear();
+      state.checkedPearls.clear();
+      state.checkedSurgicalSigns.clear();
+      state.caseAnswers = {};
+      state.revealedCells.clear();
+      state.currentStep = 1;
+      saveProgress();
+      renderAll();
+    });
+
+    renderAll();
+  </script>
+</body>
+</html>
