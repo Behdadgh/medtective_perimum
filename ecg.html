@@ -1,0 +1,2676 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>آموزش تعاملی تفسیر سیستماتیک نوار قلب (ECG)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-soft: #f1f5f9;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --text-light: #64748b;
+      --primary: #0f4c81;
+      --primary-hover: #0b3b66;
+      --primary-soft: #eff6ff;
+      --primary-border: #bfdbfe;
+      --teal: #0d9488;
+      --teal-soft: #f0fdfa;
+      --teal-border: #99f6e4;
+      --success: #15803d;
+      --success-soft: #f0fdf4;
+      --success-border: #bbf7d0;
+      --warning: #b45309;
+      --warning-soft: #fffbeb;
+      --warning-border: #fde68a;
+      --danger: #be123c;
+      --danger-soft: #fff1f2;
+      --danger-border: #fecdd3;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+      --shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+      --font: 'Vazirmatn', 'Segoe UI', Tahoma, system-ui, -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .en {
+      direction: ltr;
+      unicode-bidi: isolate;
+      display: inline-block;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      font-weight: 600;
+      font-size: 0.92em;
+      letter-spacing: 0.01em;
+    }
+
+    /* App Shell */
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Top Header */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .top-bar-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand-mini {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--primary);
+      min-width: 0;
+    }
+
+    .brand-mini span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .step-badge {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--surface-soft);
+      padding: 4px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 40px;
+      padding: 0 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .icon-btn:hover {
+      background: var(--surface-soft);
+      border-color: var(--border-strong);
+    }
+
+    .progress-track {
+      height: 4px;
+      background: var(--surface-soft);
+      width: 100%;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width 0.28s ease;
+    }
+
+    /* Main Content */
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 24px 16px 104px;
+    }
+
+    .screen-animate {
+      animation: fadeSlideIn 0.22s ease forwards;
+    }
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Typography */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--teal);
+      background: var(--teal-soft);
+      border: 1px solid var(--teal-border);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 1.65rem;
+      font-weight: 800;
+      line-height: 1.4;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      line-height: 1.45;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .lead {
+      font-size: 0.98rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    /* Cards & Layout */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-soft {
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .callout {
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      font-size: 0.92rem;
+      border: 1px solid var(--primary-border);
+      background: var(--primary-soft);
+      color: var(--text);
+    }
+
+    .callout.warning {
+      background: var(--warning-soft);
+      border-color: var(--warning-border);
+    }
+
+    .callout.danger {
+      background: var(--danger-soft);
+      border-color: var(--danger-border);
+    }
+
+    .callout.success {
+      background: var(--success-soft);
+      border-color: var(--success-border);
+    }
+
+    .callout-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 560px) {
+      .grid-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+      h1 { font-size: 1.9rem; }
+      main { padding: 28px 20px 108px; }
+    }
+
+    .clean-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .clean-list li {
+      position: relative;
+      padding-right: 18px;
+      font-size: 0.94rem;
+      color: var(--text);
+    }
+
+    .clean-list li::before {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 11px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border-color: var(--border-strong);
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-soft);
+    }
+
+    .btn-danger-outline {
+      background: var(--surface);
+      color: var(--danger);
+      border-color: var(--danger-border);
+    }
+
+    .btn-danger-outline:hover {
+      background: var(--danger-soft);
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 40;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid var(--border);
+      padding: 10px 16px;
+    }
+
+    .bottom-nav-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .bottom-nav .btn {
+      flex: 1;
+      max-width: 220px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Hero / Start */
+    .hero-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 22px;
+      box-shadow: var(--shadow);
+      text-align: right;
+    }
+
+    .hero-ecg-wrap {
+      background: #0f172a;
+      border-radius: 14px;
+      padding: 16px;
+      margin: 18px 0 22px;
+      overflow: hidden;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
+    .pill {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+
+    /* Roadmap */
+    .roadmap-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .roadmap-item {
+      width: 100%;
+      text-align: right;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: inherit;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .roadmap-item:hover {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .roadmap-item.done {
+      border-color: var(--success-border);
+    }
+
+    .roadmap-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--surface-soft);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .roadmap-item.done .roadmap-num {
+      background: var(--success-soft);
+      color: var(--success);
+    }
+
+    .roadmap-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .roadmap-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text);
+      display: block;
+    }
+
+    .roadmap-sub {
+      font-size: 0.82rem;
+      color: var(--text-light);
+      display: block;
+    }
+
+    /* Segmented Tabs */
+    .seg-tabs {
+      display: flex;
+      gap: 6px;
+      background: var(--surface-soft);
+      padding: 5px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+    }
+
+    .seg-tab {
+      flex: 1;
+      min-height: 42px;
+      border: none;
+      background: transparent;
+      border-radius: 9px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 6px 10px;
+      transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .seg-tab.active {
+      background: var(--surface);
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* SVG ECG Box */
+    .ecg-box {
+      background: #fffafa;
+      border: 1px solid #fecaca;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .ecg-box-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-light);
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ecg-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Interactive Controls */
+    .slider-group {
+      margin-bottom: 14px;
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      height: 6px;
+      cursor: pointer;
+    }
+
+    .metric-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      margin-top: 10px;
+    }
+
+    .metric-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .status-chip {
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+
+    .status-chip.normal { background: var(--success-soft); color: var(--success); border: 1px solid var(--success-border); }
+    .status-chip.tachy { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger-border); }
+    .status-chip.brady { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning-border); }
+
+    /* Matrix 2x2 */
+    .matrix-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .matrix-btn {
+      min-height: 64px;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      font-family: inherit;
+      text-align: right;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .matrix-btn strong {
+      display: block;
+      font-size: 0.92rem;
+      color: var(--text);
+    }
+
+    .matrix-btn span {
+      font-size: 0.78rem;
+      color: var(--text-light);
+    }
+
+    .matrix-btn.active {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .matrix-btn.active strong {
+      color: var(--primary);
+    }
+
+    /* Accordion */
+    .accordion-item {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .accordion-trigger {
+      width: 100%;
+      min-height: 52px;
+      padding: 12px 16px;
+      background: transparent;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-family: inherit;
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      text-align: right;
+    }
+
+    .accordion-trigger:hover {
+      background: var(--surface-soft);
+    }
+
+    .accordion-arrow {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      transition: transform 0.2s ease;
+    }
+
+    .accordion-item.open .accordion-arrow {
+      transform: rotate(180deg);
+    }
+
+    .accordion-body {
+      display: none;
+      padding: 0 16px 16px;
+      border-top: 1px solid var(--border);
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    .accordion-item.open .accordion-body {
+      display: block;
+      padding-top: 14px;
+    }
+
+    /* Reveal Answer Box */
+    .reveal-box {
+      border: 1px dashed var(--primary-border);
+      background: var(--primary-soft);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 14px;
+    }
+
+    .reveal-q {
+      font-weight: 700;
+      font-size: 0.94rem;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .reveal-a {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--primary-border);
+      font-size: 0.92rem;
+      color: var(--text);
+    }
+
+    /* Axis Controls */
+    .thumb-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .thumb-toggle-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .thumb-btn {
+      flex: 1;
+      min-height: 44px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+    }
+
+    .thumb-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    /* Matching Activity */
+    .match-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 540px) {
+      .match-grid {
+        grid-template-columns: 1.25fr 1fr;
+      }
+    }
+
+    .match-col {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .match-item {
+      width: 100%;
+      min-height: 48px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      font-family: inherit;
+      font-size: 0.86rem;
+      font-weight: 600;
+      text-align: right;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .match-item.selected {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .match-item.solved {
+      border-color: var(--success-border);
+      background: var(--success-soft);
+      color: var(--success);
+      cursor: default;
+    }
+
+    .match-item.wrong {
+      border-color: var(--danger);
+      background: var(--danger-soft);
+    }
+
+    /* 12-Lead Grid */
+    .lead-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin: 14px 0;
+      direction: ltr;
+    }
+
+    .lead-cell {
+      padding: 10px 6px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      text-align: center;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      transition: all 0.18s ease;
+    }
+
+    .lead-cell.ste {
+      background: var(--danger-soft);
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    .lead-cell.recip {
+      background: var(--warning-soft);
+      border-color: var(--warning);
+      color: var(--warning);
+    }
+
+    .territory-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .chip-btn {
+      min-height: 40px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .chip-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    /* Quiz */
+    .quiz-option {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--text);
+      text-align: right;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      transition: all 0.15s ease;
+    }
+
+    .quiz-option:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .quiz-option.correct {
+      border-color: var(--success);
+      background: var(--success-soft);
+      color: var(--success);
+    }
+
+    .quiz-option.incorrect {
+      border-color: var(--danger);
+      background: var(--danger-soft);
+      color: var(--danger);
+    }
+
+    .quiz-feedback {
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      line-height: 1.65;
+    }
+
+    .quiz-feedback.correct {
+      background: var(--success-soft);
+      border: 1px solid var(--success-border);
+      color: #14532d;
+    }
+
+    .quiz-feedback.incorrect {
+      background: var(--danger-soft);
+      border: 1px solid var(--danger-border);
+      color: #881337;
+    }
+
+    /* Flashcards */
+    .flashcard-stage {
+      min-height: 220px;
+      background: var(--surface);
+      border: 1.5px solid var(--border-strong);
+      border-radius: 18px;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      margin-bottom: 14px;
+      transition: border-color 0.15s ease;
+    }
+
+    .flashcard-stage:hover {
+      border-color: var(--primary);
+    }
+
+    .flashcard-tag {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--teal);
+      background: var(--teal-soft);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+
+    .flashcard-main {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .flashcard-hint {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      margin-top: 16px;
+    }
+
+    /* Summary Score */
+    .score-hero {
+      text-align: center;
+      padding: 24px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      margin-bottom: 16px;
+    }
+
+    .score-circle {
+      width: 104px;
+      height: 104px;
+      border-radius: 50%;
+      margin: 0 auto 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary-soft);
+      border: 4px solid var(--primary);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 1.45rem;
+    }
+
+    .score-circle small {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-card {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 22px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .modal-actions .btn {
+      flex: 1;
+    }
+
+    .inline-tag {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: var(--surface-soft);
+      color: var(--primary);
+      margin-left: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Header -->
+    <header class="top-bar" id="topBar">
+      <div class="top-bar-inner">
+        <div class="brand-mini">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect width="24" height="24" rx="6" fill="#0F4C81" />
+            <path d="M3 13h4l2-6 3 11 2-6 1.5 1H21" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span id="headerTitle">تفسیر سیستماتیک نوار قلب</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="step-badge" id="stepCounter">شروع</span>
+          <button type="button" class="icon-btn" id="btnRoadmap" aria-label="نقشه راه یادگیری">نقشه راه</button>
+        </div>
+      </div>
+      <div class="progress-track" aria-label="میزان پیشرفت">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main id="appMain" aria-live="polite"></main>
+
+    <!-- Bottom Sticky Navigation -->
+    <nav class="bottom-nav hidden" id="bottomNav" aria-label="ناوبری صفحات">
+      <div class="bottom-nav-inner">
+        <button type="button" class="btn btn-secondary" id="btnPrev">→ قبلی</button>
+        <button type="button" class="btn btn-primary" id="btnNext">بعدی ←</button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Reset Confirmation Modal -->
+  <div class="modal-backdrop hidden" id="resetModal" role="dialog" aria-modal="true" aria-labelledby="resetModalTitle">
+    <div class="modal-card">
+      <h3 id="resetModalTitle">بازنشانی پیشرفت یادگیری؟</h3>
+      <p style="font-size:0.9rem;color:var(--text-muted);margin-top:6px;">
+        تمام پاسخ‌های آزمون، وضعیت فلش‌کارت‌ها و پیشرفت صفحات پاک می‌شود و از ابتدا شروع می‌کنید.
+      </p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="btnCancelReset">انصراف</button>
+        <button type="button" class="btn btn-danger-outline" id="btnConfirmReset">بله، پاک شود</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const STORAGE_KEY = 'ecg_systematic_learning_v1';
+
+      const SCREENS = [
+        { id: 'start', title: 'شروع آموزش', short: 'شروع', step: 0 },
+        { id: 'roadmap', title: 'نقشه راه یادگیری', short: 'نقشه راه', step: 0 },
+        { id: 'rate', title: 'گام ۱: محاسبه ضربان قلب (Rate)', short: 'گام ۱ از ۷', step: 1 },
+        { id: 'tachy', title: 'گام ۲ (الف): تاکی‌آریتمی‌ها', short: 'گام ۲ از ۷', step: 2 },
+        { id: 'brady', title: 'گام ۲ (ب): برادی‌آریتمی‌ها و بلوک‌های AV', short: 'گام ۲ از ۷', step: 2 },
+        { id: 'axis', title: 'گام ۳: محور الکتریکی قلب (Axis)', short: 'گام ۳ از ۷', step: 3 },
+        { id: 'intervals', title: 'گام ۴: فواصل PR و QT', short: 'گام ۴ از ۷', step: 4 },
+        { id: 'pwave', title: 'گام ۵: موج P و بزرگی دهلیزها', short: 'گام ۵ از ۷', step: 5 },
+        { id: 'bbb', title: 'گام ۶ (الف): بلوک‌های شاخه‌ای (BBB)', short: 'گام ۶ از ۷', step: 6 },
+        { id: 'vh', title: 'گام ۶ (ب): هیپرتروفی بطنی و تمرین تطبیق', short: 'گام ۶ از ۷', step: 6 },
+        { id: 'nsteacs', title: 'گام ۷ (الف): افت قطعه ST و NSTE-ACS', short: 'گام ۷ از ۷', step: 7 },
+        { id: 'stemi', title: 'گام ۷ (ب): صعود ST و تعیین محل STEMI', short: 'گام ۷ از ۷', step: 7 },
+        { id: 'quiz', title: 'آزمون سناریوهای بالینی و مفهومی', short: 'آزمون', step: 8 },
+        { id: 'flashcards', title: 'مرور سریع با فلش‌کارت', short: 'مرور سریع', step: 9 },
+        { id: 'summary', title: 'ارزیابی نهایی و برنامه مرور', short: 'ارزیابی نهایی', step: 10 }
+      ];
+
+      // Default State
+      function getDefaultState() {
+        return {
+          currentScreen: 0,
+          visited: [0],
+          // Interactive screen states
+          rateMode: 'rwave',
+          rateRWaves: 11,
+          rateBoxes: 4.5,
+          tachyCell: 'narrow_reg',
+          bradyOpen: 0,
+          axisLead1: 'up',
+          axisAVF: 'up',
+          axisLead2: 'neg',
+          intervalTab: 'pr',
+          pwaveTab: 'lae',
+          bbbTab: 'lbbb',
+          stDepMorph: 'horizontal',
+          troponinState: 'normal',
+          stemiTerritory: 'anterior',
+          // Learning / assessment states
+          reveals: {},
+          matching: {
+            selectedLeft: null,
+            solved: {}
+          },
+          quizAnswers: {},
+          flashcardIndex: 0,
+          flashcardFlipped: false,
+          flashcardFilter: 'all',
+          flashcardStatus: {}
+        };
+      }
+
+      let state = loadState();
+
+      function loadState() {
+        try {
+          const raw = window.localStorage.getItem(STORAGE_KEY);
+          if (!raw) return getDefaultState();
+          const parsed = JSON.parse(raw);
+          return Object.assign(getDefaultState(), parsed, {
+            matching: Object.assign({ selectedLeft: null, solved: {} }, parsed.matching || {})
+          });
+        } catch (e) {
+          return getDefaultState();
+        }
+      }
+
+      function saveState() {
+        try {
+          window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {
+          // Ignore storage errors in restricted environments
+        }
+      }
+
+      // Grounded Content Data (strictly from the video)
+      const TACHY_DATA = {
+        narrow_reg: {
+          title: 'باریک و منظم (Narrow Regular)',
+          criteria: 'کمپلکس <span class="en">QRS &lt; 120 ms</span> (کمتر از ۳ مربع کوچک) و فاصله <span class="en">R–R</span> ثابت و یکسان.',
+          svgType: 'narrow_reg',
+          items: [
+            {
+              name: 'تاکی‌کاردی سینوسی (<span class="en">Sinus Tachycardia</span>)',
+              desc: 'ضربان بیش از ۱۰۰، موج <span class="en">P</span> مثبت در لید <span class="en">II</span> و منفی در <span class="en">aVR</span>؛ به دنبال هر موج <span class="en">P</span> یک کمپلکس <span class="en">QRS</span> وجود دارد.'
+            },
+            {
+              name: 'فلاتر دهلیزی ۲ به ۱ (<span class="en">2:1 Atrial Flutter</span>)',
+              desc: 'موج <span class="en">P</span> مشخص دیده نمی‌شود؛ امواج فلاتر منظم در لیدهای <span class="en">II, III, aVF</span> حضور دارند و ضربان قلب به‌طور بسیار شایع روی حدود ۱۵۰ ثابت است.'
+            },
+            {
+              name: 'تاکی‌کاردی فوق‌بطنی حمله‌ای (<span class="en">PSVT: AVRT / AVNRT</span>)',
+              desc: 'موج <span class="en">P</span> قابل مشاهده نیست (گاهی موج <span class="en">P</span> رتروگراد) و موج فلاتر هم وجود ندارد. می‌تواند بسیار سریع باشد (۱۷۰ تا ۱۸۰). مانورهای واگال و <span class="en">Adenosine</span> هم برای تشخیص و هم درمان به‌کار می‌روند.'
+            }
+          ]
+        },
+        narrow_irreg: {
+          title: 'باریک و نامنظم (Narrow Irregular)',
+          criteria: 'کمپلکس <span class="en">QRS &lt; 120 ms</span> (کمتر از ۳ مربع کوچک) و فاصله <span class="en">R–R</span> متغیر در طول نوار.',
+          svgType: 'narrow_irreg',
+          items: [
+            {
+              name: 'فیبریلاسیون دهلیزی (<span class="en">Atrial Fibrillation</span>)',
+              desc: 'موج <span class="en">P</span> واضح وجود ندارد و به‌جای آن امواج فیبریلاتوری (به‌ویژه در لید <span class="en">I</span>) همراه با ریتم نامنظم دیده می‌شود.'
+            },
+            {
+              name: 'فلاتر دهلیزی با بلوک متغیر (<span class="en">Atrial Flutter with Variable Block</span>)',
+              desc: 'امواج دندانه‌اره‌ای (<span class="en">Sawtooth</span>) دیده می‌شوند اما نسبت هدایت ثابت نیست (مثلاً بین ۲:۱ و ۳:۱ تغییر می‌کند) و باعث نامنظمی فاصله <span class="en">R–R</span> می‌شود.'
+            },
+            {
+              name: 'تاکی‌کاردی دهلیزی چندکانونی (<span class="en">MAT</span>)',
+              desc: 'امواج <span class="en">P</span> دیده می‌شوند اما حداقل ۳ شکل (<span class="en">Morphology</span>) متفاوت از موج <span class="en">P</span> وجود دارد. در بیماران مبتلا به <span class="en">COPD</span> بسیار شایع است.'
+            }
+          ]
+        },
+        wide_reg: {
+          title: 'پهن و منظم (Wide Regular)',
+          criteria: 'کمپلکس <span class="en">QRS &gt; 120 ms</span> (بیش از ۳ مربع کوچک) و فاصله <span class="en">R–R</span> یکسان.',
+          svgType: 'wide_reg',
+          items: [
+            {
+              name: 'تاکی‌کاردی بطنی منومورفیک (<span class="en">Monomorphic VTach</span>)',
+              desc: 'تا زمانی که خلافش ثابت نشود، این ریتم را تاکی‌کاردی بطنی در نظر بگیرید؛ به‌ویژه وقتی همه کمپلکس‌های <span class="en">QRS</span> شکل یکسان دارند.'
+            }
+          ]
+        },
+        wide_irreg: {
+          title: 'پهن و نامنظم (Wide Irregular)',
+          criteria: 'کمپلکس <span class="en">QRS &gt; 120 ms</span> و فاصله <span class="en">R–R</span> نامنظم.',
+          svgType: 'wide_irreg',
+          items: [
+            {
+              name: 'تاکی‌کاردی بطنی پلی‌مورفیک با QT طولانی (<span class="en">Torsades de Pointes</span>)',
+              desc: 'با <span class="en">QT</span> طولانی شروع می‌شود و کمپلکس‌های <span class="en">QRS</span> شکل متغیر دارند؛ ابتدا بزرگ، در مرکز باریک و دوباره بزرگ می‌شوند (نمای کلاسیک روبان‌مانند).'
+            },
+            {
+              name: 'فیبریلاسیون بطنی (<span class="en">Ventricular Fibrillation</span>)',
+              desc: 'خطرناک‌ترین ریتم؛ کمپلکس‌ها شکل و فاصله کاملاً آشفته و نامنظم دارند و نیازمند شناسایی فوری است.'
+            }
+          ]
+        }
+      };
+
+      const BRADY_DATA = [
+        {
+          title: 'برادی‌کاردی سینوسی (Sinus Bradycardia)',
+          badge: 'PR نرمال • بدون حذف QRS',
+          svg: 'sinus_brady',
+          desc: 'ضربان قلب کمتر از ۶۰، فاصله <span class="en">PR</span> طبیعی است، هیچ کمپلکس <span class="en">QRS</span> حذف نمی‌شود و به دنبال هر موج <span class="en">P</span> یک <span class="en">QRS</span> می‌آید.'
+        },
+        {
+          title: 'بلوک دهلیزی-بطنی درجه ۱ (1st-Degree AV Block)',
+          badge: 'PR > 200 ms • بدون حذف QRS',
+          svg: 'av1',
+          desc: 'فاصله <span class="en">PR</span> طولانی‌تر از ۲۰۰ میلی‌ثانیه است، اما همچنان به دنبال هر موج <span class="en">P</span> یک کمپلکس <span class="en">QRS</span> وجود دارد و هیچ ضربانی حذف نمی‌شود.'
+        },
+        {
+          title: 'بلوک درجه ۲ — موبیتز ۱ / ونکه‌باخ (Mobitz I / Wenckebach)',
+          badge: 'طولانی‌تر، طولانی‌تر، حذف!',
+          svg: 'mobitz1',
+          desc: 'فاصله <span class="en">PR</span> در هر ضربان به‌تدریج طولانی‌تر می‌شود تا جایی که یک موج <span class="en">P</span> بدون <span class="en">QRS</span> باقی می‌ماند و ضربان حذف می‌شود.'
+        },
+        {
+          title: 'بلوک درجه ۲ — موبیتز ۲ (Mobitz II)',
+          badge: 'PR ثابت • حذف ناگهانی QRS',
+          svg: 'mobitz2',
+          desc: 'فاصله <span class="en">PR</span> ثابت است (به‌تدریج افزایش نمی‌یابد)، اما ناگهان پس از یک موج <span class="en">P</span>، کمپلکس <span class="en">QRS</span> حذف می‌شود.'
+        },
+        {
+          title: 'بلوک دهلیزی-بطنی درجه ۳ (3rd-Degree AV Block)',
+          badge: 'گسستگی کامل AV',
+          svg: 'av3',
+          desc: 'هیچ ارتباطی بین امواج <span class="en">P</span> و کمپلکس‌های <span class="en">QRS</span> وجود ندارد (<span class="en">AV Dissociation</span>). دهلیزها با ریتم خود و بطن‌ها با ریتم مستقل خود می‌زنند و اغلب کمپلکس <span class="en">QRS</span> پهن است که مطرح‌کننده بلوک <span class="en">Infranodal</span> است.'
+        }
+      ];
+
+      const MATCHING_PAIRS = [
+        { id: 'lbbb', left: 'موج S بسیار عمیق در V1–V2 + موج R بزرگ و دندانه‌دار در V5–V6', right: 'LBBB (بلوک شاخه چپ)' },
+        { id: 'rbbb', left: 'نمای rSR\' (شکل M) در V1–V2 + موج S پهن و کشیده در V5–V6', right: 'RBBB (بلوک شاخه راست)' },
+        { id: 'lvh', left: 'موج S بسیار عمیق در V1–V2 + موج R بسیار بلند در V5–V6 (مجموع > 35 mm)', right: 'LVH (هیپرتروفی بطن چپ)' },
+        { id: 'rvh', left: 'موج R بسیار بلند در V1–V2 + موج S بزرگ‌تر از معمول در V6', right: 'RVH (هیپرتروفی بطن راست)' }
+      ];
+
+      const STEMI_TERRITORIES = {
+        anterior: {
+          label: 'قُدامی (Anterior)',
+          ste: ['V1', 'V2', 'V3', 'V4'],
+          recip: ['II', 'III', 'aVF'],
+          title: 'انفارکتوس قدامی / قدامی-سپتال (<span class="en">Anterior / Anteroseptal STEMI</span>)',
+          desc: 'صعود قطعه <span class="en">ST</span> در لیدهای <span class="en">V1–V4</span> (به‌ویژه <span class="en">V2–V4</span>) همراه با تغییرات متقابل (<span class="en">Reciprocal changes</span>: افت ST یا وارونگی T) در لیدهای <span class="en">II, III, aVF</span>.'
+        },
+        inferior: {
+          label: 'تحتانی (Inferior)',
+          ste: ['II', 'III', 'aVF'],
+          recip: ['I', 'aVL'],
+          title: 'انفارکتوس تحتانی (<span class="en">Inferior STEMI</span>)',
+          desc: 'صعود محدب (<span class="en">Convex</span>) قطعه <span class="en">ST</span> در لیدهای <span class="en">II, III, aVF</span> به همراه تغییرات متقابل در لیدهای <span class="en">I</span> و <span class="en">aVL</span>.'
+        },
+        lateral: {
+          label: 'جانبی (Lateral)',
+          ste: ['I', 'aVL', 'V5', 'V6'],
+          recip: ['II', 'III', 'aVF'],
+          title: 'انفارکتوس جانبی / جانبی بالا (<span class="en">Lateral / High Lateral STEMI</span>)',
+          desc: 'صعود قطعه <span class="en">ST</span> در حداقل دو لید مجاور از <span class="en">I, aVL, V5, V6</span> (بیش از ۱ میلی‌متر در اندامی و بیش از ۲ میلی‌متر در پره‌کوردیال) همراه با تغییرات متقابل در <span class="en">II, III, aVF</span>.'
+        },
+        posterior: {
+          label: 'خلفی (Posterior)',
+          ste: [],
+          recip: ['V1', 'V2', 'V3'],
+          posteriorNote: true,
+          title: 'انفارکتوس خلفی (<span class="en">Posterior STEMI</span>)',
+          desc: 'در لیدهای <span class="en">V1, V2, V3</span> افت قطعه <span class="en">ST</span> و وارونگی موج <span class="en">T</span> می‌بینید (ممکن است با NSTEMI اشتباه شود). با بستن لیدهای خلفی <span class="en">V7, V8, V9</span>، صعود قطعه <span class="en">ST</span> تشخیص را قطعی می‌کند.'
+        },
+        pericarditis: {
+          label: 'مقلد: پریکاردیت',
+          ste: ['I', 'II', 'III', 'aVL', 'aVF', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6'],
+          recip: [],
+          title: 'پریکاردیت (<span class="en">Pericarditis</span>) — پس از رد STEMI',
+          desc: 'صعود منتشر (<span class="en">Diffuse</span>) قطعه <span class="en">ST</span> تقریباً در تمام لیدها، با نمای مقعر (<span class="en">Concave / Smiley</span>) و همراه با <strong>افت قطعه <span class="en">PR</span></strong>.'
+        },
+        hyperk: {
+          label: 'مقلد: هیپرکالمی',
+          ste: ['V1', 'V2', 'V3'],
+          recip: [],
+          title: 'هیپرکالمی (<span class="en">Hyperkalemia</span>) — پس از رد STEMI',
+          desc: 'می‌تواند باعث صعود قطعه <span class="en">ST</span> همراه با امواج <span class="en">T</span> نوک‌تیز یا هایپراکیوت شود. تشخیص آن دشوار است و بررسی سطح پتاسیم خون ضروری است.'
+        }
+      };
+
+      const QUIZ_QUESTIONS = [
+        {
+          stepId: 'rate',
+          stepLabel: 'گام ۱: ضربان قلب',
+          q: 'در یک نوار ریتم، فاصله بین دو موج R متوالی دقیقاً ۴/۵ مربع بزرگ است. ضربان قلب تقریبی بیمار و دسته‌بندی آن کدام است؟',
+          options: [
+            'حدود ۶۷ ضربان در دقیقه — ضربان نرمال',
+            'حدود ۱۱۰ ضربان در دقیقه — تاکی‌کاردی',
+            'حدود ۵۰ ضربان در دقیقه — برادی‌کاردی',
+            'حدود ۹۰ ضربان در دقیقه — تاکی‌کاردی'
+          ],
+          correct: 0,
+          explain: 'در روش مربع‌های بزرگ، عدد ۳۰۰ را بر تعداد مربع‌های بزرگ بین دو موج R تقسیم می‌کنیم: 300 ÷ 4.5 ≈ 67 bpm که در محدوده نرمال (۶۰ تا ۱۰۰) قرار می‌گیرد.'
+        },
+        {
+          stepId: 'tachy',
+          stepLabel: 'گام ۲: تاکی‌آریتمی‌ها',
+          q: 'بیماری مبتلا به COPD با ضربان قلب ۱۳۰، کمپلکس QRS باریک (<120 ms) و ریتم نامنظم مراجعه کرده است. در نوار قلب ۴ شکل مختلف از موج P دیده می‌شود. محتمل‌ترین تشخیص چیست؟',
+          options: [
+            'فیبریلاسیون دهلیزی (AFib)',
+            'تاکی‌کاردی دهلیزی چندکانونی (MAT)',
+            'فلاتر دهلیزی ۲ به ۱',
+            'تاکی‌کاردی فوق‌بطنی حمله‌ای (PSVT)'
+          ],
+          correct: 1,
+          explain: 'تاکی‌کاردی باریک و نامنظم با حضور ۳ یا بیشتر موج P با شکل متفاوت، مشخصه تاکی‌کاردی دهلیزی چندکانونی (MAT) است که در بیماران COPD بسیار شایع است.'
+        },
+        {
+          stepId: 'brady',
+          stepLabel: 'گام ۲: برادی‌آریتمی‌ها',
+          q: 'در نوار قلب بیمار با ضربان ۴۸، فاصله PR به‌طور ثابت ۲۴۰ میلی‌ثانیه است و ناگهان پس از یک موج P، کمپلکس QRS حذف می‌شود. نوع بلوک چیست؟',
+          options: [
+            'بلوک AV درجه ۱',
+            'بلوک درجه ۲ — موبیتز ۱ (ونکه‌باخ)',
+            'بلوک درجه ۲ — موبیتز ۲',
+            'بلوک AV درجه ۳'
+          ],
+          correct: 2,
+          explain: 'وقتی فاصله PR ثابت باقی می‌ماند (تدریجاً طولانی نمی‌شود) و ناگهان یک QRS حذف می‌شود، مطرح‌کننده بلوک درجه ۲ موبیتز ۲ است.'
+        },
+        {
+          stepId: 'axis',
+          stepLabel: 'گام ۳: محور قلب',
+          q: 'کمپلکس QRS در لید I مثبت (رو به بالا) و در لید aVF منفی (رو به پایین) است. اقدام بعدی برای قطعی کردن انحراف محور به چپ (LAD) چیست؟',
+          options: [
+            'بررسی لید V1 برای موج R بلند',
+            'بررسی لید II؛ اگر عمدتاً منفی (یا هم‌فاز) باشد LAD قطعی است',
+            'نیازی به بررسی لید دیگری نیست، همیشه LAD است',
+            'بررسی لید aVR برای وارونگی موج P'
+          ],
+          correct: 1,
+          explain: 'در حالت I مثبت و aVF منفی، محور هنوز می‌تواند نرمال باشد. باید لید II را بررسی کرد: اگر منفی یا هم‌فاز (Equiphasic) باشد LAD قطعی است و اگر مثبت باشد محور نرمال است.'
+        },
+        {
+          stepId: 'intervals',
+          stepLabel: 'گام ۴: فواصل PR و QT',
+          q: 'کدام سه‌گانه در نوار قلب مطرح‌کننده سندرم ولف-پارکینسون-وایت (WPW) از طریق مسیر فرعی Bundle of Kent است؟',
+          options: [
+            'PR طولانی، موج T وارونه، QRS باریک',
+            'PR کوتاه (<160 ms)، موج دلتا (Delta wave) و QRS پهن',
+            'QT طولانی (>500 ms)، موج P دوشاخه و QRS باریک',
+            'افت قطعه PR، صعود مقعر ST و موج P نوک‌تیز'
+          ],
+          correct: 1,
+          explain: 'سه‌گانه کلاسیک WPW شامل فاصله PR کوتاه، موج دلتا (شیب صعودی کوتاه ابتدایی) و کمپلکس QRS پهن است.'
+        },
+        {
+          stepId: 'pwave',
+          stepLabel: 'گام ۵: موج P',
+          q: 'در لید II یک موج P نوک‌تیز با ارتفاع ۲/۸ میلی‌متر و در لید V1 موج P دوفازی با جزء ابتدایی بزرگ‌تر از جزء انتهایی دیده می‌شود. این یافته مطرح‌کننده چیست؟',
+          options: [
+            'بزرگی دهلیز چپ (LAE) — مثلاً در تنگی میترال',
+            'بزرگی دهلیز راست (RAE) — مثلاً در پرفشاری شریان ریوی',
+            'هیپرتروفی بطن چپ (LVH)',
+            'بلوک شاخه چپ (LBBB)'
+          ],
+          correct: 1,
+          explain: 'موج P نوک‌تیز با ارتفاع ≥ 2.5 mm در لید II و بزرگ‌تر بودن جزء ابتدایی موج P دوفازی در V1 مشخصه بزرگی دهلیز راست (RAE) است که در پرفشاری ریوی یا بیماری دریچه تریکوسپید دیده می‌شود.'
+        },
+        {
+          stepId: 'nsteacs',
+          stepLabel: 'گام ۷: NSTE-ACS',
+          q: 'بیماری با درد قفسه سینه، افت افقی قطعه ST به میزان ۱/۵ میلی‌متر در دو لید مجاور و وارونگی موج T دارد. تروپونین بیمار نرمال گزارش شده است. تشخیص در طیف ACS چیست؟',
+          options: [
+            'آنژین ناپایدار (Unstable Angina)',
+            'انفارکتوس بدون صعود ST (NSTEMI)',
+            'انفارکتوس با صعود ST (STEMI)',
+            'پریکاردیت حاد'
+          ],
+          correct: 0,
+          explain: 'در حضور یافته‌های ایسکمی (افت افقی/نزولی ST و وارونگی T)، تروپونین نرمال نشان‌دهنده آنژین ناپایدار (نبود نکروز) و تروپونین مثبت نشان‌دهنده NSTEMI است.'
+        },
+        {
+          stepId: 'stemi',
+          stepLabel: 'گام ۷: STEMI',
+          q: 'در نوار قلب بیمار با درد قفسه سینه، افت قطعه ST و وارونگی موج T در لیدهای V1، V2 و V3 دیده می‌شود. کدام اقدام برای رد یک STEMI مهم ضروری است؟',
+          options: [
+            'صبر کردن تا تکرار نوار قلب در روز بعد',
+            'گرفتن لیدهای خلفی V7، V8 و V9 برای بررسی Posterior STEMI',
+            'تجویز فوری آدنوزین وریدی',
+            'بررسی لید aVR برای تشخیص پریکاردیت'
+          ],
+          correct: 1,
+          explain: 'افت ST و وارونگی T در V1–V3 می‌تواند نمای آینه‌ای انفارکتوس خلفی باشد؛ با قرار دادن لیدهای خلفی V7–V9 و مشاهده صعود ST، تشخیص Posterior STEMI قطعی می‌شود.'
+        }
+      ];
+
+      const FLASHCARDS = [
+        { tag: 'گام ۱ • ضربان قلب', q: 'دو روش سریع محاسبه ضربان قلب روی نوار ریتم کدام‌اند؟', a: '۱) شمارش تعداد امواج R در نوار ریتم × ۶\n۲) تقسیم عدد ۳۰۰ بر تعداد مربع‌های بزرگ بین دو موج R متوالی.' },
+        { tag: 'گام ۲ • تاکی‌آریتمی', q: 'اگر تاکی‌کاردی باریک و منظم با ضربان ثابت حدود ۱۵۰ bpm دیدید به چه ریتمی شک می‌کنید؟', a: 'فلاتر دهلیزی ۲ به ۱ (2:1 Atrial Flutter) — در لیدهای II, III, aVF به‌دنبال امواج فلاتر بگردید.' },
+        { tag: 'گام ۲ • بلوک AV', q: 'تفاوت کلیدی موبیتز ۱ و موبیتز ۲ در چیست؟', a: 'در موبیتز ۱ (ونکه‌باخ) فاصله PR تدریجاً طولانی‌تر شده سپس QRS حذف می‌شود؛ در موبیتز ۲ فاصله PR ثابت است و ناگهان QRS حذف می‌شود.' },
+        { tag: 'گام ۳ • محور قلب', q: 'در قانون شست‌ها، وقتی هر دو شست (لید I و aVF) رو به پایین باشند چه معنایی دارد؟', a: 'انحراف شدید محور به راست (Extreme RAD) — ابتدا نبض بیمار را چک کنید! شایع‌ترین علت: Monomorphic VTach (همچنین در انواعی از WPW).' },
+        { tag: 'گام ۴ • فاصله QT', q: 'قاعده سریع تشخیص QT طولانی و خطر اصلی آن چیست؟', a: 'اگر QT بیش از نصف فاصله R–R (یا بیش از ۵۰۰ میلی‌ثانیه) باشد طولانی است و خطر بالای Torsades de Pointes ایجاد می‌کند.' },
+        { tag: 'گام ۴ • الکترولیت‌های QT', q: 'سه اختلال الکترولیتی مهم که QT را طولانی می‌کنند کدام‌اند؟', a: 'هیپوکالمی (Hypokalemia)، هیپومنیزیمی (Hypomagnesemia) و هیپوکلسمی (Hypocalcemia).' },
+        { tag: 'گام ۵ • بزرگی دهلیزها', q: 'تفاوت موج P در لید II و V1 بین LAE و RAE چیست؟', a: 'LAE: موج P دوشاخه (Bifid) در II + جزء انتهایی بزرگ‌تر در V1.\nRAE: موج P نوک‌تیز (≥2.5 mm) در II + جزء ابتدایی بزرگ‌تر در V1.' },
+        { tag: 'گام ۶ • بلوک شاخه‌ای', q: 'نمای مشخصه RBBB در لیدهای V1–V2 و V5–V6 چیست؟', a: 'الگوی rSR\' (شکل M) در V1–V2 + موج S پهن و کشیده (Wide slurred S) در V5–V6.' },
+        { tag: 'گام ۷ • افت ST', q: 'کدام شکل‌های افت ST مطرح‌کننده ایسکمی هستند و معیار عمق آن چقدر است؟', a: 'نمای افقی (Horizontal) و نزولی (Downsloping)؛ بیش از 0.5 mm در V2–V3 یا بیش از 1 mm در سایر لیدها، در حداقل ۲ لید مجاور.' },
+        { tag: 'گام ۷ • صعود ST', q: 'معیار ارتفاع صعود ST در لیدهای اندامی و پره‌کوردیال چقدر است؟', a: 'بیش از 1 mm در لیدهای اندامی و بیش از 2 mm در لیدهای پره‌کوردیال، در حداقل ۲ لید مجاور (نمای محدب/Tombstone نگران‌کننده‌تر است).' }
+      ];
+
+      // SVG Generators
+      let svgUid = 0;
+      function svgGrid(w, h) {
+        svgUid += 1;
+        const sm = 'ecgSm_' + svgUid;
+        const lg = 'ecgLg_' + svgUid;
+        return `<defs>
+          <pattern id="${sm}" width="10" height="10" patternUnits="userSpaceOnUse">
+            <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#fee2e2" stroke-width="0.7"/>
+          </pattern>
+          <pattern id="${lg}" width="50" height="50" patternUnits="userSpaceOnUse">
+            <rect width="50" height="50" fill="url(#${sm})"/>
+            <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#fca5a5" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <rect width="${w}" height="${h}" fill="url(#${lg})"/>`;
+      }
+
+      function renderRateSVG(bpm) {
+        const w = 600, h = 110;
+        // Space between beats inversely proportional to bpm
+        const clamped = Math.max(35, Math.min(180, bpm));
+        const pxPerBeat = Math.round(7500 / clamped);
+        let path = `M 0 70 `;
+        let x = 20;
+        while (x < w - 20) {
+          path += `L ${x} 70 Q ${x + 6} 58 ${x + 12} 70 L ${x + 18} 70 L ${x + 21} 76 L ${x + 26} 22 L ${x + 31} 82 L ${x + 35} 70 L ${x + 44} 70 Q ${x + 54} 52 ${x + 64} 70 `;
+          x += pxPerBeat;
+        }
+        path += `L ${w} 70`;
+        return `<svg class="ecg-svg" viewBox="0 0 ${w} ${h}" role="img" aria-label="نوار شبیه‌سازی ضربان قلب">
+          ${svgGrid(w, h)}
+          <path d="${path}" fill="none" stroke="#0f172a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>`;
+      }
+
+      function renderTachySVG(type) {
+        const w = 600, h = 95;
+        let path = '';
+        if (type === 'narrow_reg') {
+          let x = 10;
+          path = 'M 0 60 ';
+          while (x < w - 15) {
+            path += `L ${x} 60 L ${x + 6} 60 L ${x + 9} 16 L ${x + 13} 68 L ${x + 16} 60 Q ${x + 24} 48 ${x + 32} 60 `;
+            x += 48;
+          }
+        } else if (type === 'narrow_irreg') {
+          const gaps = [42, 74, 50, 88, 44, 68, 56, 78];
+          let x = 10, i = 0;
+          path = 'M 0 60 ';
+          while (x < w - 20) {
+            path += `L ${x} 58 L ${x + 4} 62 L ${x + 8} 59 L ${x + 11} 16 L ${x + 15} 68 L ${x + 19} 60 L ${x + 25} 62 L ${x + 30} 58 `;
+            x += gaps[i % gaps.length];
+            i++;
+          }
+        } else if (type === 'wide_reg') {
+          let x = 8;
+          path = 'M 0 55 ';
+          while (x < w - 20) {
+            path += `C ${x + 12} 10, ${x + 24} 10, ${x + 34} 78 C ${x + 42} 90, ${x + 50} 55, ${x + 56} 55 `;
+            x += 58;
+          }
+        } else {
+          // Torsades ribbon-like polymorphic
+          const amps = [34, 28, 16, 10, 18, 30, 38, 28, 14, 10, 22, 34, 30];
+          let x = 6;
+          path = 'M 0 50 ';
+          amps.forEach((a) => {
+            path += `Q ${x + 11} ${50 - a} ${x + 22} 50 Q ${x + 33} ${50 + a} ${x + 44} 50 `;
+            x += 44;
+          });
+        }
+        return `<svg class="ecg-svg" viewBox="0 0 ${w} ${h}" role="img" aria-label="الگوی تاکی‌آریتمی">
+          ${svgGrid(w, h)}
+          <path d="${path}" fill="none" stroke="#0f172a" stroke-width="2.2" stroke-linejoin="round"/>
+        </svg>`;
+      }
+
+      function renderBradySVG(type) {
+        const w = 560, h = 88;
+        let path = 'M 0 58 ';
+        if (type === 'sinus_brady') {
+          [25, 210, 395].forEach((x) => {
+            path += `L ${x} 58 Q ${x + 8} 45 ${x + 16} 58 L ${x + 28} 58 L ${x + 32} 16 L ${x + 37} 66 L ${x + 41} 58 Q ${x + 54} 42 ${x + 68} 58 `;
+          });
+        } else if (type === 'av1') {
+          [20, 200, 380].forEach((x) => {
+            path += `L ${x} 58 Q ${x + 8} 45 ${x + 16} 58 L ${x + 54} 58 L ${x + 58} 16 L ${x + 63} 66 L ${x + 67} 58 Q ${x + 80} 42 ${x + 94} 58 `;
+          });
+        } else if (type === 'mobitz1') {
+          // Beat 1 short PR, Beat 2 medium PR, Beat 3 long PR, Beat 4 dropped
+          const beats = [{ x: 15, pr: 24 }, { x: 145, pr: 44 }, { x: 295, pr: 66 }];
+          beats.forEach((b) => {
+            path += `L ${b.x} 58 Q ${b.x + 8} 45 ${b.x + 16} 58 L ${b.x + b.pr} 58 L ${b.x + b.pr + 4} 16 L ${b.x + b.pr + 9} 66 L ${b.x + b.pr + 13} 58 Q ${b.x + b.pr + 24} 44 ${b.x + b.pr + 36} 58 `;
+          });
+          // Dropped beat P wave only
+          path += `L 470 58 Q 478 45 486 58 L 555 58`;
+        } else if (type === 'mobitz2') {
+          const beats = [20, 165, 310];
+          beats.forEach((x, idx) => {
+            path += `L ${x} 58 Q ${x + 8} 45 ${x + 16} 58 `;
+            if (idx < 2) {
+              path += `L ${x + 42} 58 L ${x + 46} 16 L ${x + 51} 66 L ${x + 55} 58 Q ${x + 68} 44 ${x + 80} 58 `;
+            }
+          });
+          path += `L 455 58 Q 463 45 471 58 L 497 58 L 501 16 L 506 66 L 510 58 L 555 58`;
+        } else {
+          // 3rd degree: regular P waves at 30, 130, 230, 330, 430, 520; wide independent QRS at 85, 290, 485
+          path = 'M 0 58 L 20 58 Q 28 45 36 58 L 75 58 L 85 18 L 102 74 L 112 58 L 122 58 Q 130 45 138 58 L 222 58 Q 230 45 238 58 L 280 58 L 290 18 L 307 74 L 317 58 L 325 58 Q 333 45 341 58 L 422 58 Q 430 45 438 58 L 475 58 L 485 18 L 502 74 L 512 58 L 520 58 Q 528 45 536 58 L 560 58';
+        }
+        return `<svg class="ecg-svg" viewBox="0 0 ${w} ${h}" role="img" aria-label="نمودار بلوک دهلیزی-بطنی">
+          ${svgGrid(w, h)}
+          <path d="${path}" fill="none" stroke="#0f172a" stroke-width="2.1" stroke-linejoin="round"/>
+        </svg>`;
+      }
+
+      // Navigation & Core Rendering
+      function goToScreen(index) {
+        const safeIndex = Math.max(0, Math.min(SCREENS.length - 1, index));
+        state.currentScreen = safeIndex;
+        if (!state.visited.includes(safeIndex)) {
+          state.visited.push(safeIndex);
+        }
+        saveState();
+        renderApp();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function renderApp() {
+        const screen = SCREENS[state.currentScreen];
+        const headerTitle = document.getElementById('headerTitle');
+        const stepCounter = document.getElementById('stepCounter');
+        const progressFill = document.getElementById('progressFill');
+        const bottomNav = document.getElementById('bottomNav');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+        const appMain = document.getElementById('appMain');
+
+        headerTitle.textContent = screen.title;
+        stepCounter.textContent = screen.short;
+
+        const pct = Math.round((state.visited.length / SCREENS.length) * 100);
+        progressFill.style.width = `${pct}%`;
+
+        if (state.currentScreen === 0) {
+          bottomNav.classList.add('hidden');
+        } else {
+          bottomNav.classList.remove('hidden');
+          btnPrev.disabled = state.currentScreen <= 0;
+          btnNext.disabled = state.currentScreen >= SCREENS.length - 1;
+          btnNext.textContent = state.currentScreen === SCREENS.length - 2 ? 'مشاهده ارزیابی نهایی ←' : 'بعدی ←';
+        }
+
+        let html = '';
+        switch (screen.id) {
+          case 'start': html = renderStart(); break;
+          case 'roadmap': html = renderRoadmap(); break;
+          case 'rate': html = renderRate(); break;
+          case 'tachy': html = renderTachy(); break;
+          case 'brady': html = renderBrady(); break;
+          case 'axis': html = renderAxis(); break;
+          case 'intervals': html = renderIntervals(); break;
+          case 'pwave': html = renderPWave(); break;
+          case 'bbb': html = renderBBB(); break;
+          case 'vh': html = renderVH(); break;
+          case 'nsteacs': html = renderNSTEACS(); break;
+          case 'stemi': html = renderSTEMI(); break;
+          case 'quiz': html = renderQuiz(); break;
+          case 'flashcards': html = renderFlashcards(); break;
+          case 'summary': html = renderSummary(); break;
+          default: html = renderStart();
+        }
+
+        appMain.innerHTML = `<div class="screen-animate">${html}</div>`;
+      }
+
+      // 0. Start Screen
+      function renderStart() {
+        const hasProgress = state.visited.length > 1;
+        return `
+          <section class="hero-card">
+            <span class="eyebrow">یادگیری فعال • رویکرد ۷ گام بالینی</span>
+            <h1>تفسیر سیستماتیک نوار قلب (<span class="en">ECG</span>)</h1>
+            <p class="lead">
+              هر پزشک و دانشجوی پزشکی برای خواندن دقیق نوار قلب و از دست ندادن یافته‌های حیاتی، به یک الگوریتم منظم نیاز دارد. در این مسیر تعاملی، از محاسبه ضربان تا تشخیص محل انفارکتوس را گام‌به‌گام تمرین می‌کنید.
+            </p>
+            <div class="hero-ecg-wrap" aria-hidden="true">
+              <svg viewBox="0 0 600 90" width="100%" height="auto" style="display:block;">
+                <path d="M0 55 L70 55 Q80 42 90 55 L110 55 L116 64 L126 14 L136 74 L144 55 L165 55 Q182 34 198 55 L260 55 Q270 42 280 55 L300 55 L306 64 L316 14 L326 74 L334 55 L355 55 Q372 34 388 55 L450 55 Q460 42 470 55 L490 55 L496 64 L506 14 L516 74 L524 55 L600 55"
+                  fill="none" stroke="#38bdf8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <div class="pill-row">
+              <span class="pill">۷ گام ساختاریافته</span>
+              <span class="pill">شبیه‌سازهای تعاملی</span>
+              <span class="pill">آزمون سناریوی بالینی</span>
+              <span class="pill">فلش‌کارت مرور سریع</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <button type="button" class="btn btn-primary btn-full" data-action="go" data-target="${hasProgress ? Math.max(1, state.visited[state.visited.length - 1]) : 1}">
+                ${hasProgress ? 'ادامه مسیر یادگیری ←' : 'شروع یادگیری ←'}
+              </button>
+              ${hasProgress ? `<button type="button" class="btn btn-secondary btn-full" data-action="go" data-target="1">مشاهده نقشه راه</button>` : ''}
+            </div>
+          </section>
+        `;
+      }
+
+      // 1. Roadmap Screen
+      function renderRoadmap() {
+        const items = SCREENS.slice(2).map((s, idx) => {
+          const realIdx = idx + 2;
+          const isDone = state.visited.includes(realIdx);
+          return `
+            <button type="button" class="roadmap-item ${isDone ? 'done' : ''}" data-action="go" data-target="${realIdx}">
+              <span class="roadmap-num">${isDone ? '✓' : idx + 1}</span>
+              <span class="roadmap-info">
+                <span class="roadmap-title">${s.title}</span>
+                <span class="roadmap-sub">${isDone ? 'مشاهده‌شده' : 'آماده شروع'}</span>
+              </span>
+              <span style="color:var(--text-light);font-size:0.9rem;">←</span>
+            </button>
+          `;
+        }).join('');
+
+        return `
+          <span class="eyebrow">مسیر آموزشی</span>
+          <h2>نقشه راه ۷ گام تفسیر نوار قلب</h2>
+          <p class="lead">برای یادگیری عمیق، مراحل را به ترتیب دنبال کنید یا مستقیماً وارد هر بخش شوید.</p>
+          <div class="roadmap-list">${items}</div>
+        `;
+      }
+
+      // 2. Step 1: Rate
+      function renderRate() {
+        const isRWave = state.rateMode === 'rwave';
+        const bpm = isRWave ? Math.round(state.rateRWaves * 6) : Math.round(300 / state.rateBoxes);
+        let statusClass = 'normal', statusText = 'ضربان نرمال (۶۰ تا ۱۰۰)';
+        if (bpm > 100) { statusClass = 'tachy'; statusText = 'تاکی‌کاردی (> 100 bpm)'; }
+        else if (bpm < 60) { statusClass = 'brady'; statusText = 'برادی‌کاردی (< 60 bpm)'; }
+
+        return `
+          <span class="eyebrow">گام ۱ از ۷ • Rate</span>
+          <h2>محاسبه ضربان قلب</h2>
+          <p class="lead">اولین گام، تشخیص سریع تاکی‌کاردی، برادی‌کاردی یا ضربان نرمال است. دو روش اصلی روی نوار ریتم وجود دارد:</p>
+
+          <div class="grid-2" style="margin-bottom:16px;">
+            <div class="card" style="margin-bottom:0;">
+              <h3>۱. روش شمارش امواج <span class="en">R</span></h3>
+              <p style="font-size:0.9rem;color:var(--text-muted);">تعداد امواج <span class="en">R</span> در نوار ریتم را بشمارید و در <strong>۶</strong> ضرب کنید.<br/>مثال: ۱۱ موج R × ۶ = <strong>۶۶ bpm</strong>.</p>
+            </div>
+            <div class="card" style="margin-bottom:0;">
+              <h3>۲. روش مربع‌های بزرگ (۳۰۰)</h3>
+              <p style="font-size:0.9rem;color:var(--text-muted);">عدد <strong>۳۰۰</strong> را بر تعداد مربع‌های بزرگ بین دو موج <span class="en">R</span> تقسیم کنید (هر ۱ مربع بزرگ = ۳۰۰ bpm).<br/>مثال: ۳۰۰ ÷ ۴/۵ ≈ <strong>۶۷ bpm</strong>.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>شبیه‌ساز تعاملی محاسبه ضربان</h3>
+            <div class="seg-tabs">
+              <button type="button" class="seg-tab ${isRWave ? 'active' : ''}" data-action="rateMode" data-val="rwave">روش امواج R (×۶)</button>
+              <button type="button" class="seg-tab ${!isRWave ? 'active' : ''}" data-action="rateMode" data-val="boxes">روش ۳۰۰ ÷ مربع بزرگ</button>
+            </div>
+
+            ${isRWave ? `
+              <div class="slider-group">
+                <div class="slider-header">
+                  <span>تعداد امواج <span class="en">R</span> در نوار ریتم:</span>
+                  <strong id="rateSliderLabel">${state.rateRWaves} موج (${state.rateRWaves} × ۶)</strong>
+                </div>
+                <input type="range" min="6" max="26" step="1" value="${state.rateRWaves}" data-input="rateRWaves" aria-label="تعداد امواج R" />
+              </div>
+            ` : `
+              <div class="slider-group">
+                <div class="slider-header">
+                  <span>تعداد مربع‌های بزرگ بین دو موج <span class="en">R</span>:</span>
+                  <strong id="rateSliderLabel">${state.rateBoxes} مربع (۳۰۰ ÷ ${state.rateBoxes})</strong>
+                </div>
+                <input type="range" min="1.5" max="7" step="0.5" value="${state.rateBoxes}" data-input="rateBoxes" aria-label="تعداد مربع‌های بزرگ" />
+              </div>
+            `}
+
+            <div class="ecg-box">
+              <div class="ecg-box-label">
+                <span>نمای زنده نوار ریتم</span>
+                <span class="en" id="rateSvgBpm">${bpm} bpm</span>
+              </div>
+              <div id="rateSvgWrap">${renderRateSVG(bpm)}</div>
+            </div>
+
+            <div class="metric-banner">
+              <div>
+                <div style="font-size:0.8rem;color:var(--text-light);">ضربان محاسبه‌شده</div>
+                <div class="metric-value"><span class="en" id="rateMetricBpm">${bpm} bpm</span></div>
+              </div>
+              <span class="status-chip ${statusClass}" id="rateStatusChip">${statusText}</span>
+            </div>
+          </div>
+        `;
+      }
+
+      // 3. Step 2A: Tachyarrhythmias
+      function renderTachy() {
+        const active = TACHY_DATA[state.tachyCell];
+        const revealed = !!state.reveals['tachy_q'];
+
+        return `
+          <span class="eyebrow">گام ۲ از ۷ • Rhythm (تاکی‌کاردی)</span>
+          <h2>طبقه‌بندی تاکی‌آریتمی‌ها (<span class="en">HR &gt; 100</span>)</h2>
+          <p class="lead">برای تشخیص نوع تاکی‌آریتمی، دو سؤال کلیدی بپرسید: آیا <span class="en">QRS</span> باریک است (<span class="en">&lt;120 ms</span> / ۳ مربع کوچک) یا پهن؟ و آیا فاصله <span class="en">R–R</span> منظم است یا نامنظم؟</p>
+
+          <div class="matrix-grid">
+            <button type="button" class="matrix-btn ${state.tachyCell === 'narrow_reg' ? 'active' : ''}" data-action="tachyCell" data-val="narrow_reg">
+              <strong>باریک و منظم</strong>
+              <span>Narrow Regular</span>
+            </button>
+            <button type="button" class="matrix-btn ${state.tachyCell === 'narrow_irreg' ? 'active' : ''}" data-action="tachyCell" data-val="narrow_irreg">
+              <strong>باریک و نامنظم</strong>
+              <span>Narrow Irregular</span>
+            </button>
+            <button type="button" class="matrix-btn ${state.tachyCell === 'wide_reg' ? 'active' : ''}" data-action="tachyCell" data-val="wide_reg">
+              <strong>پهن و منظم</strong>
+              <span>Wide Regular</span>
+            </button>
+            <button type="button" class="matrix-btn ${state.tachyCell === 'wide_irreg' ? 'active' : ''}" data-action="tachyCell" data-val="wide_irreg">
+              <strong>پهن و نامنظم</strong>
+              <span>Wide Irregular</span>
+            </button>
+          </div>
+
+          <div class="card">
+            <h3>${active.title}</h3>
+            <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:12px;">${active.criteria}</p>
+            <div class="ecg-box">
+              <div class="ecg-box-label"><span>الگوی شماتیک ریتم</span></div>
+              ${renderTachySVG(active.svgType)}
+            </div>
+            <ul class="clean-list">
+              ${active.items.map(it => `<li><strong>${it.name}:</strong> ${it.desc}</li>`).join('')}
+            </ul>
+          </div>
+
+          <div class="reveal-box">
+            <div class="reveal-q">تمرین بازیابی فعال: چه تفاوتی بین PSVT و فلاتر دهلیزی ۲ به ۱ در نوار قلب وجود دارد؟</div>
+            <button type="button" class="btn btn-secondary" data-action="toggleReveal" data-val="tachy_q">
+              ${revealed ? 'مخفی کردن پاسخ' : 'فکر کردم — نمایش پاسخ'}
+            </button>
+            ${revealed ? `<div class="reveal-a">در <strong>فلاتر دهلیزی ۲ به ۱</strong> امواج فلاتر منظم در لیدهای <span class="en">II, III, aVF</span> دیده می‌شوند و ضربان معمولاً ثابت روی حدود <strong>۱۵۰</strong> است. اما در <strong>PSVT</strong> نه موج P مشخصی هست و نه موج فلاتر، ضربان می‌تواند به ۱۷۰–۱۸۰ برسد و به مانورهای واگال یا <span class="en">Adenosine</span> پاسخ می‌دهد.</div>` : ''}
+          </div>
+        `;
+      }
+
+      // 4. Step 2B: Bradyarrhythmias
+      function renderBrady() {
+        const revealed = !!state.reveals['brady_q'];
+        return `
+          <span class="eyebrow">گام ۲ از ۷ • Rhythm (برادی‌کاردی)</span>
+          <h2>برادی‌آریتمی‌ها و بلوک‌های <span class="en">AV</span> (<span class="en">HR &lt; 60</span>)</h2>
+          <p class="lead">در ریتم کُند، اولین کار بررسی <strong>فاصله <span class="en">PR</span></strong> و ارتباط امواج <span class="en">P</span> با کمپلکس‌های <span class="en">QRS</span> است. روی هر مورد بزنید تا جزئیات و الگوی نوار آن باز شود:</p>
+
+          <div>
+            ${BRADY_DATA.map((item, idx) => {
+              const isOpen = state.bradyOpen === idx;
+              return `
+                <div class="accordion-item ${isOpen ? 'open' : ''}">
+                  <button type="button" class="accordion-trigger" data-action="bradyOpen" data-val="${idx}">
+                    <div>
+                      <div>${item.title}</div>
+                      <span class="inline-tag">${item.badge}</span>
+                    </div>
+                    <span class="accordion-arrow">▼</span>
+                  </button>
+                  <div class="accordion-body">
+                    <div class="ecg-box" style="margin-bottom:10px;">
+                      ${renderBradySVG(item.svg)}
+                    </div>
+                    <p>${item.desc}</p>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+
+          <div class="reveal-box">
+            <div class="reveal-q">تمرین سریع: جمله معروف «طولانی‌تر، طولانی‌تر، حذف!» (<span class="en">Longer, longer, drop</span>) مربوط به کدام بلوک است؟</div>
+            <button type="button" class="btn btn-secondary" data-action="toggleReveal" data-val="brady_q">
+              ${revealed ? 'مخفی کردن پاسخ' : 'نمایش پاسخ'}
+            </button>
+            ${revealed ? `<div class="reveal-a"><strong>بلوک AV درجه ۲ نوع موبیتز ۱ (ونکه‌باخ / <span class="en">Wenckebach</span>):</strong> فاصله PR به‌تدریج در هر ضربان افزایش می‌یابد تا یک کمپلکس QRS حذف شود.</div>` : ''}
+          </div>
+        `;
+      }
+
+      // 5. Step 3: Axis
+      function renderAxis() {
+        const l1 = state.axisLead1;
+        const avf = state.axisAVF;
+        const l2 = state.axisLead2;
+
+        let resultTitle = '', resultTone = 'normal', resultNote = '', causes = [];
+
+        if (l1 === 'up' && avf === 'up') {
+          resultTitle = 'محور الکتریکی نرمال (Normal Axis)';
+          resultTone = 'success';
+          resultNote = 'هر دو شست (لید I و aVF) رو به بالا هستند؛ انحراف محور وجود ندارد.';
+          causes = ['نوار طبیعی بدون انحراف محور الکتریکی.'];
+        } else if (l1 === 'up' && avf === 'down') {
+          if (l2 === 'pos') {
+            resultTitle = 'محور الکتریکی نرمال (تأییدشده با لید II)';
+            resultTone = 'success';
+            resultNote = 'با وجود منفی بودن aVF، چون کمپلکس QRS در لید II عمدتاً مثبت است، محور همچنان در محدوده نرمال قرار دارد.';
+            causes = ['بررسی لید II از تشخیص اشتباه انحراف به چپ جلوگیری کرد.'];
+          } else {
+            resultTitle = 'انحراف محور به چپ (Left Axis Deviation — LAD)';
+            resultTone = 'warning';
+            resultNote = 'لید I مثبت، aVF منفی و لید II منفی یا هم‌فاز (Equiphasic) است → LAD قطعی است.';
+            causes = [
+              'بلوک شاخه چپ (<span class="en">LBBB</span>)',
+              'هیپرتروفی بطن چپ (<span class="en">LVH</span> — به‌دلیل کشیدگی و فشار روی شاخه چپ)',
+              'بلوک فاسیکول قدامی چپ (<span class="en">Left Anterior Fascicular Block</span>)'
+            ];
+          }
+        } else if (l1 === 'down' && avf === 'up') {
+          resultTitle = 'انحراف محور به راست (Right Axis Deviation — RAD)';
+          resultTone = 'warning';
+          resultNote = 'شست راست (aVF) رو به بالا و شست چپ (I) رو به پایین است (شستی که بالاست جهت انحراف را نشان می‌دهد).';
+          causes = [
+            'بلوک شاخه راست (<span class="en">RBBB</span>)',
+            'هیپرتروفی بطن راست (<span class="en">RVH</span>)',
+            'بلوک فاسیکول خلفی چپ (<span class="en">Left Posterior Fascicular Block</span>)'
+          ];
+        } else {
+          resultTitle = 'انحراف شدید محور به راست (Extreme Right Axis Deviation)';
+          resultTone = 'danger';
+          resultNote = 'هر دو شست رو به پایین هستند! پیش از هر چیز بررسی کنید آیا بیمار نبض دارد یا خیر.';
+          causes = [
+            'شایع‌ترین علت: تاکی‌کاردی بطنی منومورفیک (<span class="en">Monomorphic VTach</span>)',
+            'همچنین در برخی انواع سندرم <span class="en">Wolff-Parkinson-White (WPW)</span>'
+          ];
+        }
+
+        const showLead2 = (l1 === 'up' && avf === 'down');
+
+        return `
+          <span class="eyebrow">گام ۳ از ۷ • Axis</span>
+          <h2>تعیین محور قلب با قانون شست‌ها</h2>
+          <p class="lead">جهت غالب کمپلکس <span class="en">QRS</span> را در لید <strong><span class="en">I</span></strong> (شست دست چپ) و لید <strong><span class="en">aVF</span></strong> (شست دست راست) تغییر دهید و نتیجه را ببینید:</p>
+
+          <div class="grid-2" style="margin-bottom:14px;">
+            <div class="thumb-card">
+              <div style="font-weight:700;">لید <span class="en">I</span> (شست چپ)</div>
+              <div style="font-size:1.8rem;margin:6px 0;">${l1 === 'up' ? '👍' : '👎'}</div>
+              <div class="thumb-toggle-row">
+                <button type="button" class="thumb-btn ${l1 === 'up' ? 'active' : ''}" data-action="axisL1" data-val="up">مثبت (بالا)</button>
+                <button type="button" class="thumb-btn ${l1 === 'down' ? 'active' : ''}" data-action="axisL1" data-val="down">منفی (پایین)</button>
+              </div>
+            </div>
+
+            <div class="thumb-card">
+              <div style="font-weight:700;">لید <span class="en">aVF</span> (شست راست)</div>
+              <div style="font-size:1.8rem;margin:6px 0;">${avf === 'up' ? '👍' : '👎'}</div>
+              <div class="thumb-toggle-row">
+                <button type="button" class="thumb-btn ${avf === 'up' ? 'active' : ''}" data-action="axisAVF" data-val="up">مثبت (بالا)</button>
+                <button type="button" class="thumb-btn ${avf === 'down' ? 'active' : ''}" data-action="axisAVF" data-val="down">منفی (پایین)</button>
+              </div>
+            </div>
+          </div>
+
+          ${showLead2 ? `
+            <div class="card-soft">
+              <div style="font-weight:700;font-size:0.92rem;margin-bottom:8px;">نکته کلیدی: برای افتراق محور نرمال از LAD، لید <span class="en">II</span> را هم چک کنید:</div>
+              <div class="thumb-toggle-row">
+                <button type="button" class="thumb-btn ${l2 === 'neg' ? 'active' : ''}" data-action="axisL2" data-val="neg">لید II منفی یا هم‌فاز</button>
+                <button type="button" class="thumb-btn ${l2 === 'pos' ? 'active' : ''}" data-action="axisL2" data-val="pos">لید II عمدتاً مثبت</button>
+              </div>
+            </div>
+          ` : ''}
+
+          <div class="callout ${resultTone}">
+            <span class="callout-title">${resultTitle}</span>
+            <p style="margin-bottom:10px;">${resultNote}</p>
+            <ul class="clean-list">
+              ${causes.map(c => `<li>${c}</li>`).join('')}
+            </ul>
+          </div>
+        `;
+      }
+
+      // 6. Step 4: Intervals
+      function renderIntervals() {
+        const isPR = state.intervalTab === 'pr';
+        return `
+          <span class="eyebrow">گام ۴ از ۷ • Intervals</span>
+          <h2>بررسی فواصل <span class="en">PR</span> و <span class="en">QT</span></h2>
+          <p class="lead">دو فاصله حیاتی که باید در هر نوار قلب ارزیابی شوند: فاصله <span class="en">PR</span> (بلوک‌های AV و WPW) و فاصله <span class="en">QT</span> (خطر تورساد).</p>
+
+          <div class="seg-tabs">
+            <button type="button" class="seg-tab ${isPR ? 'active' : ''}" data-action="intervalTab" data-val="pr">فاصله PR</button>
+            <button type="button" class="seg-tab ${!isPR ? 'active' : ''}" data-action="intervalTab" data-val="qt">فاصله QT</button>
+          </div>
+
+          ${isPR ? `
+            <div class="card">
+              <div class="ecg-box">
+                <div class="ecg-box-label"><span>مقایسه PR کوتاه + موج دلتا (WPW)</span></div>
+                <svg class="ecg-svg" viewBox="0 0 560 100" role="img" aria-label="سه‌گانه WPW">
+                  ${svgGrid(560, 100)}
+                  <path d="M 10 68 L 60 68 Q 72 52 84 68 L 94 68 L 112 46 L 122 18 L 138 78 L 150 68 Q 170 50 190 68 L 260 68" fill="none" stroke="#0f172a" stroke-width="2.4" stroke-linejoin="round"/>
+                  <path d="M 94 68 L 112 46" stroke="#be123c" stroke-width="3.5"/>
+                  <text x="115" y="42" fill="#be123c" font-size="12" font-weight="700">Delta Wave</text>
+                  <line x1="60" y1="86" x2="94" y2="86" stroke="#0f4c81" stroke-width="2"/>
+                  <text x="52" y="97" fill="#0f4c81" font-size="11" font-weight="700">Short PR</text>
+                  <line x1="94" y1="86" x2="148" y2="86" stroke="#0d9488" stroke-width="2"/>
+                  <text x="104" y="97" fill="#0d9488" font-size="11" font-weight="700">Wide QRS</text>
+                </svg>
+              </div>
+              <ul class="clean-list">
+                <li><strong>فاصله <span class="en">PR</span> طولانی (<span class="en">&gt; 200 ms</span>):</strong> مطرح‌کننده بلوک‌های دهلیزی-بطنی (درجه ۱، موبیتز ۱، موبیتز ۲ و درجه ۳ با گسستگی AV).</li>
+                <li><strong>فاصله <span class="en">PR</span> کوتاه (<span class="en">&lt; 160 ms</span>):</strong> به <strong>سندرم <span class="en">Wolff-Parkinson-White (WPW)</span></strong> (مسیر فرعی <span class="en">Bundle of Kent</span>) فکر کنید و سه‌گانه زیر را جستجو کنید:
+                  <br/>۱) فاصله <span class="en">PR</span> کوتاه، ۲) <strong>موج دلتا (<span class="en">Delta wave</span>)</strong> و ۳) کمپلکس <span class="en">QRS</span> پهن.
+                </li>
+              </ul>
+            </div>
+          ` : `
+            <div class="card">
+              <div class="callout danger" style="margin-bottom:14px;">
+                <span class="callout-title">QT طولانی = خطر بالای <span class="en">Torsades de Pointes</span></span>
+                قاعده سریع: اگر فاصله <span class="en">QT</span> (از شروع QRS تا پایان موج T) <strong>بیش از نصف فاصله <span class="en">R–R</span></strong> یا <strong>بیش از ۵۰۰ میلی‌ثانیه</strong> باشد، بیمار در خطر جدی تورساد است.
+              </div>
+              <h3>علل مهم طولانی شدن <span class="en">QT</span></h3>
+              <ul class="clean-list" style="margin-bottom:14px;">
+                <li><strong>داروهای ضدآریتمی:</strong> <span class="en">Amiodarone</span>، <span class="en">Ibutilide</span></li>
+                <li><strong>آنتی‌بیوتیک‌ها:</strong> ماکرولیدها (<span class="en">Macrolides</span>)</li>
+                <li><strong>آنتی‌سایکوتیک‌ها:</strong> <span class="en">Haloperidol</span>، <span class="en">Quetiapine</span></li>
+                <li><strong>ضدافسردگی‌ها:</strong> <span class="en">SSRIs</span> و <span class="en">TCAs</span></li>
+                <li><strong>ضدتهوع‌ها:</strong> <span class="en">Ondansetron</span>، <span class="en">Compazine</span></li>
+                <li><strong>اختلالات الکترولیتی کلیدی:</strong> هیپوکالمی (<span class="en">Hypokalemia</span>)، هیپومنیزیمی (<span class="en">Hypomagnesemia</span>) و هیپوکلسمی (<span class="en">Hypocalcemia</span>).</li>
+              </ul>
+              <div class="card-soft" style="margin-bottom:0;">
+                <strong>QT کوتاه</strong> (اهمیت کمتر، مثلاً زیر ۴۶۰ میلی‌ثانیه — افزایش مختصر خطر تاکی‌کاردی): در <strong>هیپرکلسمی (<span class="en">Hypercalcemia</span>)</strong> و <strong>هیپرکالمی (<span class="en">Hyperkalemia</span>)</strong> دیده می‌شود.
+              </div>
+            </div>
+          `}
+        `;
+      }
+
+      // 7. Step 5: P-Wave
+      function renderPWave() {
+        const isLAE = state.pwaveTab === 'lae';
+        const revealed = !!state.reveals['pwave_q'];
+        return `
+          <span class="eyebrow">گام ۵ از ۷ • P-Wave</span>
+          <h2>ارزیابی موج <span class="en">P</span> و بزرگی دهلیزها</h2>
+          <p class="lead">ابتدا به <strong>لید <span class="en">II</span></strong> نگاه کنید و سپس برای تأیید، موج <span class="en">P</span> دوفازی در <strong>لید <span class="en">V1</span></strong> را بررسی نمایید:</p>
+
+          <div class="seg-tabs">
+            <button type="button" class="seg-tab ${isLAE ? 'active' : ''}" data-action="pwaveTab" data-val="lae">بزرگی دهلیز چپ (LAE)</button>
+            <button type="button" class="seg-tab ${!isLAE ? 'active' : ''}" data-action="pwaveTab" data-val="rae">بزرگی دهلیز راست (RAE)</button>
+          </div>
+
+          <div class="card">
+            <div class="grid-2" style="margin-bottom:14px;">
+              <div class="ecg-box" style="margin-bottom:0;">
+                <div class="ecg-box-label"><span>لید II</span><span>${isLAE ? 'دوشاخه (Bifid)' : 'نوک‌تیز (≥ 2.5 mm)'}</span></div>
+                <svg class="ecg-svg" viewBox="0 0 240 85" role="img" aria-label="موج P در لید II">
+                  ${svgGrid(240, 85)}
+                  ${isLAE
+                    ? `<path d="M 20 62 L 60 62 Q 80 28 100 46 Q 120 26 140 62 L 220 62" fill="none" stroke="#0f4c81" stroke-width="3" stroke-linecap="round"/>`
+                    : `<path d="M 20 62 L 75 62 L 105 16 L 135 62 L 220 62" fill="none" stroke="#be123c" stroke-width="3" stroke-linejoin="round"/>`
+                  }
+                </svg>
+              </div>
+              <div class="ecg-box" style="margin-bottom:0;">
+                <div class="ecg-box-label"><span>تأیید در لید V1</span><span>${isLAE ? 'جزء انتهایی بزرگ‌تر' : 'جزء ابتدایی بزرگ‌تر'}</span></div>
+                <svg class="ecg-svg" viewBox="0 0 240 85" role="img" aria-label="موج P دوفازی در V1">
+                  ${svgGrid(240, 85)}
+                  <line x1="15" y1="42" x2="225" y2="42" stroke="#94a3b8" stroke-dasharray="4 3" stroke-width="1"/>
+                  ${isLAE
+                    ? `<path d="M 20 42 L 70 42 Q 82 28 94 42 Q 116 78 144 42 L 220 42" fill="none" stroke="#0f4c81" stroke-width="3"/>`
+                    : `<path d="M 20 42 L 65 42 Q 92 8 118 42 Q 130 56 142 42 L 220 42" fill="none" stroke="#be123c" stroke-width="3"/>`
+                  }
+                </svg>
+              </div>
+            </div>
+
+            ${isLAE ? `
+              <h3>بزرگی دهلیز چپ (<span class="en">Left Atrial Enlargement</span>)</h3>
+              <ul class="clean-list">
+                <li><strong>لید II:</strong> موج <span class="en">P</span> دوشاخه یا شکاف‌دار (<span class="en">Bifid P-wave</span>).</li>
+                <li><strong>لید V1:</strong> موج <span class="en">P</span> دوفازی که در آن <strong>جزء انتهایی (منفی)</strong> بزرگ‌تر از جزء ابتدایی است.</li>
+                <li><strong>علل بالینی:</strong> افزایش فشار دهلیز چپ به‌دنبال <strong>نارسایی قلب چپ</strong>، <strong>کاردیومیوپاتی</strong> یا بیماری‌های دریچه میترال مانند <strong>تنگی دریچه میترال (<span class="en">Mitral Stenosis</span>)</strong>.</li>
+              </ul>
+            ` : `
+              <h3>بزرگی دهلیز راست (<span class="en">Right Atrial Enlargement</span>)</h3>
+              <ul class="clean-list">
+                <li><strong>لید II:</strong> موج <span class="en">P</span> بلند و نوک‌تیز با ارتفاع <strong>بیش از یا مساوی ۲/۵ میلی‌متر</strong>.</li>
+                <li><strong>لید V1:</strong> موج <span class="en">P</span> دوفازی که در آن <strong>جزء ابتدایی (مثبت)</strong> بزرگ‌تر از جزء انتهایی است.</li>
+                <li><strong>علل بالینی:</strong> <strong>پرفشاری شریان ریوی (<span class="en">Pulmonary Hypertension</span>)</strong> و بیماری‌های دریچه تریکوسپید مانند <strong>تنگی تریکوسپید (<span class="en">Tricuspid Stenosis</span>)</strong>.</li>
+              </ul>
+            `}
+          </div>
+
+          <div class="reveal-box">
+            <div class="reveal-q">یادآوری سریع: اگر در لید II موج P شکاف‌دار (Bifid) دیدید، در لید V1 منتظر چه نمایی هستید؟</div>
+            <button type="button" class="btn btn-secondary" data-action="toggleReveal" data-val="pwave_q">
+              ${revealed ? 'مخفی کردن پاسخ' : 'نمایش پاسخ'}
+            </button>
+            ${revealed ? `<div class="reveal-a">یک موج <span class="en">P</span> دوفازی که <strong>بخش انتهایی (منفی)</strong> آن بزرگ‌تر و عمیق‌تر از بخش ابتدایی باشد؛ این یافته بزرگی دهلیز چپ (<span class="en">LAE</span>) را تأیید می‌کند.</div>` : ''}
+          </div>
+        `;
+      }
+
+      // 8. Step 6A: Bundle Branch Blocks
+      function renderBBB() {
+        const isLBBB = state.bbbTab === 'lbbb';
+        return `
+          <span class="eyebrow">گام ۶ از ۷ • QRS (بلوک شاخه‌ای)</span>
+          <h2>بلوک شاخه چپ و راست (<span class="en">LBBB vs RBBB</span>)</h2>
+          <p class="lead">برای تشخیص بلوک‌های شاخه‌ای، ابتدا به لیدهای <strong><span class="en">V1–V2</span></strong> و سپس به <strong><span class="en">V5–V6</span></strong> نگاه کنید:</p>
+
+          <div class="seg-tabs">
+            <button type="button" class="seg-tab ${isLBBB ? 'active' : ''}" data-action="bbbTab" data-val="lbbb">بلوک شاخه چپ (LBBB)</button>
+            <button type="button" class="seg-tab ${!isLBBB ? 'active' : ''}" data-action="bbbTab" data-val="rbbb">بلوک شاخه راست (RBBB)</button>
+          </div>
+
+          <div class="card">
+            <div class="grid-2" style="margin-bottom:14px;">
+              <div class="ecg-box" style="margin-bottom:0;">
+                <div class="ecg-box-label"><span>V1 / V2</span><span>${isLBBB ? 'موج S بسیار عمیق (rS)' : 'الگوی rSR\' (شکل M)'}</span></div>
+                <svg class="ecg-svg" viewBox="0 0 240 95" role="img" aria-label="الگوی V1-V2">
+                  ${svgGrid(240, 95)}
+                  ${isLBBB
+                    ? `<path d="M 20 35 L 75 35 L 82 24 L 94 86 L 116 35 L 220 35" fill="none" stroke="#0f4c81" stroke-width="3" stroke-linejoin="round"/>`
+                    : `<path d="M 20 62 L 68 62 L 82 26 L 96 68 L 116 14 L 132 62 L 220 62" fill="none" stroke="#0d9488" stroke-width="3" stroke-linejoin="round"/>`
+                  }
+                </svg>
+              </div>
+              <div class="ecg-box" style="margin-bottom:0;">
+                <div class="ecg-box-label"><span>V5 / V6</span><span>${isLBBB ? 'موج R بزرگ و دندانه‌دار' : 'موج S پهن و کشیده'}</span></div>
+                <svg class="ecg-svg" viewBox="0 0 240 95" role="img" aria-label="الگوی V5-V6">
+                  ${svgGrid(240, 95)}
+                  ${isLBBB
+                    ? `<path d="M 20 68 L 70 68 L 88 18 L 104 30 L 120 16 L 140 68 L 220 68" fill="none" stroke="#0f4c81" stroke-width="3" stroke-linejoin="round"/>`
+                    : `<path d="M 20 55 L 65 55 L 74 62 L 86 18 L 102 74 L 138 74 L 152 55 L 220 55" fill="none" stroke="#0d9488" stroke-width="3" stroke-linejoin="round"/>`
+                  }
+                </svg>
+              </div>
+            </div>
+
+            ${isLBBB ? `
+              <h3>بلوک شاخه چپ (<span class="en">Left Bundle Branch Block</span>)</h3>
+              <ul class="clean-list">
+                <li><strong>V1 و V2:</strong> موج <span class="en">r</span> کوچک و سپس یک <strong>موج <span class="en">S</span> بسیار عمیق و بزرگ</strong>.</li>
+                <li><strong>V5 و V6:</strong> یک <strong>موج <span class="en">R</span> بسیار بزرگ و دندانه‌دار (<span class="en">Notched R</span>)</strong>.</li>
+                <li><strong>علل شایع:</strong> کشیدگی، ضخیم شدن یا فیبروز/انفارکتوس شاخه چپ در <strong>نارسایی قلب چپ (به‌ویژه سیستولیک)</strong>، <strong>انفارکتوس میوکارد (MI)</strong> و <strong>هیپرتروفی بطن چپ (LVH)</strong>.</li>
+              </ul>
+            ` : `
+              <h3>بلوک شاخه راست (<span class="en">Right Bundle Branch Block</span>)</h3>
+              <ul class="clean-list">
+                <li><strong>V1 و V2:</strong> نمای <strong><span class="en">rSR'</span> یا شکل <span class="en">M</span></strong>.</li>
+                <li><strong>V5 و V6:</strong> یک <strong>موج <span class="en">S</span> پهن و کشیده (<span class="en">Wide slurred S-wave</span>)</strong>.</li>
+                <li><strong>علل شایع:</strong> <strong>پرفشاری شریان ریوی</strong> (هیپرتروفی یا اتساع بطن راست) و <strong>انفارکتوس بطن راست (<span class="en">RV MI</span>)</strong> با ایجاد فیبروز در شاخه راست.</li>
+              </ul>
+            `}
+          </div>
+        `;
+      }
+
+      // 9. Step 6B: Ventricular Hypertrophy + Interactive Matching
+      function renderVH() {
+        const solvedCount = Object.keys(state.matching.solved).length;
+        const leftOrder = [MATCHING_PAIRS[0], MATCHING_PAIRS[2], MATCHING_PAIRS[1], MATCHING_PAIRS[3]];
+        const rightOrder = [MATCHING_PAIRS[1], MATCHING_PAIRS[3], MATCHING_PAIRS[0], MATCHING_PAIRS[2]];
+
+        return `
+          <span class="eyebrow">گام ۶ از ۷ • QRS (هیپرتروفی بطنی)</span>
+          <h2>هیپرتروفی بطن چپ و راست (<span class="en">LVH vs RVH</span>)</h2>
+
+          <div class="grid-2" style="margin-bottom:16px;">
+            <div class="card" style="margin-bottom:0;">
+              <h3>هیپرتروفی بطن چپ (<span class="en">LVH</span>)</h3>
+              <ul class="clean-list">
+                <li><strong>V1–V2:</strong> امواج <span class="en">S</span> به‌شدت عمیق.</li>
+                <li><strong>V5–V6:</strong> امواج <span class="en">R</span> بسیار بلند.</li>
+                <li><strong>معیار عددی:</strong> مجموع ارتفاع <span class="en">S</span> (در V1/V2) + <span class="en">R</span> (در V5/V6) <strong>بیش از ۳۵ میلی‌متر</strong>.</li>
+                <li><strong>علل شایع:</strong> تنگی دریچه آئورت (<span class="en">Aortic Stenosis</span>) و فشار خون بالا (<span class="en">Hypertension</span>).</li>
+              </ul>
+            </div>
+            <div class="card" style="margin-bottom:0;">
+              <h3>هیپرتروفی بطن راست (<span class="en">RVH</span>)</h3>
+              <ul class="clean-list">
+                <li><strong>V1–V2:</strong> امواج <span class="en">R</span> بسیار بلند.</li>
+                <li><strong>V6:</strong> امواج <span class="en">S</span> بزرگ‌تر از حد معمول.</li>
+                <li><strong>علت بسیار شایع:</strong> پرفشاری شریان ریوی (<span class="en">Pulmonary Hypertension</span>).</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>تمرین تطبیق سریع (${solvedCount} از ۴)</h3>
+            <p style="font-size:0.86rem;color:var(--text-muted);margin-bottom:12px;">ابتدا یک یافته نوار قلب را از ستون اول انتخاب کنید، سپس روی تشخیص متناظر آن بزنید:</p>
+            <div class="match-grid">
+              <div class="match-col">
+                ${leftOrder.map(item => {
+                  const isSolved = !!state.matching.solved[item.id];
+                  const isSel = state.matching.selectedLeft === item.id;
+                  return `<button type="button" class="match-item ${isSolved ? 'solved' : isSel ? 'selected' : ''}" data-action="matchLeft" data-val="${item.id}" ${isSolved ? 'disabled' : ''}>${isSolved ? '✓ ' : ''}${item.left}</button>`;
+                }).join('')}
+              </div>
+              <div class="match-col">
+                ${rightOrder.map(item => {
+                  const isSolved = !!state.matching.solved[item.id];
+                  return `<button type="button" class="match-item ${isSolved ? 'solved' : ''}" data-action="matchRight" data-val="${item.id}" ${isSolved ? 'disabled' : ''}>${isSolved ? '✓ ' : ''}${item.right}</button>`;
+                }).join('')}
+              </div>
+            </div>
+            <div id="matchFeedback" style="margin-top:10px;font-size:0.86rem;font-weight:600;color:var(--success);">
+              ${solvedCount === 4 ? 'عالی! همه الگوهای کمپلکس QRS را به‌درستی تطبیق دادید.' : ''}
+            </div>
+          </div>
+        `;
+      }
+
+      // 10. Step 7A: ST Depression & NSTE-ACS
+      function renderNSTEACS() {
+        const m = state.stDepMorph;
+        const trop = state.troponinState;
+
+        return `
+          <span class="eyebrow">گام ۷ از ۷ • ST و T (ایسکمی بدون صعود ST)</span>
+          <h2>افت قطعه <span class="en">ST</span>، وارونگی <span class="en">T</span> و <span class="en">NSTE-ACS</span></h2>
+          <p class="lead">در بیمار با درد قفسه سینه، معیار افت قطعه <span class="en">ST</span> (نقطه <span class="en">J</span> زیر خط ایزوالکتریک) در <strong>حداقل ۲ لید مجاور</strong> عبارت است از: <strong>بیش از 0.5 mm در V2–V3</strong> یا <strong>بیش از 1 mm در سایر لیدها</strong>.</p>
+
+          <div class="card">
+            <h3>۱. اهمیت شکل (<span class="en">Morphology</span>) افت قطعه <span class="en">ST</span></h3>
+            <div class="seg-tabs">
+              <button type="button" class="seg-tab ${m === 'horizontal' ? 'active' : ''}" data-action="stDepMorph" data-val="horizontal">افقی (Horizontal)</button>
+              <button type="button" class="seg-tab ${m === 'downsloping' ? 'active' : ''}" data-action="stDepMorph" data-val="downsloping">نزولی (Downsloping)</button>
+              <button type="button" class="seg-tab ${m === 'upsloping' ? 'active' : ''}" data-action="stDepMorph" data-val="upsloping">صعودی (Upsloping)</button>
+            </div>
+            <div class="ecg-box">
+              <svg class="ecg-svg" viewBox="0 0 360 95" role="img" aria-label="شکل افت قطعه ST">
+                ${svgGrid(360, 95)}
+                <line x1="15" y1="46" x2="345" y2="46" stroke="#94a3b8" stroke-dasharray="4 3" stroke-width="1.2"/>
+                ${m === 'horizontal'
+                  ? `<path d="M 20 46 L 85 46 L 94 14 L 106 66 L 180 66 Q 210 42 240 46 L 340 46" fill="none" stroke="#be123c" stroke-width="3" stroke-linejoin="round"/>`
+                  : m === 'downsloping'
+                  ? `<path d="M 20 46 L 85 46 L 94 14 L 106 60 L 178 78 Q 208 50 236 46 L 340 46" fill="none" stroke="#be123c" stroke-width="3" stroke-linejoin="round"/>`
+                  : `<path d="M 20 46 L 85 46 L 94 14 L 106 68 L 176 46 Q 206 28 236 46 L 340 46" fill="none" stroke="#0d9488" stroke-width="3" stroke-linejoin="round"/>`
+                }
+              </svg>
+            </div>
+            <p style="font-size:0.9rem;color:var(--text-muted);">
+              ${m === 'upsloping'
+                ? 'افت <strong>صعودی (<span class="en">Upsloping</span>)</strong> نسبت به دو نوع دیگر نگرانی کمتری برای ایسکمی حاد ایجاد می‌کند.'
+                : 'افت <strong>افقی (<span class="en">Horizontal</span>)</strong> و <strong>نزولی (<span class="en">Downsloping</span>)</strong> همراه با وارونگی موج <span class="en">T</span> به‌شدت مطرح‌کننده ایسکمی میوکارد هستند.'}
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>۲. تصمیم‌گیری بالینی با تروپونین (<span class="en">Troponin</span>)</h3>
+            <div class="seg-tabs">
+              <button type="button" class="seg-tab ${trop === 'normal' ? 'active' : ''}" data-action="tropState" data-val="normal">تروپونین نرمال</button>
+              <button type="button" class="seg-tab ${trop === 'positive' ? 'active' : ''}" data-action="tropState" data-val="positive">تروپونین مثبت (بالا)</button>
+            </div>
+            <div class="callout ${trop === 'normal' ? 'warning' : 'danger'}" style="margin-bottom:12px;">
+              <span class="callout-title">${trop === 'normal' ? 'آنژین ناپایدار (Unstable Angina)' : 'انفارکتوس بدون صعود ST (NSTEMI)'}</span>
+              ${trop === 'normal'
+                ? 'ایسکمی میوکارد وجود دارد اما انفارکتوس (نکروز) رخ نداده است.'
+                : 'انفارکتوس میوکارد (معمولاً ساب‌اندوکاردیال) رخ داده است و جزو سندرم حاد کرونری (<span class="en">NSTE-ACS</span>) محسوب می‌شود.'}
+            </div>
+            <div class="card-soft" style="margin-bottom:0;font-size:0.88rem;">
+              <strong>تشخیص‌های افتراقی مهم غیر از ACS:</strong> مسمومیت با <strong>دیگوکسین (<span class="en">Digoxin toxicity</span>)</strong> (سطح دیگوکسین را چک کنید) و <strong>هیپوکالمی (<span class="en">Hypokalemia</span>)</strong> (سطح پتاسیم را چک کنید).
+            </div>
+          </div>
+        `;
+      }
+
+      // 11. Step 7B: ST Elevation & STEMI Localization
+      function renderSTEMI() {
+        const terr = STEMI_TERRITORIES[state.stemiTerritory];
+        const leads = ['I', 'aVR', 'V1', 'V4', 'II', 'aVL', 'V2', 'V5', 'III', 'aVF', 'V3', 'V6'];
+
+        return `
+          <span class="eyebrow">گام ۷ از ۷ • STEMI</span>
+          <h2>صعود قطعه <span class="en">ST</span> و تعیین محل انفارکتوس</h2>
+          <p class="lead">معیار صعود <span class="en">ST</span> در <strong>حداقل ۲ لید مجاور</strong>: بیش از <strong>1 mm</strong> در لیدهای اندامی یا بیش از <strong>2 mm</strong> در لیدهای پره‌کوردیال. همچنین امواج <span class="en">T</span> پهن و بزرگ (<strong><span class="en">Hyperacute T-waves</span></strong>) می‌توانند پیش از صعود ST ظاهر شوند.</p>
+
+          <div class="grid-2" style="margin-bottom:16px;">
+            <div class="card" style="margin-bottom:0;padding:14px;">
+              <div style="font-weight:700;font-size:0.88rem;margin-bottom:6px;color:var(--teal);">مقعر (Concave / لبخند 😊)</div>
+              <svg class="ecg-svg" viewBox="0 0 220 74" role="img" aria-label="صعود مقعر ST">
+                ${svgGrid(220, 74)}
+                <path d="M 10 52 L 55 52 L 64 14 L 74 34 Q 108 42 136 16 Q 152 52 170 52 L 210 52" fill="none" stroke="#0d9488" stroke-width="2.6"/>
+              </svg>
+              <p style="font-size:0.8rem;color:var(--text-muted);margin-top:6px;">احتمال کمتر MI؛ بیشتر در رپولاریزاسیون زودرس خوش‌خیم، پریکاردیت یا هیپرکالمی.</p>
+            </div>
+            <div class="card" style="margin-bottom:0;padding:14px;">
+              <div style="font-weight:700;font-size:0.88rem;margin-bottom:6px;color:var(--danger);">محدب / سنگ‌قبر (Convex / Tombstone ☹️)</div>
+              <svg class="ecg-svg" viewBox="0 0 220 74" role="img" aria-label="صعود محدب ST">
+                ${svgGrid(220, 74)}
+                <path d="M 10 52 L 55 52 L 64 16 Q 102 2 140 24 Q 158 52 175 52 L 210 52" fill="none" stroke="#be123c" stroke-width="2.8"/>
+              </svg>
+              <p style="font-size:0.8rem;color:var(--text-muted);margin-top:6px;">به‌شدت مطرح‌کننده انفارکتوس میوکارد (STEMI) — به‌ویژه همراه با تغییرات متقابل و تروپونین بالا.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>نقشه تعاملی ۱۲ لید: تعیین محل <span class="en">STEMI</span> و مقلدها</h3>
+            <p style="font-size:0.84rem;color:var(--text-muted);margin-bottom:10px;">ابتدا همیشه STEMI را رد کنید، سپس به مقلدها (پریکاردیت و هیپرکالمی) فکر کنید:</p>
+            <div class="territory-chips">
+              ${Object.keys(STEMI_TERRITORIES).map(key => `
+                <button type="button" class="chip-btn ${state.stemiTerritory === key ? 'active' : ''}" data-action="stemiTerr" data-val="${key}">
+                  ${STEMI_TERRITORIES[key].label}
+                </button>
+              `).join('')}
+            </div>
+
+            <div class="lead-grid">
+              ${leads.map(ld => {
+                const isSTE = terr.ste.includes(ld);
+                const isRecip = terr.recip.includes(ld);
+                return `<div class="lead-cell ${isSTE ? 'ste' : isRecip ? 'recip' : ''}">
+                  <div>${ld}</div>
+                  <div style="font-size:0.68rem;margin-top:2px;">${isSTE ? '↑ ST' : isRecip ? '↓ Recip' : '—'}</div>
+                </div>`;
+              }).join('')}
+            </div>
+
+            ${terr.posteriorNote ? `
+              <div style="display:flex;gap:8px;justify-content:center;margin-bottom:12px;direction:ltr;">
+                <span class="lead-cell ste" style="padding:6px 14px;">V7 ↑ ST</span>
+                <span class="lead-cell ste" style="padding:6px 14px;">V8 ↑ ST</span>
+                <span class="lead-cell ste" style="padding:6px 14px;">V9 ↑ ST</span>
+              </div>
+            ` : ''}
+
+            <div class="callout ${state.stemiTerritory === 'pericarditis' || state.stemiTerritory === 'hyperk' ? 'warning' : 'danger'}" style="margin-bottom:0;">
+              <span class="callout-title">${terr.title}</span>
+              <p>${terr.desc}</p>
+            </div>
+          </div>
+        `;
+      }
+
+      // 12. Quiz Screen
+      function renderQuiz() {
+        const answeredCount = Object.keys(state.quizAnswers).length;
+        return `
+          <span class="eyebrow">سنجش یادگیری • ${answeredCount} از ${QUIZ_QUESTIONS.length} پاسخ‌داده‌شده</span>
+          <h2>آزمون سناریوهای بالینی و مفهومی</h2>
+          <p class="lead">پس از هر انتخاب، بازخورد آموزشی آنی دریافت می‌کنید تا علت درستی یا نادرستی گزینه برایتان تثبیت شود.</p>
+
+          ${QUIZ_QUESTIONS.map((q, qIdx) => {
+            const userAns = state.quizAnswers[qIdx];
+            const isAnswered = userAns !== undefined;
+            return `
+              <div class="card">
+                <div style="font-size:0.78rem;font-weight:700;color:var(--teal);margin-bottom:6px;">سؤال ${qIdx + 1} • ${q.stepLabel}</div>
+                <p style="font-weight:700;font-size:0.95rem;margin-bottom:12px;">${q.q}</p>
+                <div>
+                  ${q.options.map((opt, oIdx) => {
+                    let cls = '';
+                    if (isAnswered) {
+                      if (oIdx === q.correct) cls = 'correct';
+                      else if (oIdx === userAns) cls = 'incorrect';
+                    }
+                    return `
+                      <button type="button" class="quiz-option ${cls}" data-action="quizAns" data-q="${qIdx}" data-o="${oIdx}" ${isAnswered ? 'disabled' : ''}>
+                        <span>${opt}</span>
+                        ${isAnswered && oIdx === q.correct ? '<span>✓</span>' : isAnswered && oIdx === userAns ? '<span>✕</span>' : ''}
+                      </button>
+                    `;
+                  }).join('')}
+                </div>
+                ${isAnswered ? `
+                  <div class="quiz-feedback ${userAns === q.correct ? 'correct' : 'incorrect'}">
+                    <strong>${userAns === q.correct ? 'پاسخ درست:' : 'توضیح آموزشی:'}</strong> ${q.explain}
+                  </div>
+                ` : ''}
+              </div>
+            `;
+          }).join('')}
+        `;
+      }
+
+      // 13. Flashcards Screen
+      function renderFlashcards() {
+        const filteredIndices = FLASHCARDS.map((_, i) => i).filter(i => {
+          if (state.flashcardFilter === 'review') return state.flashcardStatus[i] === 'review';
+          return true;
+        });
+
+        const safePos = filteredIndices.length > 0 ? Math.min(state.flashcardIndex, filteredIndices.length - 1) : 0;
+        const actualIdx = filteredIndices[safePos];
+        const card = actualIdx !== undefined ? FLASHCARDS[actualIdx] : null;
+        const reviewCount = Object.values(state.flashcardStatus).filter(v => v === 'review').length;
+
+        return `
+          <span class="eyebrow">مرور فعال و تکرار فاصله‌دار</span>
+          <h2>فلش‌کارت‌های مرور سریع</h2>
+          <p class="lead">پیش از لمس کارت، پاسخ را در ذهن خود بازیابی کنید و سپس میزان تسلط خود را علامت بزنید.</p>
+
+          <div class="seg-tabs">
+            <button type="button" class="seg-tab ${state.flashcardFilter === 'all' ? 'active' : ''}" data-action="fcFilter" data-val="all">همه کارت‌ها (${FLASHCARDS.length})</button>
+            <button type="button" class="seg-tab ${state.flashcardFilter === 'review' ? 'active' : ''}" data-action="fcFilter" data-val="review">نیاز به مرور (${reviewCount})</button>
+          </div>
+
+          ${!card ? `
+            <div class="card" style="text-align:center;padding:32px 20px;">
+              <h3>کارتی در لیست «نیاز به مرور» نیست!</h3>
+              <p style="font-size:0.9rem;color:var(--text-muted);margin:8px 0 16px;">برای مرور مجدد همه مفاهیم، به نمای «همه کارت‌ها» برگردید.</p>
+              <button type="button" class="btn btn-primary" data-action="fcFilter" data-val="all">نمایش همه کارت‌ها</button>
+            </div>
+          ` : `
+            <div class="flashcard-stage" data-action="fcFlip" role="button" tabindex="0" aria-label="برگرداندن فلش‌کارت">
+              <span class="flashcard-tag">${card.tag} • کارت ${safePos + 1} از ${filteredIndices.length}</span>
+              <div class="flashcard-main" style="white-space:pre-line;">
+                ${state.flashcardFlipped ? card.a : card.q}
+              </div>
+              <div class="flashcard-hint">${state.flashcardFlipped ? 'برای دیدن پرسش دوباره لمس کنید' : 'برای نمایش پاسخ لمس کنید'}</div>
+            </div>
+
+            <div style="display:flex;gap:10px;margin-bottom:12px;">
+              <button type="button" class="btn btn-secondary" style="flex:1;border-color:var(--warning-border);color:var(--warning);" data-action="fcMark" data-idx="${actualIdx}" data-val="review">
+                نیاز به مرور ${state.flashcardStatus[actualIdx] === 'review' ? '✓' : ''}
+              </button>
+              <button type="button" class="btn btn-secondary" style="flex:1;border-color:var(--success-border);color:var(--success);" data-action="fcMark" data-idx="${actualIdx}" data-val="known">
+                تسلط دارم ${state.flashcardStatus[actualIdx] === 'known' ? '✓' : ''}
+              </button>
+            </div>
+
+            <div style="display:flex;gap:10px;">
+              <button type="button" class="btn btn-secondary" style="flex:1;" data-action="fcNav" data-dir="-1" ${safePos === 0 ? 'disabled' : ''}>→ کارت قبلی</button>
+              <button type="button" class="btn btn-primary" style="flex:1;" data-action="fcNav" data-dir="1" ${safePos >= filteredIndices.length - 1 ? 'disabled' : ''}>کارت بعدی ←</button>
+            </div>
+          `}
+        `;
+      }
+
+      // 14. Summary & Evaluation Screen
+      function renderSummary() {
+        let correct = 0;
+        const weakSteps = [];
+        const unanswered = [];
+
+        QUIZ_QUESTIONS.forEach((q, idx) => {
+          const ans = state.quizAnswers[idx];
+          if (ans === undefined) {
+            unanswered.push(q);
+          } else if (ans === q.correct) {
+            correct++;
+          } else {
+            weakSteps.push(q);
+          }
+        });
+
+        const total = QUIZ_QUESTIONS.length;
+        const pct = Math.round((correct / total) * 100);
+        const knownCards = Object.values(state.flashcardStatus).filter(v => v === 'known').length;
+
+        return `
+          <span class="eyebrow">ارزیابی نهایی عملکرد</span>
+          <h2>گزارش یادگیری و بخش‌های پیشنهادی برای مرور</h2>
+
+          <div class="score-hero">
+            <div class="score-circle">
+              <span>${pct}٪</span>
+              <small>${correct} از ${total}</small>
+            </div>
+            <h3>${pct >= 80 ? 'تسلط بسیار خوب بر رویکرد ۷ گام!' : pct >= 50 ? 'پیشرفت خوب — چند بخش نیاز به مرور دارد' : 'شروع عالی — مرور بخش‌های کلیدی توصیه می‌شود'}</h3>
+            <p style="font-size:0.88rem;color:var(--text-muted);margin-top:6px;">
+              بازدید صفحات: ${state.visited.length} از ${SCREENS.length} • فلش‌کارت‌های مسلط‌شده: ${knownCards} از ${FLASHCARDS.length}
+            </p>
+          </div>
+
+          ${weakSteps.length > 0 ? `
+            <div class="card">
+              <h3>بخش‌هایی که در آزمون نیاز به مرور مجدد داشتند:</h3>
+              <div class="roadmap-list" style="margin-top:10px;">
+                ${weakSteps.map(w => {
+                  const targetIdx = SCREENS.findIndex(s => s.id === w.stepId);
+                  return `
+                    <button type="button" class="roadmap-item" data-action="go" data-target="${targetIdx}">
+                      <span class="roadmap-num" style="background:var(--danger-soft);color:var(--danger);">!</span>
+                      <span class="roadmap-info">
+                        <span class="roadmap-title">${w.stepLabel}</span>
+                        <span class="roadmap-sub">برای مرور مجدد این بخش کلیک کنید</span>
+                      </span>
+                      <span>←</span>
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          ` : unanswered.length > 0 ? `
+            <div class="callout warning">
+              <span class="callout-title">آزمون هنوز کامل نشده است</span>
+              به ${unanswered.length} سؤال از آزمون پاسخ نداده‌اید. برای دریافت ارزیابی دقیق‌تر، به صفحه آزمون برگردید.
+            </div>
+          ` : `
+            <div class="callout success">
+              <span class="callout-title">همه سؤالات آزمون را درست پاسخ دادید!</span>
+              برای تثبیت بلندمدت، می‌توانید هر چند روز یک‌بار فلش‌کارت‌های مرور سریع را دوره کنید.
+            </div>
+          `}
+
+          <div class="card">
+            <h3>خلاصه طلایی ۷ گام تفسیر <span class="en">ECG</span></h3>
+            <ul class="clean-list">
+              <li><strong>۱. Rate:</strong> امواج R × ۶ یا ۳۰۰ ÷ مربع بزرگ (نرمال ۶۰–۱۰۰).</li>
+              <li><strong>۲. Rhythm:</strong> در تاکی‌کاردی ماتریس باریک/پهن × منظم/نامنظم؛ در برادی‌کاردی فاصله PR و بلوک‌های AV.</li>
+              <li><strong>۳. Axis:</strong> قانون شست‌ها در I و aVF (تأیید LAD با لید II).</li>
+              <li><strong>۴. Intervals:</strong> PR (بلوک AV یا سه‌گانه WPW) و QT (&gt; نصف R–R یا &gt;500 ms → خطر تورساد).</li>
+              <li><strong>۵. P-Wave:</strong> دوشاخه در II + انتهایی بزرگ در V1 (LAE)؛ نوک‌تیز ≥2.5mm در II + ابتدایی بزرگ در V1 (RAE).</li>
+              <li><strong>۶. QRS:</strong> بلوک شاخه‌ای (LBBB / RBBB) و هیپرتروفی بطنی (LVH / RVH).</li>
+              <li><strong>۷. ST &amp; T:</strong> افت ST + تروپونین (آنژین ناپایدار vs NSTEMI)؛ صعود ST + محل STEMI (قُدامی، تحتانی، جانبی، خلفی) پیش از رد مقلدها.</li>
+            </ul>
+          </div>
+
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button type="button" class="btn btn-primary" style="flex:1;" data-action="retryQuiz">تکرار آزمون</button>
+            <button type="button" class="btn btn-danger-outline" style="flex:1;" data-action="openReset">شروع مجدد کل دوره</button>
+          </div>
+        `;
+      }
+
+      // Event Delegation
+      document.addEventListener('click', function (e) {
+        const el = e.target.closest('[data-action]');
+        if (!el) return;
+        const action = el.dataset.action;
+
+        if (action === 'go') {
+          goToScreen(parseInt(el.dataset.target, 10));
+        } else if (action === 'rateMode') {
+          state.rateMode = el.dataset.val;
+          saveState();
+          renderApp();
+        } else if (action === 'tachyCell') {
+          state.tachyCell = el.dataset.val;
+          saveState();
+          renderApp();
+        } else if (action === 'toggleReveal') {
+          const k = el.dataset.val;
+          state.reveals[k] = !state.reveals[k];
+          saveState();
+          renderApp();
+        } else if (action === 'bradyOpen') {
+          const idx = parseInt(el.dataset.val, 10);
+          state.bradyOpen = state.bradyOpen === idx ? -1 : idx;
+          saveState();
+          renderApp();
+        } else if (action === 'axisL1') {
+          state.axisLead1 = el.dataset.val;
+          saveState();
+          renderApp();
+        } else if (action === 'axisAVF') {
+          state.axisAVF = el.dataset.val;
+          saveState();
+          renderApp();
+        } else if (action === 'axisL2') {
+          state.axisLead2 = el.dataset.val;
+          saveState();
+          renderApp();
+        } else if (action === 'intervalTab') {
+          state.intervalTab = el.dataset.val;
+          saveState();
+          renderApp();
+        } else if (action === 'pwaveTab') {
+          state.pwaveTab = el.dataset.val;
+          saveState();
+          renderApp();
+        } else if (action === 'bbbTab') {
+          state.bbbTab = el.dataset.val;
+          saveState();
+          renderApp();
+        } else if (action === 'matchLeft') {
+          state.matching.selectedLeft = el.dataset.val;
+          saveState();
+          renderApp();
+        } else if (action === 'matchRight') {
+          const left = state.matching.selectedLeft;
+          const right = el.dataset.val;
+          if (!left) {
+            const fb = document.getElementById('matchFeedback');
+            if (fb) {
+              fb.style.color = 'var(--warning)';
+              fb.textContent = 'ابتدا یک یافته را از ستون اول انتخاب کنید.';
+            }
+            return;
+          }
+          if (left === right) {
+            state.matching.solved[left] = true;
+            state.matching.selectedLeft = null;
+            saveState();
+            renderApp();
+          } else {
+            el.classList.add('wrong');
+            const fb = document.getElementById('matchFeedback');
+            if (fb) {
+              fb.style.color = 'var(--danger)';
+              fb.textContent = 'تطبیق نادرست بود؛ دوباره دقت کنید و گزینه صحیح را بزنید.';
+            }
+            setTimeout(() => el.classList.remove('wrong'), 450);
+          }
+        } else if (action === 'stDepMorph') {
+          state.stDepMorph = el.dataset.val;
+          saveState();
+          renderApp();
+        } else if (action === 'tropState') {
+          state.troponinState = el.dataset.val;
+          saveState();
+          renderApp();
+        } else if (action === 'stemiTerr') {
+          state.stemiTerritory = el.dataset.val;
+          saveState();
+          renderApp();
+        } else if (action === 'quizAns') {
+          const q = parseInt(el.dataset.q, 10);
+          const o = parseInt(el.dataset.o, 10);
+          if (state.quizAnswers[q] === undefined) {
+            state.quizAnswers[q] = o;
+            saveState();
+            renderApp();
+          }
+        } else if (action === 'fcFilter') {
+          state.flashcardFilter = el.dataset.val;
+          state.flashcardIndex = 0;
+          state.flashcardFlipped = false;
+          saveState();
+          renderApp();
+        } else if (action === 'fcFlip') {
+          state.flashcardFlipped = !state.flashcardFlipped;
+          saveState();
+          renderApp();
+        } else if (action === 'fcMark') {
+          const idx = parseInt(el.dataset.idx, 10);
+          state.flashcardStatus[idx] = el.dataset.val;
+          saveState();
+          renderApp();
+        } else if (action === 'fcNav') {
+          const dir = parseInt(el.dataset.dir, 10);
+          state.flashcardIndex = Math.max(0, state.flashcardIndex + dir);
+          state.flashcardFlipped = false;
+          saveState();
+          renderApp();
+        } else if (action === 'retryQuiz') {
+          state.quizAnswers = {};
+          saveState();
+          goToScreen(SCREENS.findIndex(s => s.id === 'quiz'));
+        } else if (action === 'openReset') {
+          document.getElementById('resetModal').classList.remove('hidden');
+        }
+      });
+
+      function updateRateDisplayInPlace() {
+        const isRWave = state.rateMode === 'rwave';
+        const bpm = isRWave ? Math.round(state.rateRWaves * 6) : Math.round(300 / state.rateBoxes);
+        let statusClass = 'normal', statusText = 'ضربان نرمال (۶۰ تا ۱۰۰)';
+        if (bpm > 100) { statusClass = 'tachy'; statusText = 'تاکی‌کاردی (> 100 bpm)'; }
+        else if (bpm < 60) { statusClass = 'brady'; statusText = 'برادی‌کاردی (< 60 bpm)'; }
+        const lbl = document.getElementById('rateSliderLabel');
+        const svgBpm = document.getElementById('rateSvgBpm');
+        const svgWrap = document.getElementById('rateSvgWrap');
+        const metricBpm = document.getElementById('rateMetricBpm');
+        const chip = document.getElementById('rateStatusChip');
+        if (lbl) lbl.textContent = isRWave ? `${state.rateRWaves} موج (${state.rateRWaves} × ۶)` : `${state.rateBoxes} مربع (۳۰۰ ÷ ${state.rateBoxes})`;
+        if (svgBpm) svgBpm.textContent = `${bpm} bpm`;
+        if (svgWrap) svgWrap.innerHTML = renderRateSVG(bpm);
+        if (metricBpm) metricBpm.textContent = `${bpm} bpm`;
+        if (chip) {
+          chip.className = 'status-chip ' + statusClass;
+          chip.textContent = statusText;
+        }
+      }
+
+      document.addEventListener('input', function (e) {
+        const inputType = e.target.dataset.input;
+        if (!inputType) return;
+        if (inputType === 'rateRWaves') {
+          state.rateRWaves = parseInt(e.target.value, 10);
+          saveState();
+          updateRateDisplayInPlace();
+        } else if (inputType === 'rateBoxes') {
+          state.rateBoxes = parseFloat(e.target.value);
+          saveState();
+          updateRateDisplayInPlace();
+        }
+      });
+
+      // Fixed controls
+      document.getElementById('btnRoadmap').addEventListener('click', function () {
+        goToScreen(1);
+      });
+
+      document.getElementById('btnPrev').addEventListener('click', function () {
+        goToScreen(state.currentScreen - 1);
+      });
+
+      document.getElementById('btnNext').addEventListener('click', function () {
+        goToScreen(state.currentScreen + 1);
+      });
+
+      document.getElementById('btnCancelReset').addEventListener('click', function () {
+        document.getElementById('resetModal').classList.add('hidden');
+      });
+
+      document.getElementById('btnConfirmReset').addEventListener('click', function () {
+        state = getDefaultState();
+        saveState();
+        document.getElementById('resetModal').classList.add('hidden');
+        renderApp();
+      });
+
+      // Initial render
+      renderApp();
+    })();
+  </script>
+</body>
+</html>
