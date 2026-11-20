@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Our Little Date ♡</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#f7b6c8;--rose:#c9798f;--deep:#a94766;--cream:#fff7f0;--ivory:#fffdf9;--ink:#5a2f3d;--sh:0 12px 34px rgba(201,121,143,.25)}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%;overflow-x:hidden}
+body{font-family:'Vazirmatn',Tahoma,sans-serif;color:var(--ink);background:linear-gradient(160deg,#ffe3ec,#fff4ea 55%,#ffd9e5);background-attachment:fixed;line-height:1.9}
+#fx{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:50}
+.fl{position:fixed;bottom:-30px;animation:rise linear forwards;opacity:.0}
+@keyframes rise{10%{opacity:.8}100%{transform:translateY(-110vh) rotate(40deg);opacity:0}}
+.bg-h{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg-h span{position:absolute;color:var(--pink);opacity:.5;animation:float 7s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-18px) rotate(10deg)}}
+main{position:relative;z-index:1;max-width:520px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 16px 40px;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+.screen{display:none;animation:in .6s ease both;text-align:center}
+.screen.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(18px) scale(.98)}}
+.card{background:var(--ivory);border-radius:28px;padding:24px 20px;box-shadow:var(--sh);border:1px solid #ffe0e8}
+h1{font-size:2rem;color:var(--deep);font-weight:800;line-height:1.4}
+h2{font-size:1.35rem;color:var(--deep);font-weight:800;margin-bottom:18px}
+.sub{color:var(--rose);letter-spacing:2px;margin-bottom:6px}
+.sig{color:var(--rose);margin:6px 0 14px}
+.btn{font:inherit;font-weight:600;border:0;border-radius:999px;padding:12px 26px;cursor:pointer;color:#fff;background:linear-gradient(135deg,#f08fab,var(--deep));box-shadow:0 8px 20px rgba(169,71,102,.35);transition:.2s}
+.btn:hover{transform:translateY(-2px)}.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.6;cursor:default}
+.btn.ghost{background:#fff;color:var(--deep);box-shadow:0 4px 12px rgba(201,121,143,.25);border:1px solid var(--pink)}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+:focus-visible{outline:3px solid var(--deep);outline-offset:3px}
+/* envelope */
+.env{position:relative;width:250px;height:170px;margin:26px auto 10px;cursor:pointer;background:none;border:0;display:block;perspective:700px}
+.env .body{position:absolute;inset:0;background:linear-gradient(135deg,#f9c3d3,#f08fab);border-radius:14px;box-shadow:var(--sh)}
+.env .flap{position:absolute;top:0;left:0;right:0;height:100px;background:linear-gradient(#f4a3bb,#e888a6);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .8s ease;z-index:3;border-radius:14px 14px 0 0}
+.env .seal{position:absolute;top:70px;left:50%;transform:translateX(-50%);font-size:2rem;z-index:4;animation:beat 1.4s infinite;transition:opacity .4s}
+@keyframes beat{50%{transform:translateX(-50%) scale(1.2)}}
+.env.open .flap{transform:rotateX(180deg);z-index:1}.env.open .seal{opacity:0}
+.env .paper{position:absolute;left:14px;right:14px;top:10px;bottom:10px;background:#fff;border-radius:8px;z-index:2;transition:transform .9s .4s}
+.env.open .paper{transform:translateY(-40px)}
+.hint{color:var(--rose);font-size:.9rem}
+.letter{display:none;margin-top:16px;text-align:right;white-space:pre-line;background:#fffaf5 repeating-linear-gradient(transparent 0 33px,#ffe1e9 34px);border-radius:18px;padding:18px;box-shadow:inset 0 0 0 1px #ffe0e8;animation:in .8s both;line-height:34px}
+.letter.show{display:block}
+.cd{display:flex;gap:8px;justify-content:center;margin:18px 0 4px;direction:ltr}
+.cd div{background:#fff;border-radius:16px;padding:8px 6px;min-width:62px;box-shadow:0 4px 12px rgba(201,121,143,.2)}
+.cd b{display:block;font-size:1.4rem;color:var(--deep)}.cd small{color:var(--rose)}
+/* big question */
+.noarea{position:relative;height:150px;margin-top:14px;overflow:hidden;border-radius:20px}
+#yes{position:absolute;left:50%;top:14px;transform:translateX(-50%);font-size:1.1rem;padding:14px 26px;animation:pulse 1.6s infinite;white-space:nowrap}
+@keyframes pulse{50%{box-shadow:0 0 0 12px rgba(240,143,171,.25)}}
+#no{position:absolute;top:92px;left:calc(50% - 36px);padding:8px 18px;transition:left .25s,top .25s}
+/* time */
+.tbox{display:flex;gap:10px;justify-content:center;align-items:center;direction:ltr;margin:10px 0}
+.tbox select{font:inherit;font-size:1.6rem;font-weight:800;color:var(--deep);padding:10px 14px;border-radius:18px;border:2px solid var(--pink);background:#fff;appearance:none;text-align:center;min-width:84px}
+.tbox span{font-size:2rem;color:var(--rose)}
+.tshow{font-size:2.4rem;font-weight:800;color:var(--deep);margin:6px 0}
+.err{color:#c0334f;min-height:1.6em;font-size:.95rem}
+/* destinations */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.dest{position:relative;border:3px solid transparent;border-radius:22px;padding:0;overflow:hidden;cursor:pointer;background:#fff;font:inherit;color:var(--ink);box-shadow:0 6px 16px rgba(201,121,143,.2);transition:.25s}
+.dest:hover{transform:translateY(-4px)}
+.dest .pic{height:96px;display:flex;align-items:center;justify-content:center;font-size:3.2rem}
+.dest .t{padding:8px;font-weight:600}
+.dest .ck{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:var(--deep);color:#fff;display:none;align-items:center;justify-content:center}
+.dest.sel{border-color:var(--deep);transform:scale(1.04);box-shadow:0 10px 24px rgba(169,71,102,.4)}.dest.sel .ck{display:flex;animation:pop .4s}
+@keyframes pop{from{transform:scale(0)}}
+/* notes */
+textarea{width:100%;min-height:150px;font:inherit;padding:14px;border-radius:16px;border:2px dashed var(--pink);background:#fffaf5 repeating-linear-gradient(transparent 0 31px,#ffe6ec 32px);line-height:32px;resize:vertical;color:var(--ink)}
+.cnt{text-align:left;color:var(--rose);font-size:.85rem;direction:ltr}
+/* ticket */
+.ticket{background:linear-gradient(160deg,#fff,#ffe9ef);border-radius:26px;padding:20px;box-shadow:var(--sh);border:2px dashed var(--pink);position:relative;text-align:center}
+.ticket h3{color:var(--deep);font-size:1.5rem}
+.pol{background:#fff;padding:8px 8px 22px;box-shadow:0 6px 16px rgba(0,0,0,.15);transform:rotate(-3deg);width:170px;margin:12px auto}
+.pol .ph{height:130px;background:linear-gradient(135deg,#ffd6e2,#ffeede);display:flex;align-items:center;justify-content:center;font-size:2.4rem;overflow:hidden}
+.pol img{width:100%;height:100%;object-fit:cover}
+.kv{text-align:right;margin-top:10px}.kv p{border-bottom:1px dotted var(--pink);padding:5px 0}.kv b{color:var(--rose)}
+.msg{white-space:pre-line;margin-top:16px;font-weight:600;color:var(--deep)}
+.stat{margin-top:14px;padding:12px;border-radius:16px;background:#fff;font-size:.92rem}
+.stat.ok{color:#2f7d4f}.stat.bad{color:#c0334f}
+/* music */
+#mus{position:fixed;top:max(12px,env(safe-area-inset-top));left:12px;z-index:60;width:46px;height:46px;border-radius:50%;border:0;background:#fff;box-shadow:var(--sh);cursor:pointer;font-size:1.3rem}
+#mus.play span{display:inline-block;animation:spin 3s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="bg-h" aria-hidden="true"></div>
+<div id="fx" aria-hidden="true"></div>
+<button id="mus" aria-label="پخش/توقف موسیقی" title="موسیقی"><span>♪</span></button>
+<main>
+
+<section class="screen card" id="s1" aria-labelledby="t1">
+  <h1 id="t1">Our Little Date ♡</h1>
+  <p class="sub">4 Years of Us</p>
+  <p class="sig">«برای قند روزهای تلخ من...»</p>
+  <button class="env" id="env" aria-label="باز کردن پاکت نامه"><div class="body"></div><div class="paper"></div><div class="flap"></div><div class="seal">❤️</div></button>
+  <p class="hint" id="envhint">روی پاکت بزن 💌</p>
+  <div class="letter" id="letter">مریم جان...
+
+چهار سال از روزی که قصه‌مون شروع شد می‌گذره.
+
+حالا برای چهارمین سالگردمون یه سورپرایز کوچولو برات دارم.
+
+آماده‌ای با هم یه قرار قشنگ دیگه بسازیم؟ ❤️</div>
+  <div id="cdwrap"><div class="cd" id="cd" aria-live="off"></div></div>
+  <div class="row"><button class="btn" id="go1" style="display:none">ادامه ✨</button></div>
+</section>
+
+<section class="screen card" id="s2" aria-labelledby="t2">
+  <h2 id="t2">مریم جان، با من روز ۳ آذر ماه بیرون میای؟ 🥺❤️</h2>
+  <div class="noarea" id="noarea">
+    <button class="btn" id="yes">آره، معلومه که میام! ❤️</button>
+    <button class="btn ghost" id="no" type="button">نه! 🙈</button>
+  </div>
+  <p class="msg" id="yesmsg"></p>
+</section>
+
+<section class="screen card" id="s3" aria-labelledby="t3">
+  <h2 id="t3">خب خانوم خوشگلم، دوست داری چه ساعتی بریم بیرون؟ ⏰</h2>
+  <div class="tshow" id="tshow">--:--</div>
+  <div class="tbox"><select id="hh" aria-label="ساعت"></select><span>:</span><select id="mm" aria-label="دقیقه"></select></div>
+  <p class="err" id="terr" role="alert"></p>
+  <div class="row"><button class="btn ghost" data-back>قبلی</button><button class="btn" id="go3">تأیید ساعت ✓</button></div>
+</section>
+
+<section class="screen card" id="s4" aria-labelledby="t4">
+  <h2 id="t4">حالا بگو کجا بریم که بیشتر بهت خوش بگذره؟ 🌷</h2>
+  <div class="grid" id="dests" role="radiogroup" aria-label="مقصد"></div>
+  <p class="err" id="derr" role="alert"></p>
+  <div class="row"><button class="btn ghost" data-back>قبلی</button><button class="btn" id="go4">ادامه</button></div>
+</section>
+
+<section class="screen card" id="s5" aria-labelledby="t5">
+  <h2 id="t5">یه چیزی هست که دوست داری بدونم؟ ❤️</h2>
+  <textarea id="note" maxlength="400" placeholder="مثلاً دوست داری کجا بریم، چی بخوریم یا هر چیزی که دلت می‌خواد..." aria-label="یادداشت"></textarea>
+  <div class="cnt" id="cnt">0 / 400</div>
+  <div class="row"><button class="btn ghost" data-back>قبلی</button><button class="btn" id="go5">ساختن بلیط 🎟️</button></div>
+</section>
+
+<section class="screen" id="s6" aria-labelledby="t6">
+  <div class="ticket" id="ticket">
+    <h3 id="t6">Our Little Date ♡</h3>
+    <p class="sub">4 Years of Us</p>
+    <div class="pol"><div class="ph" id="photo">🌸💗</div></div>
+    <p><b>Maryam</b> · مریم</p>
+    <div class="kv">
+      <p><b>تاریخ:</b> <span id="kd"></span></p>
+      <p><b>ساعت:</b> <span id="kt"></span></p>
+      <p><b>مقصد:</b> <span id="kp"></span></p>
+      <p><b>یادداشت:</b> <span id="kn"></span></p>
+    </div>
+    <p class="msg">پس قرار چهارمین سالگردمون تنظیم شد! 🥹
+
+حالا من یه قرار دارم که باید به قشنگ‌ترین شکل ممکن بسازمش.
+
+ممنون که چهار ساله قشنگ‌ترین قسمت زندگی منی...
+
+دوستت دارم، قند روزهای تلخ من ❤️</p>
+  </div>
+  <div class="stat" id="stat" role="status"></div>
+  <div class="row" id="fallback" style="display:none">
+    <button class="btn ghost" id="copy">کپی خلاصه</button><button class="btn ghost" id="share">اشتراک‌گذاری</button>
+  </div>
+  <div class="row"><button class="btn ghost" data-back>ویرایش</button><button class="btn" id="save">ذخیره بلیط به‌صورت عکس 📷</button><button class="btn" id="fin">پایان ❤️</button></div>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js" defer></script>
+<script>
+/* ============ CONFIG: fill in values here only ============ */
+const APP_CONFIG = {
+  recipientEmail: "behdadghanmi2003@gmail.com",
+  maryamName: "مریم",
+  senderName: "بهداد",
+  anniversaryDate: "2026-11-24",
+  anniversaryPersianDate: "۳ آذر ۱۴۰۵",
+  signature: "قند روزهای تلخ من :)",
+  couplePhotoUrl: "",
+  musicUrl: "",
+  emailjsPublicKey: "",
+  emailjsServiceId: "",
+  emailjsTemplateId: ""
+};
+/* ========================================================= */
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const fa = n => Number(n).toLocaleString('fa-IR', {useGrouping:false});
+const pad = n => String(n).padStart(2, '0');
+const DESTS = [
+  {k:'cafe', e:'☕', n:'کافی‌شاپ', g:'#ffe0c9,#f7b6c8'},
+  {k:'rest', e:'🍽️', n:'رستوران', g:'#ffd3df,#fff0d9'},
+  {k:'kebab', e:'🍢', n:'کبابی', g:'#ffd9c2,#f6a9bd'},
+  {k:'forest', e:'🌳', n:'جنگل', g:'#d9f2d9,#ffd6e2'}
+];
+const state = {step:1, yes:false, h:null, m:null, place:null, note:'', sent:false, sending:false};
+const sig = () => JSON.stringify([state.h, state.m, state.place, state.note]);
+let lastSent = '';
+
+/* background hearts */
+(() => { const w = $('.bg-h'); for (let i = 0; i < 14; i++) { const s = document.createElement('span'); s.textContent = ['♥','✿','✦','♡'][i % 4]; s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;font-size:${14+Math.random()*22}px;animation-delay:${-Math.random()*7}s`; w.appendChild(s); } })();
+
+/* effects */
+function burst(n = 40, items = ['❤️','💗','🌸','✨','🎀','💖']) {
+  if (matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  for (let i = 0; i < n; i++) {
+    const s = document.createElement('span'); s.className = 'fl'; s.textContent = items[i % items.length];
+    s.style.cssText = `left:${Math.random()*100}%;font-size:${16+Math.random()*22}px;animation-duration:${3+Math.random()*3}s;animation-delay:${Math.random()*1.2}s`;
+    $('#fx').appendChild(s); setTimeout(() => s.remove(), 7000);
+  }
+}
+
+/* navigation */
+function show(n) {
+  state.step = n;
+  $$('.screen').forEach((s, i) => s.classList.toggle('on', i + 1 === n));
+  scrollTo({top:0});
+  if (n === 6) buildTicket();
+}
+$$('[data-back]').forEach(b => b.onclick = () => show(state.step - 1));
+
+/* music */
+const audio = APP_CONFIG.musicUrl ? new Audio(APP_CONFIG.musicUrl) : null;
+if (audio) audio.loop = true;
+let wantMusic = true, started = false;
+function musicUI() { $('#mus').classList.toggle('play', !!audio && !audio.paused); }
+function startMusic() { if (started || !audio || !wantMusic) return; started = true; audio.play().then(musicUI).catch(() => { started = false; }); }
+document.addEventListener('pointerdown', startMusic, {once:true});
+$('#mus').onclick = e => {
+  e.stopPropagation();
+  if (!audio) { alert('فایل موسیقی هنوز تنظیم نشده (musicUrl).'); return; }
+  if (audio.paused) { wantMusic = true; audio.play().then(musicUI).catch(() => alert('پخش موسیقی ممکن نشد.')); }
+  else { wantMusic = false; audio.pause(); musicUI(); }
+};
+if (audio) audio.addEventListener('error', () => { $('#mus').style.opacity = .4; });
+
+/* screen 1 */
+const target = new Date(APP_CONFIG.anniversaryDate + 'T00:00:00');
+function tick() {
+  const d = target - new Date(), box = $('#cd');
+  if (d <= 0) { $('#cdwrap').innerHTML = '<p class="msg">امروز سالگردمونه! 🎉 چهار سال عاشقی مبارک ❤️</p>'; clearInterval(timer); return; }
+  const v = [Math.floor(d/864e5), Math.floor(d/36e5)%24, Math.floor(d/6e4)%60, Math.floor(d/1e3)%60], l = ['روز','ساعت','دقیقه','ثانیه'];
+  box.innerHTML = v.map((x, i) => `<div><b>${fa(x)}</b><small>${l[i]}</small></div>`).join('');
+}
+const timer = setInterval(tick, 1000); tick();
+$('#env').onclick = () => {
+  $('#env').classList.add('open'); $('#envhint').style.display = 'none';
+  setTimeout(() => { $('#letter').classList.add('show'); $('#go1').style.display = ''; burst(14); }, 900);
+};
+$('#go1').onclick = () => show(2);
+
+/* screen 2 */
+const no = $('#no'), area = $('#noarea');
+function dodge(e) {
+  if (e) { e.preventDefault(); }
+  const a = area.getBoundingClientRect(), y = $('#yes').getBoundingClientRect();
+  const w = no.offsetWidth, h = no.offsetHeight;
+  for (let i = 0; i < 30; i++) {
+    const x = Math.random() * (a.width - w), t = Math.random() * (a.height - h);
+    const hit = !(x + w < y.left - a.left - 8 || x > y.right - a.left + 8 || t + h < y.top - a.top - 8 || t > y.bottom - a.top + 8);
+    if (!hit || i === 29) { no.style.left = x + 'px'; no.style.top = t + 'px'; break; }
+  }
+}
+['pointerenter','pointerdown','touchstart','mouseover','focus'].forEach(ev => no.addEventListener(ev, dodge, {passive:false}));
+no.addEventListener('click', e => { e.preventDefault(); dodge(); });
+$('#yes').onclick = () => {
+  state.yes = true; $('#yesmsg').textContent = 'می‌دونستم قراره بیای! 🥹❤️'; burst(60);
+  $('#yes').disabled = true; setTimeout(() => { $('#yes').disabled = false; show(3); }, 2200);
+};
+
+/* screen 3 */
+$('#hh').innerHTML = '<option value="">--</option>' + [...Array(24).keys()].map(i => `<option value="${i}">${fa(pad(i))}</option>`).join('');
+$('#mm').innerHTML = '<option value="">--</option>' + [...Array(60).keys()].map(i => `<option value="${i}">${fa(pad(i))}</option>`).join('');
+const timeTxt = () => `${fa(pad(state.h))}:${fa(pad(state.m))}`;
+function upTime() {
+  state.h = $('#hh').value === '' ? null : +$('#hh').value; state.m = $('#mm').value === '' ? null : +$('#mm').value;
+  $('#tshow').textContent = state.h !== null && state.m !== null ? timeTxt() : '--:--'; $('#terr').textContent = '';
+}
+$('#hh').onchange = $('#mm').onchange = upTime;
+$('#go3').onclick = () => {
+  if (state.h === null || state.m === null) { $('#terr').textContent = 'لطفاً ساعت و دقیقه رو انتخاب کن 🌸'; return; }
+  show(4);
+};
+
+/* screen 4 */
+$('#dests').innerHTML = DESTS.map(d => `<button class="dest" role="radio" aria-checked="false" data-k="${d.k}"><div class="pic" style="background:linear-gradient(135deg,${d.g})">${d.e}</div><div class="t">${d.e} ${d.n}</div><div class="ck">♥</div></button>`).join('');
+$$('.dest').forEach(b => b.onclick = () => {
+  state.place = b.dataset.k; $('#derr').textContent = '';
+  $$('.dest').forEach(x => { const on = x === b; x.classList.toggle('sel', on); x.setAttribute('aria-checked', on); });
+  burst(8, ['💗']);
+});
+$('#go4').onclick = () => state.place ? show(5) : $('#derr').textContent = 'یکی از گزینه‌ها رو انتخاب کن 💗';
+
+/* screen 5 */
+$('#note').oninput = e => { state.note = e.target.value; $('#cnt').textContent = `${e.target.value.length} / 400`; };
+$('#go5').onclick = () => { state.note = $('#note').value.trim(); show(6); };
+
+/* screen 6 */
+const placeObj = () => DESTS.find(d => d.k === state.place);
+const placeTxt = () => { const p = placeObj(); return p ? `${p.e} ${p.n}` : ''; };
+const noteTxt = () => state.note || '—';
+function summary() {
+  return `قرار سالگرد چهارم ❤️\nتاریخ: ${APP_CONFIG.anniversaryPersianDate}\nساعت: ${timeTxt()}\nمقصد: ${placeTxt()}\nیادداشت مریم: ${noteTxt()}`;
+}
+function buildTicket() {
+  $('#kd').textContent = APP_CONFIG.anniversaryPersianDate; $('#kt').textContent = timeTxt();
+  $('#kp').textContent = placeTxt(); $('#kn').textContent = noteTxt();
+  if (APP_CONFIG.couplePhotoUrl) { const i = new Image(); i.alt = 'عکس ما'; i.src = APP_CONFIG.couplePhotoUrl; i.onload = () => { $('#photo').replaceChildren(i); }; }
+  burst(40); sendEmail();
+}
+const configured = () => APP_CONFIG.emailjsPublicKey && APP_CONFIG.emailjsServiceId && APP_CONFIG.emailjsTemplateId;
+function setStat(cls, html) { const s = $('#stat'); s.className = 'stat ' + cls; s.innerHTML = html; }
+async function sendEmail() {
+  if (state.h === null || state.m === null || !state.place) { setStat('bad', 'اطلاعات ناقص است؛ لطفاً مراحل قبلی رو کامل کن.'); return; }
+  if (!configured()) {
+    setStat('bad', 'ارسال خودکار ایمیل هنوز تنظیم نشده، پس ایمیلی فرستاده نشد. لطفاً خلاصه رو کپی یا ارسال کن 👇');
+    $('#fallback').style.display = ''; return;
+  }
+  if (state.sending || (state.sent && lastSent === sig())) return;
+  if (!window.emailjs) { setStat('bad', 'سرویس ایمیل بارگذاری نشد (اینترنت؟). <button class="btn ghost" onclick="sendEmail()">تلاش دوباره</button>'); return; }
+  state.sending = true; setStat('', '<span class="fl" style="position:static;animation:none;opacity:1">💌</span> در حال ارسال به ' + APP_CONFIG.senderName + '...');
+  try {
+    emailjs.init({publicKey: APP_CONFIG.emailjsPublicKey});
+    const r = await emailjs.send(APP_CONFIG.emailjsServiceId, APP_CONFIG.emailjsTemplateId, {
+      to_email: APP_CONFIG.recipientEmail, subject: "Maryam's Anniversary Date Selection ❤️",
+      selected_time: timeTxt(), selected_place: placeObj().n, maryam_note: noteTxt(),
+      anniversary_date: APP_CONFIG.anniversaryPersianDate + ' (' + APP_CONFIG.anniversaryDate + ')',
+      submitted_at: new Date().toLocaleString('fa-IR')
+    });
+    if (r.status !== 200) throw new Error('status ' + r.status);
+    state.sent = true; lastSent = sig(); setStat('ok', 'انتخاب‌هات با موفقیت برای ' + APP_CONFIG.senderName + ' ارسال شد ✅');
+  } catch (e) {
+    setStat('bad', 'ارسال ایمیل ناموفق بود. انتخاب‌هات حفظ شده. <button class="btn ghost" onclick="sendEmail()">تلاش دوباره</button>');
+    $('#fallback').style.display = '';
+  } finally { state.sending = false; }
+}
+$('#copy').onclick = async () => {
+  try { await navigator.clipboard.writeText(summary()); setStat('ok', 'خلاصه کپی شد ✅'); }
+  catch { prompt('این متن رو کپی کن:', summary()); }
+};
+$('#share').onclick = async () => {
+  if (navigator.share) { try { await navigator.share({title:'قرار سالگرد', text: summary()}); } catch {} }
+  else $('#copy').click();
+};
+$('#fin').onclick = () => { burst(70); setStat(state.sent ? 'ok' : $('#stat').className.replace('stat ',''), $('#stat').innerHTML + '<br>دوستت دارم، ' + APP_CONFIG.signature + ' ❤️'); $('#fin').disabled = true; };
+
+/* PNG export (canvas) */
+function wrap(c, text, w) {
+  const out = []; text.split('\n').forEach(p => { let line = ''; p.split(' ').forEach(wd => { const t = line ? line + ' ' + wd : wd; if (c.measureText(t).width > w && line) { out.push(line); line = wd; } else line = t; }); out.push(line); });
+  return out;
+}
+function rr(c, x, y, w, h, r) { c.beginPath(); c.roundRect ? c.roundRect(x, y, w, h, r) : c.rect(x, y, w, h); }
+$('#save').onclick = async () => {
+  const btn = $('#save'); btn.disabled = true;
+  try {
+    try { await document.fonts.load('800 30px Vazirmatn'); await document.fonts.load('400 30px Vazirmatn'); } catch {}
+    const W = 1080, H = 1700, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d');
+    const g = c.createLinearGradient(0, 0, W, H); g.addColorStop(0, '#ffe3ec'); g.addColorStop(.5, '#fff4ea'); g.addColorStop(1, '#ffd0de'); c.fillStyle = g; c.fillRect(0, 0, W, H);
+    c.fillStyle = '#fffdf9'; rr(c, 60, 60, W - 120, H - 120, 60); c.fill(); c.setLineDash([16, 12]); c.strokeStyle = '#f7b6c8'; c.lineWidth = 6; c.stroke(); c.setLineDash([]);
+    c.direction = 'rtl'; c.textAlign = 'center'; c.fillStyle = '#a94766'; c.font = '800 70px Vazirmatn, Tahoma'; c.fillText('Our Little Date ♡', W/2, 190);
+    c.fillStyle = '#c9798f'; c.font = '400 38px Vazirmatn, Tahoma'; c.fillText('4 Years of Us', W/2, 250);
+    c.save(); c.translate(W/2, 430); c.rotate(-.05); c.fillStyle = '#fff'; c.shadowColor = 'rgba(0,0,0,.2)'; c.shadowBlur = 24; c.fillRect(-190, -150, 380, 330); c.shadowBlur = 0;
+    const pg = c.createLinearGradient(-170, -130, 170, 100); pg.addColorStop(0, '#ffd6e2'); pg.addColorStop(1, '#ffeede'); c.fillStyle = pg; c.fillRect(-170, -130, 340, 260);
+    const img = $('#photo img');
+    if (img && img.complete) { try { c.drawImage(img, -170, -130, 340, 260); c.getImageData(0, 0, 1, 1); } catch {} } else { c.font = '90px serif'; c.fillText('🌸💗', 0, 20); }
+    c.restore();
+    c.fillStyle = '#5a2f3d'; c.font = '800 50px Vazirmatn, Tahoma'; c.fillText('Maryam · مریم', W/2, 700);
+    const rows = [['تاریخ', APP_CONFIG.anniversaryPersianDate], ['ساعت', timeTxt()], ['مقصد', placeTxt()], ['یادداشت', noteTxt()]];
+    let y = 790; c.textAlign = 'right';
+    rows.forEach(([k, v]) => {
+      c.fillStyle = '#c9798f'; c.font = '600 38px Vazirmatn, Tahoma'; c.fillText(k + ':', W - 120, y);
+      c.fillStyle = '#5a2f3d'; c.font = '400 38px Vazirmatn, Tahoma';
+      const ls = wrap(c, v, 680).slice(0, 4); ls.forEach((l, i) => c.fillText(l, W - 290, y + i * 52)); y += Math.max(1, ls.length) * 52 + 26;
+    });
+    c.textAlign = 'center'; c.fillStyle = '#a94766'; c.font = '600 38px Vazirmatn, Tahoma';
+    const m = 'پس قرار چهارمین سالگردمون تنظیم شد! 🥹\nممنون که چهار ساله قشنگ‌ترین قسمت زندگی منی...\nدوستت دارم، قند روزهای تلخ من ❤️';
+    let my = Math.max(y + 50, 1330); wrap(c, m, 800).forEach(l => { c.fillText(l, W/2, my); my += 60; });
+    c.font = '60px serif'; c.fillText('💗 ✨ 🎀 ✨ 💗', W/2, H - 130);
+    const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
+    if (!blob) throw new Error('blob');
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'our-little-date-ticket.png'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  } catch (e) { alert('ذخیره عکس ممکن نشد. می‌تونی از صفحه اسکرین‌شات بگیری 📸'); }
+  btn.disabled = false;
+};
+window.sendEmail = sendEmail;
+show(1);
+</script>
+</body>
+</html>
