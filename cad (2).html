@@ -1,0 +1,2771 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>بیماری عروق کرونر (CAD) | آموزش تعاملی بالینی</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
+  <style>
+    /* ============================================================
+       DESIGN TOKENS & THEME VARIABLES
+       ============================================================ */
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-alt: #f1f5f9;
+      --navy: #0f1d3a;
+      --text: #1e293b;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --accent: #e8742c;
+      --accent-soft: #fff3eb;
+      --teal: #0f766e;
+      --teal-soft: #ecfdf5;
+      --crimson: #be123c;
+      --crimson-soft: #fff1f2;
+      --amber: #b45309;
+      --amber-soft: #fffbeb;
+      --blue: #1d4ed8;
+      --blue-soft: #eff6ff;
+      --svg-bg: #f8fafc;
+      --shadow: 0 4px 20px rgba(15, 29, 58, 0.06);
+      --radius: 16px;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b1120;
+      --surface: #131c31;
+      --surface-alt: #1e293b;
+      --navy: #f1f5f9;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --border: #263449;
+      --accent: #f28a49;
+      --accent-soft: rgba(242, 138, 73, 0.14);
+      --teal: #2dd4bf;
+      --teal-soft: rgba(45, 212, 191, 0.12);
+      --crimson: #fb7185;
+      --crimson-soft: rgba(251, 113, 133, 0.13);
+      --amber: #fbbf24;
+      --amber-soft: rgba(251, 191, 36, 0.12);
+      --blue: #60a5fa;
+      --blue-soft: rgba(96, 165, 250, 0.14);
+      --svg-bg: #0f172a;
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Vazirmatn', 'Segoe UI', Tahoma, system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      min-height: 100vh;
+      padding-bottom: 94px;
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.2s ease, color 0.2s ease;
+      overflow-x: hidden;
+    }
+
+    .en {
+      direction: ltr;
+      unicode-bidi: isolate;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    /* ============================================================
+       TOP STICKY HEADER
+       ============================================================ */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 12px 16px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--navy);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+    }
+    .brand-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .icon-btn {
+      background: var(--surface-alt);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 7px 11px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.18s ease;
+    }
+    .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .progress-track {
+      height: 4px;
+      background: var(--surface-alt);
+      width: 100%;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--crimson));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* ============================================================
+       MAIN CONTAINER & STEP TRANSITIONS
+       ============================================================ */
+    main {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 20px 16px 28px;
+    }
+
+    .step-view {
+      display: none;
+      animation: fadeSlide 0.28s ease;
+    }
+    .step-view.active { display: block; }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Typography & Badges */
+    .chapter-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-size: clamp(1.45rem, 4.5vw, 1.95rem);
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-size: clamp(1.2rem, 3.8vw, 1.5rem);
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.45;
+      margin-bottom: 10px;
+    }
+    h3 {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .lead {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+    }
+
+    /* Cards & SVG Containers */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+    .media-frame {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      margin-bottom: 16px;
+    }
+    .media-frame img {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+    .svg-box {
+      background: var(--svg-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+    .svg-box.light-paper {
+      background: #fff7f8;
+      border-color: #f3c4cb;
+    }
+    .svg-box svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .media-caption {
+      font-size: 0.82rem;
+      color: var(--muted);
+      padding: 8px 10px 2px;
+      text-align: center;
+    }
+
+    /* Callouts */
+    .callout {
+      border-radius: 12px;
+      padding: 13px 15px;
+      font-size: 0.91rem;
+      margin: 12px 0;
+      border-right: 4px solid var(--accent);
+      background: var(--accent-soft);
+    }
+    .callout.teal { border-right-color: var(--teal); background: var(--teal-soft); }
+    .callout.crimson { border-right-color: var(--crimson); background: var(--crimson-soft); }
+    .callout.amber { border-right-color: var(--amber); background: var(--amber-soft); }
+    .callout.blue { border-right-color: var(--blue); background: var(--blue-soft); }
+    .callout strong { color: var(--navy); }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 18px;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 0.93rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.18s ease;
+      min-height: 44px;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .btn-primary:hover { filter: brightness(0.95); transform: translateY(-1px); }
+    .btn-secondary {
+      background: var(--surface-alt);
+      color: var(--navy);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-block { width: 100%; }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+    /* Pill Groups */
+    .pill-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .pill-btn {
+      flex: 1 1 auto;
+      min-width: 78px;
+      padding: 9px 12px;
+      border-radius: 11px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+    .pill-btn:hover { border-color: var(--accent); }
+    .pill-btn.active {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .pill-btn.crimson.active {
+      border-color: var(--crimson);
+      background: var(--crimson);
+    }
+    .detail-panel {
+      background: var(--surface-alt);
+      border-radius: 12px;
+      padding: 14px 15px;
+      border: 1px solid var(--border);
+      font-size: 0.92rem;
+    }
+
+    /* Roadmap */
+    .roadmap-list { display: flex; flex-direction: column; gap: 10px; }
+    .roadmap-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      text-align: right;
+      font-family: inherit;
+      width: 100%;
+      transition: all 0.18s ease;
+    }
+    .roadmap-item:hover { border-color: var(--accent); transform: translateX(-2px); }
+    .roadmap-num {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--surface-alt);
+      color: var(--navy);
+      font-weight: 800;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .roadmap-item.done .roadmap-num { background: var(--teal); color: #fff; }
+    .roadmap-body { flex: 1; }
+    .roadmap-title { font-weight: 700; color: var(--navy); font-size: 0.95rem; display: block; }
+    .roadmap-sub { font-size: 0.81rem; color: var(--muted); }
+    .roadmap-status {
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--surface-alt);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .roadmap-item.done .roadmap-status { background: var(--teal-soft); color: var(--teal); }
+
+    /* Flashcards Grid */
+    .flash-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 500px) {
+      .flash-grid { grid-template-columns: 1fr; }
+    }
+    .flashcard {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      cursor: pointer;
+      text-align: right;
+      font-family: inherit;
+      transition: all 0.2s ease;
+      min-height: 112px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .flashcard:hover { border-color: var(--accent); }
+    .flashcard.flipped {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+    }
+    .flash-letter {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--navy);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+    [data-theme="dark"] .flash-letter { background: var(--accent); color: #0b1120; }
+    .flash-hint { font-size: 0.8rem; color: var(--muted); }
+    .flash-answer { font-size: 0.89rem; color: var(--text); margin-top: 4px; }
+
+    /* Sliders & Meters */
+    .sim-control { margin-bottom: 14px; }
+    .sim-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+      height: 6px;
+      cursor: pointer;
+    }
+    .meter-bar {
+      height: 12px;
+      border-radius: 999px;
+      background: var(--surface-alt);
+      overflow: hidden;
+      margin: 8px 0 12px;
+    }
+    .meter-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.25s ease, background 0.25s ease;
+    }
+
+    /* Accordion & Reveal */
+    .acc-item {
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: var(--surface);
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+    .acc-trigger {
+      width: 100%;
+      padding: 14px 16px;
+      background: none;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-family: inherit;
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: var(--navy);
+      cursor: pointer;
+      text-align: right;
+    }
+    .acc-icon { transition: transform 0.2s ease; color: var(--accent); font-weight: 800; }
+    .acc-item.open .acc-icon { transform: rotate(180deg); }
+    .acc-content {
+      display: none;
+      padding: 12px 16px 15px;
+      font-size: 0.91rem;
+      color: var(--text);
+      border-top: 1px solid var(--border);
+    }
+    .acc-item.open .acc-content { display: block; }
+
+    .reveal-box {
+      border: 1.5px dashed var(--accent);
+      border-radius: 14px;
+      padding: 15px;
+      background: var(--surface);
+      margin-top: 14px;
+    }
+    .reveal-answer {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      font-size: 0.91rem;
+    }
+    .reveal-answer.shown { display: block; }
+
+    /* Table */
+    .table-wrap { overflow-x: auto; margin: 10px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+    th, td {
+      padding: 10px 11px;
+      border-bottom: 1px solid var(--border);
+      text-align: right;
+      vertical-align: top;
+    }
+    th { background: var(--surface-alt); color: var(--navy); font-weight: 700; width: 34%; }
+
+    /* 12-Lead ECG Grid */
+    .ecg-12-layout {
+      display: grid;
+      grid-template-columns: 1fr 190px;
+      gap: 12px;
+      align-items: start;
+    }
+    @media (max-width: 680px) {
+      .ecg-12-layout { grid-template-columns: 1fr; }
+    }
+    .ecg-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      direction: ltr;
+    }
+    @media (max-width: 560px) {
+      .ecg-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .ecg-lead-card {
+      background: #fff5f6;
+      border: 1.5px solid #f2c6cc;
+      border-radius: 9px;
+      padding: 4px 5px;
+      position: relative;
+      transition: all 0.22s ease;
+    }
+    .ecg-lead-card.elevated {
+      border-color: #be123c;
+      box-shadow: 0 0 0 2px rgba(190, 18, 60, 0.25);
+      background: #ffe4e8;
+    }
+    .ecg-lead-card.reciprocal {
+      border-color: #d97706;
+      box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.22);
+      background: #fffbeb;
+    }
+    .ecg-lead-label {
+      font-family: system-ui, sans-serif;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #1e293b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+    .ecg-lead-tag {
+      font-size: 0.63rem;
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-weight: 800;
+    }
+    .ecg-lead-tag.ste { background: #be123c; color: #fff; }
+    .ecg-lead-tag.std { background: #d97706; color: #fff; }
+    .ecg-post-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 6px;
+      direction: ltr;
+    }
+
+    /* Check Chips (PCI vs CABG) */
+    .check-chip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      cursor: pointer;
+      margin-bottom: 8px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      width: 100%;
+      text-align: right;
+      transition: all 0.16s ease;
+    }
+    .check-chip.checked {
+      border-color: var(--crimson);
+      background: var(--crimson-soft);
+      color: var(--navy);
+    }
+
+    /* Quiz */
+    .quiz-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    .quiz-q { font-weight: 700; color: var(--navy); margin-bottom: 12px; font-size: 0.94rem; }
+    .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
+    .quiz-opt {
+      width: 100%;
+      text-align: right;
+      padding: 11px 14px;
+      border-radius: 11px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.89rem;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+    .quiz-opt:hover:not(:disabled) { border-color: var(--accent); }
+    .quiz-opt.correct { border-color: var(--teal); background: var(--teal-soft); color: var(--teal); font-weight: 700; }
+    .quiz-opt.incorrect { border-color: var(--crimson); background: var(--crimson-soft); color: var(--crimson); }
+    .quiz-fb {
+      margin-top: 10px;
+      padding: 11px 13px;
+      border-radius: 10px;
+      font-size: 0.87rem;
+      background: var(--surface-alt);
+      display: none;
+    }
+    .quiz-fb.shown { display: block; }
+
+    /* Score Hero */
+    .score-hero {
+      text-align: center;
+      padding: 20px 16px;
+      border-radius: 16px;
+      background: var(--surface-alt);
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+    }
+    .score-num {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1.2;
+    }
+
+    /* Clean List */
+    ul.clean-list {
+      padding-right: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.92rem;
+    }
+    ul.clean-list li::marker { color: var(--accent); }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 40;
+      background: color-mix(in srgb, var(--surface) 95%, transparent);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border);
+      padding: 10px 16px;
+    }
+    .bottom-nav-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .step-counter {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-align: center;
+      min-width: 90px;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.58);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 60;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      max-width: 380px;
+      width: 100%;
+      box-shadow: var(--shadow);
+    }
+    .modal-actions { display: flex; gap: 10px; margin-top: 16px; }
+
+    /* ============================================================
+       SVG ANIMATIONS
+       ============================================================ */
+    @keyframes ecgSweep {
+      0% { stroke-dashoffset: 760; }
+      100% { stroke-dashoffset: 0; }
+    }
+    .anim-ecg-line {
+      stroke-dasharray: 760;
+      animation: ecgSweep 3.4s linear infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.55; transform: scale(1); }
+      50% { opacity: 0.95; transform: scale(1.03); }
+    }
+    .territory-glow {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: pulseGlow 1.7s ease-in-out infinite;
+    }
+
+    @keyframes flowDash {
+      to { stroke-dashoffset: -36; }
+    }
+    .flow-arrow {
+      stroke-dasharray: 9 9;
+      animation: flowDash 1s linear infinite;
+    }
+    .flow-arrow-fast {
+      stroke-dasharray: 9 9;
+      animation: flowDash 0.45s linear infinite;
+    }
+    .flow-arrow-slow {
+      stroke-dasharray: 7 11;
+      animation: flowDash 2.6s linear infinite;
+    }
+
+    @keyframes rbcMove {
+      0% { transform: translateX(-20px); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateX(350px); opacity: 0; }
+    }
+    .rbc-fast { animation: rbcMove 2.2s linear infinite; }
+    .rbc-medium { animation: rbcMove 3.8s linear infinite; }
+    .rbc-slow { animation: rbcMove 6s linear infinite; }
+    .rbc-stopped { animation: none; opacity: 0.85; }
+
+    @keyframes heartBeat {
+      0%, 100% { transform: scale(1); }
+      14% { transform: scale(1.035); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.02); }
+      70% { transform: scale(1); }
+    }
+    .heartbeat-svg {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: heartBeat 1.5s ease-in-out infinite;
+    }
+
+    .ecg-hotspot { cursor: pointer; transition: transform 0.15s ease; }
+    .ecg-hotspot:hover circle { r: 10; }
+    .ecg-hotspot.active circle { fill: #be123c; stroke: #ffffff; stroke-width: 2.5; }
+  </style>
+</head>
+<body>
+  <!-- TOP STICKY HEADER -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <button type="button" class="brand" id="brandHomeBtn" aria-label="بازگشت به صفحه شروع">
+        <span class="brand-dot"></span>
+        <span>آموزش تعاملی <span class="en">CAD</span></span>
+      </button>
+      <div class="topbar-actions">
+        <button type="button" class="icon-btn" id="openRoadmapBtn">نقشه راه</button>
+        <button type="button" class="icon-btn" id="themeToggleBtn" aria-label="تغییر تم روشن یا تیره">حالت شب</button>
+      </div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="topProgressFill"></div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============================================================
+         STEP 0: HERO / START
+         ============================================================ -->
+    <section class="step-view active" data-step="0">
+      <div class="media-frame">
+        <img src="data:image/jpeg;base64,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" alt="نمای هنری آناتومی قلب و شریان‌های کرونر" />
+      </div>
+
+      <span class="chapter-badge">مسیر یادگیری بصری و تعاملی پزشکی</span>
+      <h1>بیماری عروق کرونر (<span class="en">CAD</span>): از پلاک تا اتاق کت‌لب</h1>
+      <p class="lead">
+        در این محیط آموزشی تعاملی، از آناتومی شریان‌های کرونر و شبیه‌ساز زنده سیر پلاک و پارگی آن تا تفسیر نوار قلب ۱۲ لید، عوارض مکانیکی پس از <span class="en">MI</span>، سندرم سرقت کرونری و انتخاب بین <span class="en">PCI</span> و <span class="en">CABG</span> را به‌صورت تصویری و گام‌به‌گام تمرین می‌کنید.
+      </p>
+
+      <div class="card">
+        <h3>۳ نکته طلایی بالینی که در این دوره مسلط می‌شوید:</h3>
+        <ul class="clean-list">
+          <li><strong>تفکیک سریع طیف ایسکمی:</strong> تفاوت دقیق آنژین پایدار، <span class="en">UA</span>، <span class="en">NSTEMI</span> و <span class="en">STEMI</span> از سطح پلاک و میوکارد تا تروپونین و <span class="en">ECG</span>.</li>
+          <li><strong>لوکالیزاسیون سریع در <span class="en">ECG</span>:</strong> شناسایی شریان مسئول (<span class="en">LAD, RCA, LCx, PDA</span>) و پیش‌بینی عوارض زودرس و مکانیکی پس از <span class="en">MI</span>.</li>
+          <li><strong>تصمیم‌گیری درمانی استاندارد:</strong> انتخاب دقیق بین درمان دارویی، <span class="en">PCI</span>، <span class="en">CABG</span> و <span class="en">tPA</span> در شرایط بالینی واقعی.</li>
+        </ul>
+      </div>
+
+      <div id="resumeBanner" class="callout teal" style="display:none;"></div>
+      <button type="button" class="btn btn-primary btn-block" id="startCourseBtn">شروع مسیر یادگیری</button>
+    </section>
+
+    <!-- ============================================================
+         STEP 1: ROADMAP
+         ============================================================ -->
+    <section class="step-view" data-step="1">
+      <span class="chapter-badge">نقشه راه یادگیری</span>
+      <h2>۶ فصل و ۱۲ گام تا تسلط بالینی بر <span class="en">CAD</span></h2>
+      <p class="lead">پیشرفت شما به‌صورت خودکار ذخیره می‌شود. می‌توانید مسیر را به ترتیب طی کنید یا مستقیماً وارد هر فصل شوید.</p>
+      <div class="roadmap-list" id="roadmapList"></div>
+    </section>
+
+    <!-- ============================================================
+         STEP 2: CHAPTER 1 - CORONARY ANATOMY INTERACTIVE SVG
+         ============================================================ -->
+    <section class="step-view" data-step="2">
+      <span class="chapter-badge">فصل ۱ از ۶ • آناتومی شریان‌های کرونر</span>
+      <h2>قلمرو خون‌رسانی ۴ شریان کلیدی قلب</h2>
+      <p class="lead">روی هر شریان در برش عرضی قلب یا دکمه‌های زیر کلیک کنید تا ناحیه میوکارد تحت خون‌رسانی آن به‌صورت زنده روشن شود.</p>
+
+      <div class="svg-box">
+        <svg viewBox="0 0 420 265" role="img" aria-label="دیاگرام تعاملی برش عرضی قلب و قلمرو شریان‌های کرونر">
+          <rect x="0" y="0" width="420" height="265" rx="12" fill="var(--svg-bg)" />
+
+          <!-- Anatomical Direction Labels -->
+          <text x="210" y="20" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--muted)">دیواره خلفی (Posterior)</text>
+          <text x="210" y="255" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--muted)">دیواره قدامی (Anterior)</text>
+          <text x="385" y="136" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--muted)">جانبی چپ</text>
+          <text x="36" y="136" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--muted)">سمت راست</text>
+
+          <!-- Base Heart Cross-Section -->
+          <!-- RV outer wall -->
+          <path d="M196,52 C122,48 84,88 84,132 C84,178 122,216 196,212 C180,180 180,84 196,52 Z"
+                fill="#cbd5e1" stroke="#64748b" stroke-width="2" />
+          <!-- RV Cavity -->
+          <path d="M174,76 C128,78 106,104 106,132 C106,162 128,188 174,190 C162,162 162,102 174,76 Z"
+                fill="#ffffff" stroke="#94a3b8" stroke-width="1.5" />
+
+          <!-- LV Myocardial Ring -->
+          <circle cx="242" cy="132" r="76" fill="#e2e8f0" stroke="#64748b" stroke-width="2" />
+
+          <!-- TERRITORY HIGHLIGHT OVERLAYS (Controlled by JS) -->
+          <!-- LAD Territory: Anterior LV + Anterior 2/3 Septum -->
+          <path id="terr-LAD" class="territory-glow" d="M190,104 C174,130 176,174 206,198 C232,214 268,210 292,190 L264,158 C252,168 232,170 218,160 C204,148 202,126 212,110 Z"
+                fill="#be123c" opacity="0.85" />
+          <!-- LCx Territory: Lateral LV Wall -->
+          <path id="terr-LCx" class="territory-glow" d="M294,76 C318,100 324,148 298,184 L268,156 C282,138 280,114 266,102 Z"
+                fill="#e8742c" opacity="0" />
+          <!-- RCA Territory: RV + Inferior/Posterior edge + AV Node -->
+          <path id="terr-RCA" class="territory-glow" d="M196,52 C122,48 84,88 84,132 C84,178 122,216 196,212 L192,192 C136,194 102,164 102,132 C102,98 136,70 194,72 Z"
+                fill="#0f766e" opacity="0" />
+          <!-- PDA Territory: Posterior LV + Posterior 1/3 Septum -->
+          <path id="terr-PDA" class="territory-glow" d="M196,62 C232,50 274,56 296,78 L266,104 C252,92 228,90 210,102 Z"
+                fill="#2563eb" opacity="0" />
+
+          <!-- LV Cavity (on top of territories) -->
+          <circle cx="242" cy="132" r="38" fill="#ffffff" stroke="#64748b" stroke-width="1.8" />
+
+          <!-- AV Node indicator -->
+          <g id="avNodeIndicator">
+            <circle cx="176" cy="90" r="8" fill="#fbbf24" stroke="#92400e" stroke-width="1.8" />
+            <text x="150" y="94" font-size="9.5" font-weight="800" fill="#92400e" font-family="system-ui">AV</text>
+          </g>
+
+          <!-- Chamber Labels -->
+          <text x="134" y="137" text-anchor="middle" font-size="13" font-weight="800" fill="#334155" font-family="system-ui">RV</text>
+          <text x="242" y="137" text-anchor="middle" font-size="13" font-weight="800" fill="#334155" font-family="system-ui">LV</text>
+          <text x="184" y="148" text-anchor="middle" font-size="8.5" font-weight="700" fill="#1e293b">سپتوم</text>
+
+          <!-- Clickable Artery Nodes -->
+          <g class="artery-node" data-artery="LAD" style="cursor:pointer;">
+            <circle cx="210" cy="214" r="18" fill="#be123c" stroke="#fff" stroke-width="2.2" />
+            <text x="210" y="218" text-anchor="middle" font-size="11" font-weight="800" fill="#ffffff" font-family="system-ui">LAD</text>
+          </g>
+          <g class="artery-node" data-artery="LCx" style="cursor:pointer;">
+            <circle cx="324" cy="132" r="18" fill="#e8742c" stroke="#fff" stroke-width="2.2" />
+            <text x="324" y="136" text-anchor="middle" font-size="11" font-weight="800" fill="#ffffff" font-family="system-ui">LCx</text>
+          </g>
+          <g class="artery-node" data-artery="RCA" style="cursor:pointer;">
+            <circle cx="84" cy="132" r="18" fill="#0f766e" stroke="#fff" stroke-width="2.2" />
+            <text x="84" y="136" text-anchor="middle" font-size="11" font-weight="800" fill="#ffffff" font-family="system-ui">RCA</text>
+          </g>
+          <g class="artery-node" data-artery="PDA" style="cursor:pointer;">
+            <circle cx="230" cy="52" r="18" fill="#2563eb" stroke="#fff" stroke-width="2.2" />
+            <text x="230" y="56" text-anchor="middle" font-size="11" font-weight="800" fill="#ffffff" font-family="system-ui">PDA</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="pill-group" id="arteryPills">
+        <button type="button" class="pill-btn active" data-artery="LAD"><span class="en">LAD</span> (قدامی)</button>
+        <button type="button" class="pill-btn" data-artery="LCx"><span class="en">LCx</span> (جانبی)</button>
+        <button type="button" class="pill-btn" data-artery="RCA"><span class="en">RCA</span> (راست و تحتانی)</button>
+        <button type="button" class="pill-btn" data-artery="PDA"><span class="en">PDA</span> (خلفی)</button>
+      </div>
+      <div class="detail-panel" id="arteryDetail"></div>
+
+      <div class="reveal-box">
+        <h3>یادآوری فعال (<span class="en">Active Recall</span>)</h3>
+        <p style="font-size:0.9rem;color:var(--muted);">کدام شریان کرونر به گره <span class="en">AV</span> شاخه می‌دهد و انسداد آن می‌تواند باعث بلوک <span class="en">AV</span> درجه ۲ یا ۳ شود؟</p>
+        <button type="button" class="btn btn-secondary" style="margin-top:10px;" data-reveal="revAnat">نمایش پاسخ</button>
+        <div class="reveal-answer" id="revAnat">
+          <strong>شریان کرونر راست (<span class="en">RCA</span>):</strong> علاوه بر خون‌رسانی به بطن راست و دیواره تحتانی بطن چپ، شاخه خون‌رسان گره <span class="en">AV</span> را تأمین می‌کند؛ بنابراین در انفارکتوس تحتانی باید مراقب برادیکاردی و بلوک <span class="en">AV</span> بود.
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         STEP 3: CHAPTER 1 - RISK FACTORS (SAD CHF)
+         ============================================================ -->
+    <section class="step-view" data-step="3">
+      <span class="chapter-badge">فصل ۱ از ۶ • آترواسکلروز و عوامل خطر</span>
+      <h2>۶ عامل خطر اصلی آترواسکلروز: رمز <span class="en">SAD CHF</span></h2>
+      <p class="lead">
+        آترواسکلروز شایع‌ترین علت <span class="en">CAD</span> است. روی هر کارت کلیک کنید تا مکانیسم و جزئیات بالینی آن باز شود.
+      </p>
+      <div style="font-size:0.85rem;font-weight:700;color:var(--teal);margin-bottom:10px;" id="flashCounter">مرور شده: ۰ از ۶ کارت</div>
+      <div class="flash-grid" id="sadChfGrid"></div>
+      <div class="callout amber">
+        <strong>نکته طلایی دیس‌لیپیدمی:</strong> در ارزیابی پروفایل چربی، تنها بالا بودن <span class="en">LDL</span> مهم نیست؛ <strong>پایین بودن <span class="en">HDL</span></strong> نیز به‌طور مستقل خطر آترواسکلروز و <span class="en">CAD</span> را به‌شدت افزایش می‌دهد.
+      </div>
+    </section>
+
+    <!-- ============================================================
+         STEP 4: CHAPTER 2 - INTERACTIVE PLAQUE PROGRESSION & O2 SIMULATOR
+         ============================================================ -->
+    <section class="step-view" data-step="4">
+      <span class="chapter-badge">فصل ۲ از ۶ • شبیه‌ساز سیر پلاک و پارگی آن</span>
+      <h2>از شریان سالم تا پارگی پلاک و سکته قلبی</h2>
+      <p class="lead">
+        با اسلایدر یا دکمه‌های زیر، مراحل پیشرفت آترواسکلروز، پارگی پوشش فیبروز، تشکیل ترومبوس و اثر آن بر لایه‌های دیواره میوکارد را به‌صورت زنده مشاهده کنید.
+      </p>
+
+      <div class="card">
+        <!-- Stage Buttons -->
+        <div class="pill-group" id="plaqueStagePills">
+          <button type="button" class="pill-btn active" data-stage="0">۱. شریان سالم</button>
+          <button type="button" class="pill-btn" data-stage="1">۲. پلاک پایدار</button>
+          <button type="button" class="pill-btn" data-stage="2">۳. پارگی و ترومبوز ناکامل</button>
+          <button type="button" class="pill-btn crimson" data-stage="3">۴. انسداد کامل (<span class="en">STEMI</span>)</button>
+        </div>
+
+        <!-- Stage Slider -->
+        <div class="sim-control" style="margin-bottom:10px;">
+          <div class="sim-label">
+            <span>سیر پلاک از سلامت تا سکته</span>
+            <span id="plaqueO2Badge" style="color:var(--teal);">عرضه O₂: ۱۰۰٪</span>
+          </div>
+          <input type="range" id="plaqueSlider" min="0" max="3" step="1" value="0" />
+        </div>
+
+        <!-- Sub-toggle for Stage 2 (UA vs NSTEMI) -->
+        <div id="uaNstemiSubToggle" style="display:none; margin-bottom:12px;">
+          <div style="font-size:0.82rem;font-weight:700;color:var(--muted);margin-bottom:6px;">تفکیک در انسداد ناکامل (Subtotal Occlusion):</div>
+          <div class="pill-group" style="margin-bottom:0;">
+            <button type="button" class="pill-btn active" data-sub="UA">آنژین ناپایدار (<span class="en">UA</span>) • تروپونین منفی</button>
+            <button type="button" class="pill-btn crimson" data-sub="NSTEMI"><span class="en">NSTEMI</span> • انفارکت ساب‌اندوکاردیال (تروپونین +)</button>
+          </div>
+        </div>
+
+        <!-- Interactive SVG: Longitudinal Artery + Cross Section + Myocardial Layers -->
+        <div class="svg-box" style="margin-bottom:10px;">
+          <svg viewBox="0 0 660 280" role="img" aria-label="شبیه‌ساز تعاملی سیر پلاک، پارگی، لومن و لایه‌های میوکارد">
+            <defs>
+              <clipPath id="lumenClip">
+                <rect x="20" y="42" width="380" height="84" rx="4" />
+              </clipPath>
+            </defs>
+
+            <!-- LEFT: LONGITUDINAL ARTERY VIEW -->
+            <text x="210" y="20" text-anchor="middle" font-size="12" font-weight="800" fill="var(--navy)">نمای طولی شریان کرونر و جریان خون</text>
+            <!-- Outer arterial wall -->
+            <rect x="20" y="30" width="380" height="108" rx="10" fill="#fca5a5" stroke="#b91c1c" stroke-width="2" />
+            <!-- Lumen background -->
+            <rect x="20" y="42" width="380" height="84" fill="#fee2e2" />
+
+            <!-- Animated Red Blood Cells -->
+            <g id="rbcGroup" clip-path="url(#lumenClip)">
+              <g class="rbc-item rbc-fast" style="animation-delay:0s;"><ellipse cx="0" cy="64" rx="9" ry="5" fill="#dc2626" /><ellipse cx="0" cy="64" rx="4" ry="2" fill="#f87171" /></g>
+              <g class="rbc-item rbc-fast" style="animation-delay:-0.5s;"><ellipse cx="0" cy="84" rx="9" ry="5" fill="#dc2626" /><ellipse cx="0" cy="84" rx="4" ry="2" fill="#f87171" /></g>
+              <g class="rbc-item rbc-fast" style="animation-delay:-1.0s;"><ellipse cx="0" cy="104" rx="9" ry="5" fill="#dc2626" /><ellipse cx="0" cy="104" rx="4" ry="2" fill="#f87171" /></g>
+              <g class="rbc-item rbc-fast" style="animation-delay:-1.5s;"><ellipse cx="0" cy="74" rx="9" ry="5" fill="#b91c1c" /><ellipse cx="0" cy="74" rx="4" ry="2" fill="#fca5a5" /></g>
+              <g class="rbc-item rbc-fast" style="animation-delay:-1.9s;"><ellipse cx="0" cy="96" rx="9" ry="5" fill="#dc2626" /><ellipse cx="0" cy="96" rx="4" ry="2" fill="#f87171" /></g>
+            </g>
+
+            <!-- Plaque (Lipid Core + Fibrous Cap) -->
+            <g id="svgPlaque" style="display:none;">
+              <!-- Yellow Lipid Core -->
+              <path d="M125,126 C145,74 275,74 295,126 Z" fill="#facc15" stroke="#ca8a04" stroke-width="1.5" />
+              <!-- Foam cells dots -->
+              <circle cx="175" cy="112" r="3" fill="#eab308" />
+              <circle cx="210" cy="104" r="3.5" fill="#eab308" />
+              <circle cx="245" cy="112" r="3" fill="#eab308" />
+              <!-- Thick Intact Fibrous Cap (Stable CAD) -->
+              <path id="svgCapIntact" d="M122,126 C142,68 278,68 298,126" fill="none" stroke="#e2e8f0" stroke-width="7" stroke-linecap="round" />
+              <!-- Ruptured Fibrous Cap (ACS) -->
+              <g id="svgCapRuptured" style="display:none;">
+                <path d="M122,126 C138,80 170,74 188,76" fill="none" stroke="#e2e8f0" stroke-width="5" stroke-linecap="round" />
+                <path d="M236,78 C258,76 284,92 298,126" fill="none" stroke="#e2e8f0" stroke-width="5" stroke-linecap="round" />
+                <path d="M190,76 L202,88 L216,74 L232,82" fill="none" stroke="#991b1b" stroke-width="2.5" />
+              </g>
+            </g>
+
+            <!-- Partial Thrombus (UA / NSTEMI) -->
+            <g id="svgThrombusPartial" style="display:none;">
+              <path d="M168,84 C178,56 238,54 252,82 C230,90 190,90 168,84 Z" fill="#991b1b" stroke="#450a0a" stroke-width="1.5" />
+              <circle cx="195" cy="68" r="3" fill="#fca5a5" />
+              <circle cx="214" cy="64" r="3" fill="#fde047" />
+              <circle cx="230" cy="70" r="3" fill="#fca5a5" />
+              <text x="210" y="54" text-anchor="middle" font-size="9.5" font-weight="800" fill="#7f1d1d">ترومبوس ناکامل</text>
+            </g>
+
+            <!-- Total Occlusion Thrombus (STEMI) -->
+            <g id="svgThrombusTotal" style="display:none;">
+              <path d="M150,88 C154,42 266,42 270,88 C240,94 180,94 150,88 Z" fill="#7f1d1d" stroke="#450a0a" stroke-width="2" />
+              <path d="M166,58 L254,74 M170,74 L250,56" stroke="#fca5a5" stroke-width="1.4" stroke-dasharray="4 3" />
+              <text x="210" y="68" text-anchor="middle" font-size="10.5" font-weight="800" fill="#ffffff">انسداد ۱۰۰٪ (ترومبوس)</text>
+            </g>
+
+            <!-- RIGHT: CROSS-SECTIONAL LUMEN VIEW -->
+            <text x="530" y="20" text-anchor="middle" font-size="12" font-weight="800" fill="var(--navy)">برش عرضی لومن</text>
+            <g transform="translate(530, 84)">
+              <circle r="52" fill="#fca5a5" stroke="#b91c1c" stroke-width="2" />
+              <circle r="40" fill="#dc2626" />
+              <!-- Stable Plaque Cross Section -->
+              <path id="csPlaque" d="M-38,10 C-22,-18 22,-18 38,10 A40,40 0 0,1 -38,10 Z" fill="#facc15" stroke="#e2e8f0" stroke-width="4" style="display:none;" />
+              <!-- Partial Thrombus Cross Section -->
+              <path id="csPartial" d="M-28,-6 C-12,-28 18,-28 28,-4 C12,6 -12,6 -28,-6 Z" fill="#7f1d1d" style="display:none;" />
+              <!-- Total Thrombus Cross Section -->
+              <circle id="csTotal" r="39" fill="#7f1d1d" opacity="0.92" style="display:none;" />
+              <text id="csPercent" y="4" text-anchor="middle" font-size="11" font-weight="800" fill="#ffffff" font-family="system-ui">100% باز</text>
+            </g>
+
+            <!-- BOTTOM: MYOCARDIAL WALL LAYERS -->
+            <text x="330" y="162" text-anchor="middle" font-size="12" font-weight="800" fill="var(--navy)">وضعیت لایه‌های دیواره میوکارد</text>
+            <!-- Epicardium (Outer) -->
+            <rect id="layerEpicardium" x="20" y="172" width="620" height="28" rx="5" fill="#fbcfe8" stroke="#be185d" stroke-width="1.2" />
+            <text x="330" y="190" text-anchor="middle" font-size="11" font-weight="700" fill="#831843">اپیکارد (لایه بیرونی نزدیک شریان کرونر)</text>
+
+            <!-- Mid-Myocardium -->
+            <rect id="layerMyocardium" x="20" y="203" width="620" height="30" rx="5" fill="#f9a8d4" stroke="#be185d" stroke-width="1.2" />
+            <text x="330" y="222" text-anchor="middle" font-size="11" font-weight="700" fill="#831843">میوکارد میانی</text>
+
+            <!-- Subendocardium / Endocardium (Inner - most vulnerable to ischemia) -->
+            <rect id="layerSubendo" x="20" y="236" width="620" height="32" rx="5" fill="#f472b6" stroke="#be185d" stroke-width="1.2" />
+            <text id="layerSubendoText" x="330" y="256" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">ساب‌اندوکارد (آسیب‌پذیرترین لایه در برابر کاهش خون‌رسانی)</text>
+          </svg>
+        </div>
+
+        <div class="detail-panel" id="plaqueDetailPanel"></div>
+      </div>
+
+      <!-- O2 SUPPLY VS DEMAND SIMULATOR -->
+      <div class="card">
+        <h3>شبیه‌ساز عدم تعادل عرضه و تقاضای اکسیژن در <span class="en">Stable CAD</span></h3>
+        <p style="font-size:0.86rem;color:var(--muted);margin-bottom:14px;">ضربان قلب و فشار خون سیستولیک (<span class="en">Afterload</span>) را افزایش دهید تا ببینید چگونه فعالیت باعث آنژین پایدار می‌شود:</p>
+
+        <div class="sim-control">
+          <div class="sim-label">
+            <span>ضربان قلب (<span class="en">Heart Rate</span>)</span>
+            <span id="hrVal" class="en">72 bpm</span>
+          </div>
+          <input type="range" id="hrSlider" min="60" max="180" value="72" />
+        </div>
+
+        <div class="sim-control">
+          <div class="sim-label">
+            <span>فشار خون سیستولیک (<span class="en">Afterload</span>)</span>
+            <span id="bpVal" class="en">120 mmHg</span>
+          </div>
+          <input type="range" id="bpSlider" min="110" max="200" value="120" />
+        </div>
+
+        <div style="font-size:0.84rem;font-weight:700;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;">
+          <span>نسبت تقاضا به عرضه محدود اکسیژن</span>
+          <span id="simStatusBadge">متعادل (استراحت)</span>
+        </div>
+        <div class="meter-bar">
+          <div class="meter-fill" id="simMeterFill"></div>
+        </div>
+        <div id="simExplanation" class="callout teal" style="margin-bottom:0;"></div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         STEP 5: CHAPTER 2 - ACS CLINICAL COMPARISON
+         ============================================================ -->
+    <section class="step-view" data-step="5">
+      <span class="chapter-badge">فصل ۲ از ۶ • مقایسه بالینی طیف ایسکمی</span>
+      <h2>آنژین پایدار در برابر <span class="en">UA</span>، <span class="en">NSTEMI</span> و <span class="en">STEMI</span></h2>
+      <p class="lead">هر سندرم را انتخاب کنید تا نوع انسداد، آسیب میوکارد، تروپونین، نوار قلب و ویژگی درد آن را مقایسه کنید:</p>
+
+      <div class="pill-group" id="acsPills">
+        <button type="button" class="pill-btn active" data-acs="STABLE">آنژین پایدار</button>
+        <button type="button" class="pill-btn" data-acs="UA">آنژین ناپایدار (<span class="en">UA</span>)</button>
+        <button type="button" class="pill-btn" data-acs="NSTEMI"><span class="en">NSTEMI</span></button>
+        <button type="button" class="pill-btn crimson" data-acs="STEMI"><span class="en">STEMI</span></button>
+      </div>
+      <div class="card" id="acsDetailCard"></div>
+
+      <div class="card">
+        <h3>درد کلاسیک آنژینی و معادل‌های آنژینی (<span class="en">Anginal Equivalents</span>)</h3>
+        <ul class="clean-list">
+          <li><strong>درد کلاسیک:</strong> زیرجناغی (<span class="en">Substernal</span>)، فشاری یا سنگینی روی سینه، با انتشار به گردن چپ، فک/صورت چپ و بازوی چپ.</li>
+          <li><strong>تفاوت درد <span class="en">ACS</span>:</strong> می‌تواند <strong>در حالت استراحت</strong> ایجاد شود، شدت بیشتر و تکرار بیشتری دارد و به‌سادگی با استراحت برطرف نمی‌شود.</li>
+          <li><strong>معادل‌های آنژینی (به‌ویژه در دیابتی‌ها، سالمندان و زنان):</strong> درد اپی‌گاستریک (شکمی)، تهوع و استفراغ، تعریق سرد (<span class="en">Diaphoresis</span>) و تنگی نفس ناگهانی.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         STEP 6: CHAPTER 3 - EARLY POST-MI COMPLICATIONS (24H)
+         ============================================================ -->
+    <section class="step-view" data-step="6">
+      <span class="chapter-badge">فصل ۳ از ۶ • عوارض زودرس پس از MI</span>
+      <h2>عوارض مرگبار ۲۴ ساعت اول پس از سکته قلبی</h2>
+      <p class="lead">پس از انفارکتوس (<span class="en">NSTEMI</span> یا <span class="en">STEMI</span>)، پایش مداوم ریتم و همودینامیک در ۲۴ ساعت اول حیاتی است:</p>
+
+      <div class="acc-item open">
+        <button type="button" class="acc-trigger">
+          <span>۱. آریتمی‌های قلبی (شایع‌ترین علت مرگ ناگهانی در ۲۴ ساعت اول)</span>
+          <span class="acc-icon">▼</span>
+        </button>
+        <div class="acc-content">
+          <ul class="clean-list">
+            <li><strong>انسداد <span class="en">RCA</span> ← ایسکمی گره <span class="en">AV</span>:</strong> اختلال هدایت دهلیزی-بطنی ← <strong>بلوک <span class="en">AV</span> درجه ۲ یا ۳</strong> ← تسلط سیستم پورکنژ ← <strong>برادیکاردی شدید</strong> و افت فشار.</li>
+            <li><strong>انسداد <span class="en">LAD</span> یا <span class="en">LCx</span> ← آسیب دیواره بطن چپ:</strong> ایجاد <strong>مدارهای بازچرخشی (<span class="en">Re-entrant circuits</span>)</strong> در مرز بافت نکروزه ← تاکی‌کاردی بطنی (<span class="en">VT</span>) ← فیبریلاسیون بطنی (<span class="en">VF</span>) ← <strong>مرگ ناگهانی قلبی</strong>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <button type="button" class="acc-trigger">
+          <span>۲. نارسایی حاد قلبی و شوک کاردیوژنیک (۲۴ ساعت اول)</span>
+          <span class="acc-icon">▼</span>
+        </button>
+        <div class="acc-content">
+          <p style="margin-bottom:8px;">به‌ویژه در انسداد وسیع <strong><span class="en">LAD</span></strong> (از دست رفتن بخش بزرگی از میوکارد بطن چپ) رخ می‌دهد:</p>
+          <ul class="clean-list">
+            <li><strong>نارسایی رو به جلو:</strong> کاهش انقباض‌پذیری ← افت <span class="en">LVEF</span> ← کاهش برون‌ده قلبی (<span class="en">CO</span>) ← طبق <span class="en">BP = CO × SVR</span>، هیپوتانسیون شدید ← <strong>شوک کاردیوژنیک</strong> و آسیب ارگان‌های حیاتی.</li>
+            <li><strong>نارسایی رو به عقب:</strong> تجمع خون در بطن چپ ← پس‌زدن به دهلیز چپ و وریدهای ریوی ← افزایش فشار هیدروستاتیک ← <strong>ادم ریوی (<span class="en">Pulmonary Edema</span>)</strong>، تنگی نفس شدید و کراکل دوطرفه.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="reveal-box">
+        <h3>مکث بالینی</h3>
+        <p style="font-size:0.9rem;color:var(--muted);">بیمار ۶ ساعت پس از <span class="en">STEMI</span> تحتانی دچار ضربان قلب ۳۶ در دقیقه و سرگیجه می‌شود. علت و شریان درگیر چیست؟</p>
+        <button type="button" class="btn btn-secondary" style="margin-top:10px;" data-reveal="revComp1">بررسی پاسخ</button>
+        <div class="reveal-answer" id="revComp1">
+          انسداد <strong><span class="en">RCA</span></strong> باعث ایسکمی گره <span class="en">AV</span> شده و منجر به <strong>بلوک <span class="en">AV</span> درجه ۲ یا ۳</strong> و برادیکاردی شدید شده است.
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         STEP 7: CHAPTER 3 - MECHANICAL COMPLICATIONS INTERACTIVE SVG
+         ============================================================ -->
+    <section class="step-view" data-step="7">
+      <span class="chapter-badge">فصل ۳ از ۶ • شبیه‌ساز عوارض مکانیکی و پریکاردیت</span>
+      <h2>پریکاردیت و ۴ عارضه مکانیکی پس از <span class="en">MI</span></h2>
+      <p class="lead">روی هر عارضه کلیک کنید تا محل دقیق آسیب، جهت شنت یا نشت خون و مکانیسم همودینامیک آن را روی قلب ۴ حفره‌ای ببینید:</p>
+
+      <div class="svg-box">
+        <svg viewBox="0 0 460 285" role="img" aria-label="دیاگرام تعاملی ۴ حفره‌ای قلب برای نمایش پریکاردیت و عوارض مکانیکی">
+          <rect width="460" height="285" rx="12" fill="var(--svg-bg)" />
+
+          <!-- Pericardial Sac (Outer Layer) -->
+          <path id="mechPericardium" d="M230,28 C126,28 82,92 92,168 C102,226 168,266 230,270 C292,266 358,226 368,168 C378,92 334,28 230,28 Z"
+                fill="none" stroke="#94a3b8" stroke-width="5" stroke-dasharray="6 4" />
+
+          <!-- Heart Myocardium Base -->
+          <path d="M230,42 C142,42 106,96 114,164 C122,216 176,252 230,256 C284,252 338,216 346,164 C354,96 318,42 230,42 Z"
+                fill="#fda4af" stroke="#be123c" stroke-width="2.2" />
+
+          <!-- 4 Chambers -->
+          <!-- RA (Viewer Left Top) -->
+          <path d="M132,126 C126,88 156,58 214,58 L214,126 Z" fill="#dbeafe" stroke="#64748b" stroke-width="1.5" />
+          <!-- LA (Viewer Right Top) -->
+          <path d="M246,58 C304,58 334,88 328,126 L246,126 Z" fill="#fee2e2" stroke="#64748b" stroke-width="1.5" />
+          <!-- RV (Viewer Left Bottom) -->
+          <path d="M134,136 L214,136 L214,234 C166,226 138,186 134,136 Z" fill="#bfdbfe" stroke="#64748b" stroke-width="1.5" />
+          <!-- LV (Viewer Right Bottom) -->
+          <path d="M246,136 L326,136 C322,188 292,228 246,236 Z" fill="#fecdd3" stroke="#64748b" stroke-width="1.5" />
+
+          <!-- Interventricular Septum -->
+          <rect x="214" y="132" width="32" height="106" rx="4" fill="#fb7185" stroke="#be123c" stroke-width="1.4" />
+
+          <!-- Mitral Valve Leaflets & Papillary Muscle (Normal) -->
+          <g id="mechNormalMitral">
+            <line x1="252" y1="130" x2="278" y2="144" stroke="#334155" stroke-width="3.2" stroke-linecap="round" />
+            <line x1="316" y1="130" x2="290" y2="144" stroke="#334155" stroke-width="3.2" stroke-linecap="round" />
+            <line x1="278" y1="144" x2="286" y2="200" stroke="#475569" stroke-width="1.5" />
+            <line x1="290" y1="144" x2="292" y2="200" stroke="#475569" stroke-width="1.5" />
+            <path d="M276,224 L286,196 L298,220 Z" fill="#be123c" />
+          </g>
+
+          <!-- Chamber Text Labels -->
+          <text x="172" y="96" text-anchor="middle" font-size="12" font-weight="800" fill="#1e3a8a" font-family="system-ui">RA</text>
+          <text x="288" y="96" text-anchor="middle" font-size="12" font-weight="800" fill="#881337" font-family="system-ui">LA</text>
+          <text x="172" y="182" text-anchor="middle" font-size="12" font-weight="800" fill="#1e3a8a" font-family="system-ui">RV</text>
+          <text x="288" y="182" text-anchor="middle" font-size="12" font-weight="800" fill="#881337" font-family="system-ui">LV</text>
+
+          <!-- OVERLAY 1: PERICARDITIS -->
+          <g id="ov-pericarditis">
+            <path class="territory-glow" d="M230,28 C126,28 82,92 92,168 C102,226 168,266 230,270 C292,266 358,226 368,168 C378,92 334,28 230,28 Z"
+                  fill="none" stroke="#f97316" stroke-width="9" />
+            <rect x="266" y="198" width="54" height="30" rx="8" fill="#7f1d1d" opacity="0.65" />
+            <text x="64" y="64" font-size="10.5" font-weight="800" fill="#ea580c">التهاب پریکارد</text>
+            <text x="64" y="79" font-size="9.5" font-weight="700" fill="#ea580c">(Friction Rub)</text>
+          </g>
+
+          <!-- OVERLAY 2: VSD -->
+          <g id="ov-vsd" style="display:none;">
+            <!-- Infarcted Septum Hole -->
+            <rect x="212" y="164" width="36" height="32" rx="4" fill="#450a0a" />
+            <rect x="210" y="172" width="40" height="16" fill="#dc2626" />
+            <!-- Animated LV -> RV Shunt Arrow -->
+            <path d="M274,180 L186,180" fill="none" stroke="#facc15" stroke-width="5" stroke-linecap="round" class="flow-arrow" />
+            <polygon points="180,180 194,172 194,188" fill="#facc15" />
+            <text x="230" y="252" text-anchor="middle" font-size="10.5" font-weight="800" fill="#7f1d1d">شنت چپ به راست (LV → RV) • نارسایی راست &gt; چپ</text>
+          </g>
+
+          <!-- OVERLAY 3: PAPILLARY MUSCLE RUPTURE (ACUTE MR) -->
+          <g id="ov-papillary" style="display:none;">
+            <!-- Flail Mitral Leaflet & Snapped Chordae -->
+            <line x1="252" y1="130" x2="278" y2="142" stroke="#334155" stroke-width="3.2" stroke-linecap="round" />
+            <line x1="316" y1="130" x2="296" y2="108" stroke="#be123c" stroke-width="3.5" stroke-linecap="round" />
+            <!-- Snapped Chordae -->
+            <path d="M296,108 L290,132 M288,196 L284,174" stroke="#991b1b" stroke-width="2" stroke-dasharray="3 3" />
+            <!-- Necrotic Papillary Muscle -->
+            <path d="M276,226 L286,196 L298,222 Z" fill="#450a0a" />
+            <!-- Animated Regurgitant Jet into LA -->
+            <path d="M286,164 C288,136 284,104 282,76" fill="none" stroke="#be123c" stroke-width="6" stroke-linecap="round" class="flow-arrow-fast" />
+            <polygon points="282,66 273,82 291,82" fill="#be123c" />
+            <text x="382" y="92" text-anchor="middle" font-size="10" font-weight="800" fill="#be123c">پس‌زدن خون</text>
+            <text x="382" y="106" text-anchor="middle" font-size="10" font-weight="800" fill="#be123c">به LA (MR حاد)</text>
+          </g>
+
+          <!-- OVERLAY 4: FREE WALL RUPTURE -> TAMPONADE -->
+          <g id="ov-freewall" style="display:none;">
+            <!-- Blood filling Pericardial Space (Hemopericardium) -->
+            <path d="M230,28 C126,28 82,92 92,168 C102,226 168,266 230,270 C292,266 358,226 368,168 C378,92 334,28 230,28 Z"
+                  fill="none" stroke="#991b1b" stroke-width="14" opacity="0.88" class="territory-glow" />
+            <!-- Rupture tear in LV lateral free wall -->
+            <path d="M322,166 L354,176" stroke="#450a0a" stroke-width="9" stroke-linecap="round" />
+            <path d="M312,166 L360,178" stroke="#facc15" stroke-width="3.5" class="flow-arrow-fast" />
+            <text x="396" y="168" text-anchor="middle" font-size="10" font-weight="800" fill="#991b1b">هموپریکارد</text>
+            <text x="396" y="182" text-anchor="middle" font-size="9.5" font-weight="700" fill="#991b1b">تامپوناد قلبی</text>
+          </g>
+
+          <!-- OVERLAY 5: PSEUDOANEURYSM -->
+          <g id="ov-pseudo" style="display:none;">
+            <!-- Contained bulge pouch -->
+            <path d="M332,150 C386,144 396,204 334,206 Z" fill="#dc2626" stroke="#7f1d1d" stroke-width="3" />
+            <!-- Fibrin Clot wall -->
+            <path d="M342,148 C392,144 400,206 336,208" fill="none" stroke="#fde047" stroke-width="4" stroke-dasharray="5 3" />
+            <!-- Swirling Blood Stasis -->
+            <circle cx="356" cy="178" r="12" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-dasharray="6 4" class="flow-arrow-slow" />
+            <text x="398" y="140" text-anchor="middle" font-size="9.5" font-weight="800" fill="#b45309">پارگی مهارشده</text>
+            <text x="398" y="224" text-anchor="middle" font-size="9.5" font-weight="800" fill="#991b1b">استاز و لخته</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="pill-group" id="mechPills">
+        <button type="button" class="pill-btn active" data-mech="pericarditis">پریکاردیت</button>
+        <button type="button" class="pill-btn" data-mech="vsd">پارگی سپتوم (<span class="en">VSD</span>)</button>
+        <button type="button" class="pill-btn" data-mech="papillary">عضله پاپیلاری (<span class="en">MR</span>)</button>
+        <button type="button" class="pill-btn crimson" data-mech="freewall">دیواره آزاد</button>
+        <button type="button" class="pill-btn" data-mech="pseudo">سودوآنوریسم</button>
+      </div>
+      <div class="card" id="mechDetailCard"></div>
+    </section>
+
+    <!-- ============================================================
+         STEP 8: CHAPTER 4 - INTERACTIVE ECG LAB & 12-LEAD LOCALIZATION
+         ============================================================ -->
+    <section class="step-view" data-step="8">
+      <span class="chapter-badge">فصل ۴ از ۶ • آزمایشگاه تعاملی نوار قلب (<span class="en">ECG</span>)</span>
+      <h2>تفسیر <span class="en">ECG</span> و لوکالیزاسیون ۱۲ لید <span class="en">STEMI</span></h2>
+      <p class="lead">در بیمار با درد قفسه سینه آنژینی، <strong>اولین تست انتخابی <span class="en">ECG</span></strong> است. در بخش اول شکل امواج را بررسی کنید و در بخش دوم لیدهای ۱۲گانه را تمرین کنید.</p>
+
+      <!-- PART 1: ECG MORPHOLOGY EXPLORER -->
+      <div class="card">
+        <h3>بخش ۱: بررسی شکل موج <span class="en">ECG</span> (روی نقاط دایره‌ای کلیک کنید)</h3>
+        <div class="pill-group" id="ecgMorphPills">
+          <button type="button" class="pill-btn active" data-morph="normal">نرمال / آنژین پایدار</button>
+          <button type="button" class="pill-btn" data-morph="nstemi">افسردگی <span class="en">ST</span> (<span class="en">UA/NSTEMI</span>)</button>
+          <button type="button" class="pill-btn crimson" data-morph="stemi">صعود <span class="en">ST</span> (<span class="en">STEMI</span>)</button>
+          <button type="button" class="pill-btn" data-morph="prinzmetal">وازواسپاستیک (<span class="en">Prinzmetal</span>)</button>
+        </div>
+
+        <div class="svg-box light-paper" style="padding:8px;">
+          <svg viewBox="0 0 560 200" role="img" aria-label="کاغذ میلی‌متری تعاملی نوار قلب">
+            <defs>
+              <pattern id="ecgSmallGrid" width="8" height="8" patternUnits="userSpaceOnUse">
+                <path d="M 8 0 L 0 0 0 8" fill="none" stroke="#f8cdd3" stroke-width="0.6" />
+              </pattern>
+              <pattern id="ecgBigGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <rect width="40" height="40" fill="url(#ecgSmallGrid)" />
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f09aa7" stroke-width="1.15" />
+              </pattern>
+            </defs>
+            <rect width="560" height="200" fill="url(#ecgBigGrid)" />
+            <!-- Isoelectric Baseline Reference -->
+            <line x1="0" y1="120" x2="560" y2="120" stroke="#64748b" stroke-width="1" stroke-dasharray="4 4" opacity="0.6" />
+            <text x="10" y="18" font-size="11" font-weight="800" fill="#be123c" font-family="system-ui" id="morphSvgTitle">NORMAL SINUS • ISOELECTRIC ST</text>
+
+            <!-- Dynamic ECG Waveform -->
+            <path id="morphWavePath" d="M10,120 L95,120 C108,120 116,102 128,102 C140,102 148,120 160,120 L185,120 L196,134 L216,38 L234,148 L246,120 L306,120 C324,120 338,88 358,88 C378,88 392,120 412,120 L550,120"
+                  fill="none" stroke="#0f172a" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+
+            <!-- Clickable Interactive Hotspots -->
+            <g class="ecg-hotspot active" data-spot="P" transform="translate(128, 102)">
+              <circle r="8" fill="#0f766e" stroke="#fff" stroke-width="2" />
+              <text y="3.5" text-anchor="middle" font-size="9.5" font-weight="800" fill="#fff" font-family="system-ui">P</text>
+            </g>
+            <g class="ecg-hotspot" data-spot="QRS" transform="translate(216, 44)">
+              <circle r="9" fill="#0f766e" stroke="#fff" stroke-width="2" />
+              <text y="3" text-anchor="middle" font-size="7.5" font-weight="800" fill="#fff" font-family="system-ui">QRS</text>
+            </g>
+            <g class="ecg-hotspot" data-spot="ST" id="spotST" transform="translate(274, 120)">
+              <circle r="9" fill="#e8742c" stroke="#fff" stroke-width="2" />
+              <text y="3.5" text-anchor="middle" font-size="8.5" font-weight="800" fill="#fff" font-family="system-ui">ST</text>
+            </g>
+            <g class="ecg-hotspot" data-spot="T" id="spotT" transform="translate(358, 88)">
+              <circle r="8" fill="#0f766e" stroke="#fff" stroke-width="2" />
+              <text y="3.5" text-anchor="middle" font-size="9.5" font-weight="800" fill="#fff" font-family="system-ui">T</text>
+            </g>
+          </svg>
+        </div>
+        <div class="detail-panel" id="morphSpotTooltip" style="margin-bottom:10px;"></div>
+        <div id="morphClinicalBox" class="callout teal" style="margin-bottom:0;"></div>
+      </div>
+
+      <!-- PART 2: 12-LEAD (+ V7-V9) STEMI LOCALIZATION SIMULATOR -->
+      <div class="card">
+        <h3>بخش ۲: شبیه‌ساز لوکالیزاسیون ۱۲ لید <span class="en">STEMI</span> (+ لیدهای خلفی)</h3>
+        <p style="font-size:0.86rem;color:var(--muted);margin-bottom:10px;">قلمرو انفارکتوس را انتخاب کنید تا تغییرات لیدهای نوار قلب و شریان مسدودشده هم‌زمان نمایش داده شوند:</p>
+
+        <div class="pill-group" id="ecgTerrPills">
+          <button type="button" class="pill-btn crimson active" data-terr="ant">قدامی (<span class="en">V1–V4 / LAD</span>)</button>
+          <button type="button" class="pill-btn crimson" data-terr="inf">تحتانی (<span class="en">II,III,aVF / RCA</span>)</button>
+          <button type="button" class="pill-btn crimson" data-terr="lat">جانبی (<span class="en">I,aVL,V5–V6 / LCx</span>)</button>
+          <button type="button" class="pill-btn crimson" data-terr="post">خلفی (<span class="en">V7–V9 / PDA</span>)</button>
+        </div>
+
+        <div class="ecg-12-layout">
+          <div>
+            <div class="ecg-grid" id="ecg12Grid"></div>
+            <div class="ecg-post-row" id="ecgPostGrid"></div>
+          </div>
+
+          <!-- Synced Mini Heart Diagram -->
+          <div class="svg-box" style="margin-bottom:0; padding:8px;">
+            <svg viewBox="0 0 180 200" role="img" aria-label="قلب کوچک همگام با نوار قلب ۱۲ لید">
+              <rect width="180" height="200" rx="10" fill="var(--svg-bg)" />
+              <text x="90" y="18" text-anchor="middle" font-size="10.5" font-weight="800" fill="var(--navy)">شریان و دیواره درگیر</text>
+              <!-- Mini Heart -->
+              <path d="M90,34 C58,20 26,48 32,90 C38,130 74,158 92,172 C110,158 144,130 148,88 C152,48 122,22 90,34 Z"
+                    fill="#fecdd3" stroke="#be123c" stroke-width="1.8" />
+              <!-- Wall Motion Abnormality Zones -->
+              <ellipse id="miniZone-ant" cx="92" cy="122" rx="28" ry="24" fill="#be123c" opacity="0.85" class="territory-glow" />
+              <ellipse id="miniZone-inf" cx="76" cy="146" rx="30" ry="16" fill="#0f766e" opacity="0" class="territory-glow" />
+              <ellipse id="miniZone-lat" cx="128" cy="100" rx="18" ry="28" fill="#e8742c" opacity="0" class="territory-glow" />
+              <ellipse id="miniZone-post" cx="92" cy="64" rx="28" ry="18" fill="#2563eb" opacity="0" class="territory-glow" />
+              <!-- Vessel Lines -->
+              <path id="miniVess-ant" d="M90,46 C92,80 90,115 92,158" fill="none" stroke="#be123c" stroke-width="4" stroke-linecap="round" />
+              <path id="miniVess-inf" d="M74,48 C50,68 44,106 58,142" fill="none" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" />
+              <path id="miniVess-lat" d="M92,46 C116,56 134,80 136,118" fill="none" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" />
+              <path id="miniVess-post" d="M76,56 C94,58 112,66 122,78" fill="none" stroke="#94a3b8" stroke-width="3" stroke-dasharray="4 3" />
+              <text id="miniArteryLabel" x="90" y="191" text-anchor="middle" font-size="11" font-weight="800" fill="#be123c" font-family="system-ui">LAD (Anterior)</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="detail-panel" id="ecgTerrDetail" style="margin-top:12px;"></div>
+      </div>
+
+      <!-- PART 3: MINI-CHALLENGE -->
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+          <h3 style="margin:0;">بخش ۳: چالش سریع — حدس شریان درگیر از روی <span class="en">ECG</span></h3>
+          <span class="chapter-badge" style="margin:0;" id="ecgChallCounter">سناریو ۱ از ۳</span>
+        </div>
+        <div id="ecgChallPrompt" style="font-size:0.9rem;color:var(--muted);margin-bottom:10px;"></div>
+        <div class="svg-box light-paper" style="padding:6px;margin-bottom:10px;">
+          <svg viewBox="0 0 420 90" id="ecgChallSvg"></svg>
+        </div>
+        <div class="pill-group" id="ecgChallOpts">
+          <button type="button" class="pill-btn" data-ans="LAD"><span class="en">LAD</span></button>
+          <button type="button" class="pill-btn" data-ans="RCA"><span class="en">RCA</span></button>
+          <button type="button" class="pill-btn" data-ans="LCx"><span class="en">LCx</span></button>
+          <button type="button" class="pill-btn" data-ans="PDA"><span class="en">PDA</span></button>
+        </div>
+        <div id="ecgChallFeedback" class="callout" style="display:none;margin-bottom:10px;"></div>
+        <button type="button" class="btn btn-secondary" id="nextEcgChallBtn" style="font-size:0.84rem;">سناریوی بعدی ↺</button>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         STEP 9: CHAPTER 4 - STRESS TESTING & CORONARY STEAL SVG
+         ============================================================ -->
+    <section class="step-view" data-step="9">
+      <span class="chapter-badge">فصل ۴ از ۶ • تست استرس و سرقت کرونری</span>
+      <h2>ارزیابی آنژین پایدار و سندرم سرقت کرونری</h2>
+      <p class="lead">اگر <span class="en">ECG</span> و تروپونین اولیه نرمال بودند (<span class="en">ACS</span> رد شد)، از تست استرس برای آشکارسازی ایسکمی استفاده می‌کنیم:</p>
+
+      <div class="pill-group" id="stressPills">
+        <button type="button" class="pill-btn active" data-stress="exercise">بیمار قادر به ورزش است</button>
+        <button type="button" class="pill-btn" data-stress="pharm">بیمار قادر به ورزش نیست (دارویی)</button>
+      </div>
+      <div class="card" id="stressDetailCard"></div>
+
+      <!-- INTERACTIVE CORONARY STEAL SVG -->
+      <div class="card">
+        <h3>شبیه‌ساز تعاملی سندرم سرقت کرونری (<span class="en">Coronary Steal</span>)</h3>
+        <p style="font-size:0.86rem;color:var(--muted);margin-bottom:10px;">اثر تزریق آدنوزین یا دی‌پیریدامول را روی شاخه سالم و شاخه تنگ‌شده مشاهده کنید:</p>
+
+        <div class="svg-box">
+          <svg viewBox="0 0 540 245" role="img" aria-label="دیاگرام تعاملی سندرم سرقت کرونری">
+            <rect width="540" height="245" rx="12" fill="var(--svg-bg)" />
+
+            <!-- Parent Coronary Trunk -->
+            <path d="M270,18 L270,74" fill="none" stroke="#dc2626" stroke-width="26" stroke-linecap="round" />
+            <path d="M270,22 L270,70" fill="none" stroke="#fef08a" stroke-width="4" class="flow-arrow" />
+            <text x="270" y="13" text-anchor="middle" font-size="10.5" font-weight="800" fill="var(--navy)">شریان کرونر اصلی (جریان ورودی)</text>
+
+            <!-- LEFT BRANCH: HEALTHY VESSEL -->
+            <path id="stealHealthyOuter" d="M270,72 C220,86 165,112 130,162" fill="none" stroke="#dc2626" stroke-width="22" stroke-linecap="round" style="transition: stroke-width 0.4s ease;" />
+            <path id="stealHealthyFlow" d="M262,76 C216,90 164,116 132,160" fill="none" stroke="#fef08a" stroke-width="4" class="flow-arrow" />
+            <text x="130" y="96" text-anchor="middle" font-size="11" font-weight="800" fill="var(--teal)">شاخه سالم</text>
+            <text id="stealHealthyRes" x="130" y="112" text-anchor="middle" font-size="9.5" font-weight="700" fill="var(--muted)">مقاومت نرمال</text>
+
+            <!-- RIGHT BRANCH: STENOTIC / DISEASED VESSEL -->
+            <path d="M270,72 C320,86 375,112 410,162" fill="none" stroke="#dc2626" stroke-width="20" stroke-linecap="round" />
+            <!-- Yellow Fixed Plaque Stenosis -->
+            <ellipse cx="348" cy="108" rx="22" ry="9" transform="rotate(28 348 108)" fill="#facc15" stroke="#a16207" stroke-width="1.5" />
+            <path id="stealDiseasedFlow" d="M278,76 C324,90 376,116 408,160" fill="none" stroke="#fef08a" stroke-width="3" class="flow-arrow-slow" />
+            <text x="414" y="96" text-anchor="middle" font-size="11" font-weight="800" fill="var(--crimson)">شاخه تنگ‌شده (پلاک)</text>
+            <text id="stealDiseasedRes" x="414" y="112" text-anchor="middle" font-size="9.5" font-weight="700" fill="var(--muted)">حداکثر اتساع قبلی</text>
+
+            <!-- MYOCARDIUM ZONES (MPI Perfusions) -->
+            <!-- Healthy Myocardium -->
+            <rect id="mpiHealthyBox" x="35" y="168" width="195" height="62" rx="12" fill="#fda4af" stroke="#be123c" stroke-width="1.8" />
+            <text x="132" y="194" text-anchor="middle" font-size="11.5" font-weight="800" fill="#881337">میوکارد سالم</text>
+            <text id="mpiHealthyLabel" x="132" y="213" text-anchor="middle" font-size="10" font-weight="700" fill="#881337">پرفیوژن طبیعی (گرم در MPI)</text>
+
+            <!-- Diseased Myocardium -->
+            <rect id="mpiDiseasedBox" x="310" y="168" width="195" height="62" rx="12" fill="#fda4af" stroke="#be123c" stroke-width="1.8" />
+            <text id="mpiDiseasedTitle" x="407" y="194" text-anchor="middle" font-size="11.5" font-weight="800" fill="#881337">میوکارد ناحیه بیمار</text>
+            <text id="mpiDiseasedLabel" x="407" y="213" text-anchor="middle" font-size="10" font-weight="700" fill="#881337">پرفیوژن حداقلی در استراحت</text>
+          </svg>
+        </div>
+
+        <button type="button" class="btn btn-primary btn-block" id="stealToggleBtn">تزریق آدنوزین / دی‌پیریدامول (فعال‌سازی سرقت کرونری)</button>
+        <div id="stealVisual" class="detail-panel" style="margin-top:12px;"></div>
+      </div>
+
+      <div class="callout teal">
+        <strong>قدم بعدی پس از تست استرس مثبت:</strong> برای مشاهده دقیق آناتومی تنگی و تصمیم برای ریواسکولاریزاسیون از <strong>آنژیوگرافی کرونر</strong> یا <strong><span class="en">CTA</span> کرونر</strong> (غیرتهاجمی) استفاده می‌شود.
+      </div>
+    </section>
+
+    <!-- ============================================================
+         STEP 10: CHAPTER 5 - TREATMENT, INTERACTIVE PCI/CABG & ACS
+         ============================================================ -->
+    <section class="step-view" data-step="10">
+      <span class="chapter-badge">فصل ۵ از ۶ • درمان دارویی و ریواسکولاریزاسیون</span>
+      <h2>درمان <span class="en">Stable CAD</span>، <span class="en">PCI</span> در برابر <span class="en">CABG</span> و <span class="en">ACS</span></h2>
+
+      <!-- Stable CAD Meds -->
+      <div class="card">
+        <h3>۱. دارودرمانی <span class="en">Stable CAD</span></h3>
+        <ul class="clean-list">
+          <li><strong>پیشگیری از ترومبوز و پیشرفت پلاک:</strong> <strong>آسپرین</strong> + <strong>استاتین</strong> (تثبیت پلاک).</li>
+          <li><strong>کاهش تقاضای اکسیژن و کنترل علائم:</strong> ۱) <strong>بتابلوکرها</strong>، ۲) <strong>نیتروگلیسیرین زیرزبانی (<span class="en">PRN</span>)</strong>، ۳) <strong>ایزوسورباید دی‌نیترات</strong>، ۴) <strong>مسدودکننده‌های کانال کلسیم (<span class="en">CCB</span>)</strong>.</li>
+        </ul>
+      </div>
+
+      <!-- INTERACTIVE PCI vs CABG SVG VISUALIZER -->
+      <div class="card">
+        <h3>۲. شبیه‌ساز تعاملی <span class="en">PCI</span> (استنت) در برابر <span class="en">CABG</span> (بای‌پس)</h3>
+        <div class="pill-group" id="revascModePills">
+          <button type="button" class="pill-btn active" data-mode="pci">آنژیوپلاستی و استنت (<span class="en">PCI</span>)</button>
+          <button type="button" class="pill-btn" data-mode="cabg">جراحی بای‌پس (<span class="en">CABG</span>)</button>
+        </div>
+
+        <!-- PCI Interactive SVG -->
+        <div id="pciVizWrap">
+          <div class="svg-box" style="margin-bottom:10px;">
+            <svg viewBox="0 0 540 165" role="img" aria-label="شبیه‌ساز گام‌به‌گام PCI، بالون و استنت">
+              <rect width="540" height="165" rx="12" fill="var(--svg-bg)" />
+              <!-- Artery Wall -->
+              <rect x="20" y="34" width="500" height="96" rx="10" fill="#fca5a5" stroke="#b91c1c" stroke-width="2" />
+              <rect x="20" y="46" width="500" height="72" fill="#fee2e2" />
+              <!-- Top & Bottom Plaque -->
+              <path id="pciPlaqueTop" d="M180,46 C210,76 330,76 360,46 Z" fill="#facc15" stroke="#ca8a04" stroke-width="1.5" style="transition:all 0.4s ease;" />
+              <path id="pciPlaqueBot" d="M180,118 C210,88 330,88 360,118 Z" fill="#facc15" stroke="#ca8a04" stroke-width="1.5" style="transition:all 0.4s ease;" />
+
+              <!-- Blood Flow Arrows -->
+              <path id="pciFlowArrow" d="M35,82 L505,82" fill="none" stroke="#dc2626" stroke-width="4" class="flow-arrow-slow" />
+
+              <!-- Catheter Guidewire (Stages 0 & 1) -->
+              <g id="pciCatheterGroup">
+                <line x1="20" y1="82" x2="430" y2="82" stroke="#1e293b" stroke-width="2.5" />
+                <rect id="pciBalloon" x="215" y="75" width="110" height="14" rx="7" fill="#3b82f6" opacity="0.88" style="transition:all 0.4s ease;" />
+              </g>
+
+              <!-- Stent Mesh (Stages 1 & 2) -->
+              <g id="pciStentMesh" style="display:none;">
+                <rect x="205" y="52" width="130" height="60" rx="6" fill="none" stroke="#475569" stroke-width="2.8" stroke-dasharray="6 4" />
+                <path d="M210,54 L235,110 L260,54 L285,110 L310,54 L330,110" fill="none" stroke="#64748b" stroke-width="1.8" />
+                <path d="M210,110 L235,54 L260,110 L285,54 L310,110 L330,54" fill="none" stroke="#64748b" stroke-width="1.8" />
+              </g>
+
+              <text id="pciStepCaption" x="270" y="150" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--navy)">گام ۱: عبور کاتتر و بالون از میان پلاک تنگ‌کننده</text>
+            </svg>
+          </div>
+          <button type="button" class="btn btn-secondary btn-block" id="pciStepBtn">گام بعدی: باد کردن بالون و باز کردن استنت ←</button>
+          <div class="callout crimson" style="margin-bottom:0;">
+            <strong>قانون طلایی پس از استنت (<span class="en">PCI</span>):</strong> برای جلوگیری از ترومبوز استنت، بیمار باید <strong>حداقل ۱ سال</strong> درمان ضدپلاکتی دوگانه (<strong><span class="en">DAPT</span></strong>: آسپرین + کلوپیدوگرل یا تیکاگرلور) دریافت کند.
+          </div>
+        </div>
+
+        <!-- CABG Interactive SVG -->
+        <div id="cabgVizWrap" style="display:none;">
+          <div class="svg-box" style="margin-bottom:10px;">
+            <svg viewBox="0 0 540 210" role="img" aria-label="دیاگرام جراحی بای‌پس کرونر CABG">
+              <rect width="540" height="210" rx="12" fill="var(--svg-bg)" />
+              <!-- Heart outline -->
+              <path d="M270,38 C200,18 148,66 156,124 C164,166 218,194 270,202 C322,194 376,166 384,124 C392,66 340,18 270,38 Z"
+                    fill="#fecdd3" stroke="#be123c" stroke-width="2" />
+              <!-- Aorta -->
+              <path d="M254,40 C248,6 298,4 300,38" fill="none" stroke="#b91c1c" stroke-width="16" stroke-linecap="round" />
+              <!-- Occluded Left Main / LAD -->
+              <path d="M272,56 C276,92 274,136 272,176" fill="none" stroke="#991b1b" stroke-width="5" />
+              <!-- Occlusion X -->
+              <circle cx="274" cy="86" r="9" fill="#facc15" stroke="#7f1d1d" stroke-width="2" />
+              <text x="274" y="90" text-anchor="middle" font-size="11" font-weight="900" fill="#7f1d1d">×</text>
+
+              <!-- Bypass Graft 1: LIMA to Distal LAD -->
+              <path d="M356,18 C362,68 338,118 276,136" fill="none" stroke="#0f766e" stroke-width="7" stroke-linecap="round" />
+              <path d="M356,18 C362,68 338,118 276,136" fill="none" stroke="#99f6e4" stroke-width="2.5" class="flow-arrow-fast" />
+              <text x="436" y="48" text-anchor="middle" font-size="10.5" font-weight="800" fill="var(--teal)">پیوند شریان پستانی داخلی</text>
+              <text x="436" y="62" text-anchor="middle" font-size="9.5" font-weight="700" fill="var(--muted)">(LIMA → دیستال LAD)</text>
+
+              <!-- Bypass Graft 2: Saphenous Vein from Aorta to RCA -->
+              <path d="M256,28 C204,48 186,98 202,146" fill="none" stroke="#2563eb" stroke-width="7" stroke-linecap="round" />
+              <path d="M256,28 C204,48 186,98 202,146" fill="none" stroke="#bfdbfe" stroke-width="2.5" class="flow-arrow-fast" />
+              <text x="104" y="64" text-anchor="middle" font-size="10.5" font-weight="800" fill="var(--blue)">پیوند ورید صافن بزرگ</text>
+              <text x="104" y="78" text-anchor="middle" font-size="9.5" font-weight="700" fill="var(--muted)">(دور زدن انسدادهای متعدد)</text>
+            </svg>
+          </div>
+          <div class="callout teal" style="margin-bottom:0;">
+            <strong>مکانیسم <span class="en">CABG</span>:</strong> با استفاده از شریان پستانی داخلی (<span class="en">LIMA</span>) یا ورید صافن بزرگ (<span class="en">Saphenous Vein</span>)، مسیر جدیدی از آئورت/ساب‌کلاوین به دیستال شریان‌های مسدودشده ایجاد می‌شود.
+          </div>
+        </div>
+      </div>
+
+      <!-- PCI vs CABG DECISION TOOL -->
+      <div class="card">
+        <h3>۳. ابزار تصمیم‌گیری: <span class="en">PCI</span> یا <span class="en">CABG</span>؟</h3>
+        <p style="font-size:0.86rem;color:var(--muted);margin-bottom:10px;">معیارهای موجود در بیمار را فعال کنید تا روش ارجح نمایش داده شود:</p>
+        <button type="button" class="check-chip" data-revasc="lm"><span>درگیری تنه اصلی کرونر چپ (<span class="en">Left Main</span>)</span><span class="chip-state">خیر</span></button>
+        <button type="button" class="check-chip" data-revasc="v3"><span>درگیری ۳ رگ یا بیشتر (<span class="en">≥ 3 Vessels</span>)</span><span class="chip-state">خیر</span></button>
+        <button type="button" class="check-chip" data-revasc="ef"><span>کاهش کسر جهشی بطن چپ (<span class="en">Low LVEF</span>)</span><span class="chip-state">خیر</span></button>
+        <div id="revascResult" class="callout teal" style="margin-bottom:0;"></div>
+      </div>
+
+      <!-- ACS MANAGEMENT CARD -->
+      <div class="card">
+        <h3>۴. مدیریت اورژانسی <span class="en">ACS</span></h3>
+        <div class="pill-group" id="acsTxPills">
+          <button type="button" class="pill-btn active" data-acstx="nstemi">پروتکل <span class="en">UA / NSTEMI</span></button>
+          <button type="button" class="pill-btn crimson" data-acstx="stemi">پروتکل <span class="en">STEMI</span></button>
+        </div>
+        <div id="acsTxCard" class="detail-panel"></div>
+        <div class="callout teal" style="margin-bottom:0;">
+          <strong>محافظت پس از ریواسکولاریزاسیون:</strong> در صورت تحمل فشار خون، شروع <strong><span class="en">ACEi</span> یا <span class="en">ARB</span></strong> برای پیشگیری از <strong>بازآرایی بطنی (<span class="en">Ventricular Remodeling</span>)</strong> بسیار توصیه می‌شود.
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         STEP 11: CHAPTER 6 - FINAL CLINICAL & ECG QUIZ + SCORE CARD
+         ============================================================ -->
+    <section class="step-view" data-step="11">
+      <span class="chapter-badge">فصل ۶ از ۶ • آزمون نهایی و کارنامه بالینی</span>
+      <h2>سنجش نهایی بالینی و <span class="en">ECG</span></h2>
+      <p class="lead">به ۶ سناریوی زیر پاسخ دهید تا بازخورد فوری و کارنامه یادگیری خود را مشاهده کنید.</p>
+
+      <div class="score-hero">
+        <div style="font-size:0.86rem;color:var(--muted);margin-bottom:4px;">امتیاز زنده شما در آزمون</div>
+        <div class="score-num" id="finalScoreText">۰ از ۶</div>
+        <div id="finalScoreMsg" style="font-size:0.89rem;color:var(--text);margin-top:6px;"></div>
+      </div>
+
+      <div id="quizContainer"></div>
+
+      <div class="card">
+        <h3>بخش‌های پیشنهادی برای مرور مجدد</h3>
+        <div id="reviewRecommendations"></div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button type="button" class="btn btn-secondary" style="flex:1;" id="backToRoadmapFinal">مشاهده نقشه راه</button>
+        <button type="button" class="btn btn-primary" style="flex:1;background:var(--crimson);" id="openResetModalBtn">بازنشانی پیشرفت</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- BOTTOM FIXED NAVIGATION -->
+  <nav class="bottom-nav" aria-label="ناوبری صفحات آموزشی">
+    <div class="bottom-nav-inner">
+      <button type="button" class="btn btn-secondary" id="prevBtn">قبلی</button>
+      <div class="step-counter" id="stepCounter">صفحه ۱ از ۱۲</div>
+      <button type="button" class="btn btn-primary" id="nextBtn">بعدی</button>
+    </div>
+  </nav>
+
+  <!-- RESET CONFIRMATION MODAL -->
+  <div class="modal-backdrop" id="resetModal" role="dialog" aria-modal="true" aria-labelledby="resetModalTitle">
+    <div class="modal-box">
+      <h3 id="resetModalTitle">بازنشانی پیشرفت یادگیری</h3>
+      <p style="font-size:0.9rem;color:var(--muted);margin-top:6px;">آیا مطمئن هستید؟ تمام پاسخ‌های آزمون، کارت‌های مرور‌شده و پیشرفت ذخیره‌شده پاک می‌شوند.</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" style="flex:1;" id="cancelResetBtn">انصراف</button>
+        <button type="button" class="btn btn-primary" style="flex:1;background:var(--crimson);" id="confirmResetBtn">پاک کردن</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const STORAGE_KEY = 'cad_interactive_svg_v2';
+      const TOTAL_STEPS = 12;
+
+      const defaultState = {
+        currentStep: 0,
+        visitedSteps: [0],
+        flippedCards: {},
+        quizAnswers: {},
+        revascFlags: { lm: false, v3: false, ef: false },
+        stealActive: false,
+        plaqueStage: 0,
+        plaqueSub: 'UA',
+        pciStep: 0,
+        theme: 'light'
+      };
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return JSON.parse(JSON.stringify(defaultState));
+          return Object.assign(JSON.parse(JSON.stringify(defaultState)), JSON.parse(raw));
+        } catch (e) {
+          return JSON.parse(JSON.stringify(defaultState));
+        }
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) { /* ignore */ }
+      }
+
+      let state = loadState();
+
+      function toFaNum(num) {
+        return String(num).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+      }
+
+      /* ============================================================
+         CONTENT DATA
+         ============================================================ */
+      const chapters = [
+        { id: 1, title: 'آناتومی کرونر و عوامل خطر آترواسکلروز', sub: 'برش عرضی تعاملی قلب (۴ شریان) + کارت‌های SAD CHF', steps: [2, 3] },
+        { id: 2, title: 'سیر پلاک، پارگی، ترازوی اکسیژن و طیف ACS', sub: 'شبیه‌ساز زنده پلاک و میوکارد + مقایسه بالینی', steps: [4, 5] },
+        { id: 3, title: 'عوارض زودرس و مکانیکی پس از MI', sub: 'آریتمی و شوک کاردیوژنیک + قلب ۴ حفره‌ای تعاملی', steps: [6, 7] },
+        { id: 4, title: 'آزمایشگاه ECG ۱۲ لید، تست استرس و سرقت کرونری', sub: 'امواج تعاملی، شبیه‌ساز ۱۲ لید، چالش ECG و سرقت کرونری', steps: [8, 9] },
+        { id: 5, title: 'درمان دارویی، PCI در برابر CABG و پروتکل ACS', sub: 'شبیه‌ساز گام‌به‌گام استنت/بای‌پس + ابزار تصمیم‌گیری', steps: [10] },
+        { id: 6, title: 'آزمون نهایی بالینی و ECG + کارنامه', sub: '۶ سناریوی کلیدی با بازخورد فوری و پیشنهاد مرور', steps: [11] }
+      ];
+
+      const arteryData = {
+        LAD: {
+          title: 'شریان نزولی قدامی چپ (LAD)',
+          tag: 'حیاتی‌ترین شریان کرونر',
+          desc: 'خون‌رسانی به <strong>دیواره قدامی بطن چپ</strong>، <strong>دو سوم قدامی سپتوم بین‌بطنی</strong> و آپکس قلب. انسداد آن بیشترین خطر شوک کاردیوژنیک و پارگی سپتوم (<span class="en">VSD</span>) را دارد.'
+        },
+        LCx: {
+          title: 'شریان سیرکومفلکس چپ (LCx)',
+          tag: 'دیواره جانبی بطن چپ',
+          desc: 'خون‌رسانی به <strong>دیواره جانبی (<span class="en">Lateral wall</span>) بطن چپ</strong>. همراه با <span class="en">LAD</span> در بروز آریتمی‌های بازچرخشی بطنی (<span class="en">VT/VF</span>) و پارگی دیواره آزاد نقش دارد.'
+        },
+        RCA: {
+          title: 'شریان کرونر راست (RCA)',
+          tag: 'بطن راست، تحتانی و گره AV',
+          desc: 'خون‌رسانی به <strong>بطن راست (<span class="en">RV</span>)</strong>، دیواره تحتانی بطن چپ و <strong>گره <span class="en">AV</span></strong>. انسداد آن با بلوک <span class="en">AV</span> (برادیکاردی) و پارگی عضله پاپیلاری (<span class="en">MR</span> حاد) مرتبط است.'
+        },
+        PDA: {
+          title: 'شریان نزولی خلفی (PDA)',
+          tag: 'دیواره خلفی قلب',
+          desc: 'خون‌رسانی به <strong>دیواره خلفی (<span class="en">Posterior</span>) بطن چپ</strong> و یک سوم خلفی سپتوم. در <span class="en">ECG</span> با دپرشن <span class="en">ST</span> در <span class="en">V1–V3</span> و الویشن در <span class="en">V7–V9</span> شناخته می‌شود.'
+        }
+      };
+
+      const sadChfCards = [
+        { id: 'S', letter: 'S', front: 'مصرف دخانیات؟', back: '<strong><span class="en">Smoking</span>:</strong> آسیب مستقیم به اندوتلیوم و تسریع تشکیل پلاک و ترومبوز.' },
+        { id: 'A', letter: 'A', front: 'آستانه سن بالا در مردان و زنان؟', back: '<strong><span class="en">Advanced Age</span>:</strong> بالای <strong>۴۵ سال</strong> در مردان و بالای <strong>۵۵ سال</strong> در زنان.' },
+        { id: 'D', letter: 'D', front: 'بیماری متابولیک کلیدی؟', back: '<strong><span class="en">Diabetes</span>:</strong> تسریع شدید آترواسکلروز و افزایش احتمال ایسکمی خاموش یا آتیپیک.' },
+        { id: 'C', letter: 'C', front: 'کدام دو جزء کلسترول مهم‌اند؟', back: '<strong><span class="en">Cholesterol</span>:</strong> بالا بودن <strong><span class="en">LDL</span></strong> و پایین بودن <strong><span class="en">HDL</span></strong>.' },
+        { id: 'H', letter: 'H', front: 'فشار مکانیکی بر دیواره رگ؟', back: '<strong><span class="en">Hypertension</span>:</strong> آسیب اندوتلیال + افزایش پس‌بار (<span class="en">Afterload</span>) و تقاضای اکسیژن.' },
+        { id: 'F', letter: 'F', front: 'نقش سابقه خانوادگی؟', back: '<strong><span class="en">Family History</span>:</strong> سابقه خانوادگی بیماری عروق کرونر زودرس.' }
+      ];
+
+      const acsComparisonData = {
+        STABLE: {
+          title: 'آنژین پایدار (Stable Angina)',
+          occlusion: 'پلاک پایدار با پوشش فیبروز ضخیم (تنگی حدود ۷۰٪، بدون پارگی)',
+          layer: 'ایسکمی گذرا فقط هنگام افزایش تقاضای اکسیژن (بدون مرگ بافتی)',
+          troponin: '<strong>منفی</strong>',
+          ecg: 'در استراحت <strong>نرمال</strong>؛ هنگام فعالیت دپرشن <span class="en">ST</span> گذرا',
+          pain: 'با فعالیت بدتر و با استراحت یا نیتروگلیسیرین زیرزبانی برطرف می‌شود.'
+        },
+        UA: {
+          title: 'آنژین ناپایدار (Unstable Angina)',
+          occlusion: 'پارگی پلاک + ترومبوس با <strong>انسداد ناکامل (<span class="en">Subtotal</span>)</strong>',
+          layer: 'ایسکمی ساب‌اندوکاردیال (هنوز نکروز رخ نداده است)',
+          troponin: '<strong>منفی</strong>',
+          ecg: 'دپرشن <span class="en">ST</span> یا وارونگی موج <span class="en">T</span> (بدون صعود <span class="en">ST</span>)',
+          pain: 'در استراحت نیز رخ می‌دهد، شدیدتر و طولانی‌تر از آنژین پایدار است.'
+        },
+        NSTEMI: {
+          title: 'انفارکتوس بدون صعود ST (NSTEMI)',
+          occlusion: 'پارگی پلاک + ترومبوس با <strong>انسداد ناکامل (<span class="en">Subtotal</span>)</strong>',
+          layer: '<strong>انفارکتوس ساب‌اندوکاردیال</strong> (مرگ سلولی در لایه داخلی میوکارد)',
+          troponin: '<strong>مثبت (افزایش‌یافته)</strong>',
+          ecg: 'دپرشن <span class="en">ST</span> یا وارونگی موج <span class="en">T</span> (بدون صعود <span class="en">ST</span>)',
+          pain: 'درد شدید در استراحت، تعریق سرد، تهوع؛ با استراحت برطرف نمی‌شود.'
+        },
+        STEMI: {
+          title: 'انفارکتوس با صعود ST (STEMI)',
+          occlusion: 'پارگی پلاک + ترومبوس با <strong>انسداد کامل ۱۰۰٪ (<span class="en">Total</span>)</strong>',
+          layer: '<strong>انفارکتوس ترانس‌مورال</strong> (مرگ بافتی تمام ضخامت دیواره)',
+          troponin: '<strong>بسیار بالا (مثبت شدید)</strong>',
+          ecg: '<strong>صعود قطعه <span class="en">ST</span> (<span class="en">Tombstone ST Elevation</span>)</strong> در لیدهای قلمرو درگیر',
+          pain: 'درد شدید خردکننده در استراحت، نیاز به ریپرفیوژن اورژانسی (<span class="en">PCI</span> یا <span class="en">tPA</span>).'
+        }
+      };
+
+      const mechData = {
+        pericarditis: {
+          title: 'پریکاردیت پس از MI (فیبرینوس و سندرم درسلر)',
+          body: '<ul class="clean-list"><li><strong>مکانیسم:</strong> گسترش التهاب ناحیه انفارکت به ساک پریکارد.</li><li><strong>تظاهر بالینی:</strong> درد <strong>پلوریتیک</strong> (بدتر با دم)، <strong>پوزیشنال</strong> (بهتر با خم شدن به جلو)، انتشار به <strong>عضله تراپزیوس</strong> و صدای مالشی (<span class="en">Friction rub</span>).</li><li><strong>زمان‌بندی:</strong> فیبرینوس (۱ تا ۳ روز پس از <span class="en">MI</span>) و سندرم درسلر (حدود ۲ هفته پس از <span class="en">MI</span>).</li></ul>'
+        },
+        vsd: {
+          title: 'پارگی سپتوم بین‌بطنی (VSD)',
+          body: '<ul class="clean-list"><li><strong>شریان مسئول:</strong> انسداد <strong><span class="en">LAD</span></strong> و نکروز سپتوم.</li><li><strong>همودینامیک:</strong> شنت چپ به راست (<span class="en">LV → RV</span>) و اضافه‌بار حجمی/فشاری بطن راست.</li><li><strong>یافته بالینی:</strong> کلاپس همودینامیک، <strong>سوفل هولوسیستولیک جدید</strong> و نارسایی قلبی (<strong>راست بیشتر از چپ</strong>).</li></ul>'
+        },
+        papillary: {
+          title: 'پارگی عضله پاپیلاری ← نارسایی حاد میترال (Acute MR)',
+          body: '<ul class="clean-list"><li><strong>شریان مسئول:</strong> معمولاً انفارکتوس تحتانی ناشی از انسداد <strong><span class="en">RCA</span></strong>.</li><li><strong>مکانیسم:</strong> نکروز عضله پاپیلاری ← رها شدن طناب‌های وتری و برگشت شدید خون به دهلیز چپ در سیستول.</li><li><strong>یافته بالینی:</strong> <strong>سوفل هولوسیستولیک جدید</strong> و ادم ریوی شدید (نارسایی <strong>چپ بیشتر از راست</strong>).</li></ul>'
+        },
+        freewall: {
+          title: 'پارگی دیواره آزاد بطن چپ ← تامپوناد قلبی',
+          body: '<ul class="clean-list"><li><strong>شریان مسئول:</strong> انسداد وسیع <strong><span class="en">LAD</span></strong> (معمولاً همراه <span class="en">LCx</span>).</li><li><strong>مکانیسم:</strong> خروج خون به فضای پریکارد (<strong>هموپریکارد</strong>) ← فشردگی قلب (<strong>تامپوناد</strong>) و خطر ایست قلبی <span class="en">PEA</span>.</li><li><strong>علائم کلاسیک:</strong> <strong>تریاد بک</strong> (<span class="en">JVD</span>، هیپوتانسیون، صداهای قلبی گنگ).</li></ul>'
+        },
+        pseudo: {
+          title: 'سودوآنوریسم (پارگی مهارشده / Contained Rupture)',
+          body: '<ul class="clean-list"><li><strong>شریان مسئول:</strong> معمولاً <strong><span class="en">LAD</span></strong>.</li><li><strong>مکانیسم:</strong> پارگی توسط لخته فیبرینی و پریکارد مهار می‌شود، اما حفره‌ای با <strong>استاز خون</strong> (تریاد ویرشو) می‌سازد.</li><li><strong>خطر اصلی:</strong> تشکیل ترومبوس و بروز <strong>ترومبوآمبولی</strong> (مانند سکته مغزی) یا پارگی ناگهانی بعدی.</li></ul>'
+        }
+      };
+
+      const stressData = {
+        exercise: {
+          title: 'تست استرس ورزشی (Exercise Stress Testing)',
+          body: '<ul class="clean-list"><li><strong>خط اول:</strong> <span class="en">ECG</span> پایه + ورزش روی تردمیل تا ضربان هدف و بررسی دپرشن <span class="en">ST</span>.</li><li><strong>جایگزینی با اکو یا <span class="en">MPI</span>:</strong> اگر <span class="en">ECG</span> پایه اختلالی مثل <strong><span class="en">LBBB</span></strong> یا موج <span class="en">Q</span> داشته باشد، تصویربرداری (<span class="en">Echo/MPI</span>) اضافه می‌شود.</li><li><strong>تست مثبت:</strong> دپرشن <span class="en">ST</span>، نقاط سرد پرفیوژن در <span class="en">MPI</span>، یا اختلال حرکتی دیواره در اکو.</li></ul>'
+        },
+        pharm: {
+          title: 'تست استرس دارویی (در ناتوانی ورزشی، مانند آرتروز شدید)',
+          body: '<ul class="clean-list"><li><strong>آدنوزین یا دی‌پیریدامول + <span class="en">MPI</span>:</strong> از طریق <strong>سندرم سرقت کرونری</strong> باعث کاهش پرفیوژن ناحیه بیمار و ایجاد نقاط سرد در اسکن هسته‌ای (<span class="en">MPI</span>) می‌شود.</li><li><strong>دوبوتامین + اکوکاردیوگرافی:</strong> با افزایش ضربان و قدرت انقباض (افزایش <span class="en">O₂ Demand</span>)، اختلال حرکتی دیواره ایسکمیک را در اکو آشکار می‌کند.</li></ul>'
+        }
+      };
+
+      const acsTxData = {
+        nstemi: {
+          title: 'پروتکل درمانی UA و NSTEMI',
+          body: '<ul class="clean-list"><li><strong>بارگیری فوری:</strong> <strong>آسپرین + کلوپیدوگرل/تیکاگرلور (<span class="en">DAPT</span>) + هپارین</strong> (+ بتابلوکر، نیتروگلیسیرین و استاتین).</li><li><strong>اندیکاسیون‌های اعزام به کت‌لب:</strong> ۱) امتیاز <strong><span class="en">TIMI &gt; 3</span></strong>، ۲) <strong>ناپایداری همودینامیک یا الکتریکی</strong> (شوک کاردیوژنیک یا <span class="en">VT/VF</span>)، ۳) <strong>آنژین مقاوم به درمان دارویی</strong>.</li></ul>'
+        },
+        stemi: {
+          title: 'پروتکل اورژانسی STEMI',
+          body: '<ul class="clean-list"><li><strong>بارگیری فوری:</strong> <strong>آسپرین ۳۲۵ میلی‌گرم + مهارکننده <span class="en">P2Y12</span> (کلوپیدوگرل/تیکاگرلور) + هپارین</strong>.</li><li><strong>مرکز دارای <span class="en">PCI</span>:</strong> اعزام فوری به کت‌لب برای <span class="en">Primary PCI</span> در اسرع وقت.</li><li><strong>مرکز فاقد <span class="en">PCI</span>:</strong> تجویز فوری <strong><span class="en">tPA</span></strong> (ترومبولیتیک) و انتقال فوری به مرکز دارای <span class="en">PCI</span>.</li></ul>'
+        }
+      };
+
+      const quizQuestions = [
+        {
+          id: 'q1', stepToReview: 4,
+          q: '۱. بیماری با درد قفسه سینه در حالت استراحت مراجعه کرده است. در نوار قلب دپرشن ST دارد و تروپونین مثبت گزارش می‌شود. تشخیص دقیق کدام است؟',
+          opts: ['آنژین پایدار (Stable Angina)', 'آنژین ناپایدار (Unstable Angina)', 'NSTEMI', 'STEMI'],
+          correct: 2,
+          fb: 'ترومبوز ناکامل همراه با مرگ سلولی در لایه ساب‌اندوکاردیال باعث مثبت شدن تروپونین و دپرشن ST (بدون صعود ST) می‌شود که تعریف NSTEMI است.'
+        },
+        {
+          id: 'q2', stepToReview: 8,
+          q: '۲. در ECG بیمار صعود قطعه ST در لیدهای II، III و aVF دیده می‌شود. کدام شریان مسدود شده و چه اقدام تکمیلی در ECG لازم است؟',
+          opts: ['LAD — گرفتن لیدهای خلفی V7–V9', 'RCA — گرفتن لیدهای سمت راست قفسه سینه (بررسی درگیری RV)', 'LCx — تکرار ECG یک ساعت بعد', 'PDA — شروع فوری CCB'],
+          correct: 1,
+          fb: 'لیدهای II, III, aVF نشان‌دهنده انفارکتوس تحتانی (معمولاً انسداد RCA) هستند و حتماً باید لیدهای سمت راست برای رد درگیری بطن راست گرفته شوند.'
+        },
+        {
+          id: 'q3', stepToReview: 7,
+          q: '۳. بیماری ۳ روز پس از سکته تحتانی دچار افت فشار، سوفل هولوسیستولیک جدید و ادم ریوی شدید (نارسایی چپ > راست) می‌شود. محتمل‌ترین عارضه چیست؟',
+          opts: ['پارگی عضله پاپیلاری و نارسایی حاد میترال (Acute MR)', 'پارگی سپتوم بین‌بطنی (VSD)', 'پریکاردیت فیبرینوس', 'سودوآنوریسم بطن چپ'],
+          correct: 0,
+          fb: 'ایسکمی تحتانی (RCA) باعث پارگی عضله پاپیلاری و نارسایی حاد میترال می‌شود که با سوفل هولوسیستولیک و نارسایی چپ غالب‌تر (ادم ریوی) تظاهر می‌کند.'
+        },
+        {
+          id: 'q4', stepToReview: 8,
+          q: '۴. مرد ۳۲ ساله با سابقه مصرف کوکائین با درد سینه و ST elevation مراجعه کرده اما تروپونین منفی است و به CCB پاسخ می‌دهد. تشخیص محتمل چیست؟',
+          opts: ['STEMI قدامی', 'آنژین وازواسپاستیک (Prinzmetal)', 'سندرم درسلر', 'سندرم سرقت کرونری'],
+          correct: 1,
+          fb: 'صعود ST گذرا همراه با تروپونین منفی در فرد جوان‌تر با مصرف کوکائین، تریپتان‌ها یا سیگار و پاسخ به CCB نشانه آنژین وازواسپاستیک است.'
+        },
+        {
+          id: 'q5', stepToReview: 9,
+          q: '۵. مکانیسم ایجاد نقاط سرد (ایسکمی) در اسکن MPI هنگام تزریق آدنوزین چیست؟',
+          opts: ['افزایش مستقیم ضربان قلب و پس‌بار', 'اتساع عروق کرونر سالم و سرقت خون از ناحیه دارای تنگی ثابت', 'انقباض مستقیم شریان کرونر سالم', 'ایجاد ترومبوس موقت در شریان بیمار'],
+          correct: 1,
+          fb: 'آدنوزین عروق سالم را گشاد کرده و مقاومت آن‌ها را کم می‌کند؛ در نتیجه خون به مسیر کم‌مقاومت سالم منحرف شده و از ناحیه بیمار «سرقت» می‌شود.'
+        },
+        {
+          id: 'q6', stepToReview: 10,
+          q: '۶. بیمار با Stable CAD مقاوم به دارو در آنژیوگرافی دچار تنگی Left Main و LVEF پایین است. کدام روش ریواسکولاریزاسیون ارجح است؟',
+          opts: ['جراحی بای‌پس عروق کرونر (CABG)', 'PCI با استنت و قطع آسپرین پس از یک ماه', 'تجویز tPA وریدی', 'تنها افزودن نیتروگلیسیرین زیرزبانی'],
+          correct: 0,
+          fb: 'درگیری تنه اصلی چپ (Left Main)، درگیری ۳ رگ یا بیشتر، یا LVEF پایین اندیکاسیون‌های کلاسیک ارجحیت CABG نسبت به PCI هستند.'
+        }
+      ];
+
+      /* ============================================================
+         NAVIGATION & GLOBAL STATE
+         ============================================================ */
+      const stepViews = Array.from(document.querySelectorAll('.step-view'));
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const stepCounter = document.getElementById('stepCounter');
+      const topProgressFill = document.getElementById('topProgressFill');
+
+      function goToStep(idx) {
+        const clamped = Math.max(0, Math.min(TOTAL_STEPS - 1, idx));
+        state.currentStep = clamped;
+        if (!state.visitedSteps.includes(clamped)) state.visitedSteps.push(clamped);
+        saveState();
+        renderStep();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function renderStep() {
+        stepViews.forEach((sec, i) => sec.classList.toggle('active', i === state.currentStep));
+        const pct = Math.round(((state.currentStep + 1) / TOTAL_STEPS) * 100);
+        topProgressFill.style.width = pct + '%';
+        stepCounter.textContent = `صفحه ${toFaNum(state.currentStep + 1)} از ${toFaNum(TOTAL_STEPS)}`;
+        prevBtn.disabled = state.currentStep === 0;
+        nextBtn.disabled = state.currentStep === TOTAL_STEPS - 1;
+        nextBtn.textContent = state.currentStep === TOTAL_STEPS - 1 ? 'پایان مسیر' : 'بعدی';
+
+        renderResumeBanner();
+        if (state.currentStep === 1) renderRoadmap();
+        if (state.currentStep === 11) renderFinalEvaluation();
+      }
+
+      function renderResumeBanner() {
+        const banner = document.getElementById('resumeBanner');
+        const startBtn = document.getElementById('startCourseBtn');
+        if (state.visitedSteps.length > 1) {
+          const furthest = Math.max(...state.visitedSteps);
+          banner.style.display = 'block';
+          banner.innerHTML = `<strong>پیشرفت شما ذخیره شده است:</strong> ${toFaNum(state.visitedSteps.length)} از ${toFaNum(TOTAL_STEPS)} صفحه را مشاهده کرده‌اید.`;
+          startBtn.textContent = furthest > 1 ? `ادامه از صفحه ${toFaNum(furthest + 1)}` : 'مشاهده نقشه راه';
+        } else {
+          banner.style.display = 'none';
+          startBtn.textContent = 'شروع مسیر یادگیری';
+        }
+      }
+
+      function renderRoadmap() {
+        const container = document.getElementById('roadmapList');
+        container.innerHTML = '';
+        chapters.forEach(ch => {
+          const allVisited = ch.steps.every(s => state.visitedSteps.includes(s));
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'roadmap-item' + (allVisited ? ' done' : '');
+          btn.innerHTML = `
+            <span class="roadmap-num">${allVisited ? '✓' : toFaNum(ch.id)}</span>
+            <span class="roadmap-body">
+              <span class="roadmap-title">${ch.title}</span>
+              <span class="roadmap-sub">${ch.sub}</span>
+            </span>
+            <span class="roadmap-status">${allVisited ? 'مرور شده' : 'ورود'}</span>
+          `;
+          btn.addEventListener('click', () => goToStep(ch.steps[0]));
+          container.appendChild(btn);
+        });
+      }
+
+      /* ============================================================
+         STEP 2: CORONARY ANATOMY INTERACTIVE SVG
+         ============================================================ */
+      function renderArtery(key) {
+        const info = arteryData[key];
+        document.getElementById('arteryDetail').innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
+            <strong style="color:var(--navy);">${info.title}</strong>
+            <span class="chapter-badge" style="margin:0;">${info.tag}</span>
+          </div>
+          <p>${info.desc}</p>
+        `;
+        document.querySelectorAll('#arteryPills .pill-btn').forEach(b => b.classList.toggle('active', b.dataset.artery === key));
+        ['LAD', 'LCx', 'RCA', 'PDA'].forEach(k => {
+          const el = document.getElementById('terr-' + k);
+          if (el) el.setAttribute('opacity', k === key ? '0.85' : '0');
+        });
+        const av = document.getElementById('avNodeIndicator');
+        if (av) av.style.opacity = key === 'RCA' ? '1' : '0.45';
+      }
+      document.querySelectorAll('#arteryPills .pill-btn, .artery-node').forEach(el => {
+        el.addEventListener('click', () => renderArtery(el.dataset.artery));
+      });
+      renderArtery('LAD');
+
+      /* ============================================================
+         STEP 3: SAD CHF FLASHCARDS
+         ============================================================ */
+      function renderFlashcards() {
+        const grid = document.getElementById('sadChfGrid');
+        grid.innerHTML = '';
+        let count = 0;
+        sadChfCards.forEach(c => {
+          const isFlipped = !!state.flippedCards[c.id];
+          if (isFlipped) count++;
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'flashcard' + (isFlipped ? ' flipped' : '');
+          btn.innerHTML = isFlipped
+            ? `<span class="flash-letter en">${c.letter}</span><div class="flash-answer">${c.back}</div>`
+            : `<span class="flash-letter en">${c.letter}</span><div><strong style="color:var(--navy);font-size:0.92rem;">${c.front}</strong><div class="flash-hint">برای نمایش پاسخ لمس کنید</div></div>`;
+          btn.addEventListener('click', () => {
+            state.flippedCards[c.id] = !state.flippedCards[c.id];
+            saveState();
+            renderFlashcards();
+          });
+          grid.appendChild(btn);
+        });
+        document.getElementById('flashCounter').textContent = `مرور شده: ${toFaNum(count)} از ${toFaNum(sadChfCards.length)} کارت`;
+      }
+      renderFlashcards();
+
+      /* ============================================================
+         STEP 4: INTERACTIVE PLAQUE PROGRESSION & O2 SIMULATOR
+         ============================================================ */
+      const plaqueSlider = document.getElementById('plaqueSlider');
+
+      function renderPlaqueStage() {
+        const st = Number(state.plaqueStage);
+        const sub = state.plaqueSub || 'UA';
+        plaqueSlider.value = st;
+
+        document.querySelectorAll('#plaqueStagePills .pill-btn').forEach(b => {
+          b.classList.toggle('active', Number(b.dataset.stage) === st);
+        });
+        const subWrap = document.getElementById('uaNstemiSubToggle');
+        subWrap.style.display = st === 2 ? 'block' : 'none';
+        document.querySelectorAll('#uaNstemiSubToggle .pill-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.sub === sub);
+        });
+
+        // SVG Elements
+        const plaque = document.getElementById('svgPlaque');
+        const capIntact = document.getElementById('svgCapIntact');
+        const capRuptured = document.getElementById('svgCapRuptured');
+        const thPartial = document.getElementById('svgThrombusPartial');
+        const thTotal = document.getElementById('svgThrombusTotal');
+        const csPlaque = document.getElementById('csPlaque');
+        const csPartial = document.getElementById('csPartial');
+        const csTotal = document.getElementById('csTotal');
+        const csPercent = document.getElementById('csPercent');
+        const o2Badge = document.getElementById('plaqueO2Badge');
+        const rbcs = document.querySelectorAll('.rbc-item');
+
+        const lEpi = document.getElementById('layerEpicardium');
+        const lMyo = document.getElementById('layerMyocardium');
+        const lSub = document.getElementById('layerSubendo');
+        const lSubText = document.getElementById('layerSubendoText');
+        const panel = document.getElementById('plaqueDetailPanel');
+
+        // Reset defaults
+        plaque.style.display = st >= 1 ? 'block' : 'none';
+        capIntact.style.display = st === 1 ? 'block' : 'none';
+        capRuptured.style.display = st >= 2 ? 'block' : 'none';
+        thPartial.style.display = st === 2 ? 'block' : 'none';
+        thTotal.style.display = st === 3 ? 'block' : 'none';
+
+        csPlaque.style.display = st >= 1 ? 'block' : 'none';
+        csPartial.style.display = st === 2 ? 'block' : 'none';
+        csTotal.style.display = st === 3 ? 'block' : 'none';
+
+        // RBC Speed
+        rbcs.forEach(r => {
+          r.classList.remove('rbc-fast', 'rbc-medium', 'rbc-slow', 'rbc-stopped');
+          if (st === 0) r.classList.add('rbc-fast');
+          else if (st === 1) r.classList.add('rbc-medium');
+          else if (st === 2) r.classList.add('rbc-slow');
+          else r.classList.add('rbc-stopped');
+        });
+
+        // Reset Myocardial Layers
+        lEpi.setAttribute('fill', '#fbcfe8');
+        lMyo.setAttribute('fill', '#f9a8d4');
+        lSub.setAttribute('fill', '#f472b6');
+
+        if (st === 0) {
+          o2Badge.textContent = 'عرضه O₂: ۱۰۰٪ (نرمال)';
+          o2Badge.style.color = 'var(--teal)';
+          csPercent.textContent = '100% باز';
+          lSubText.textContent = 'ساب‌اندوکارد سالم و دارای خون‌رسانی کامل';
+          panel.innerHTML = '<strong>۱. شریان کرونر سالم:</strong> لومن کاملاً باز است، جریان گلبول‌های قرمز روان بوده و تمام لایه‌های میوکارد اکسیژن کافی دریافت می‌کنند.';
+        } else if (st === 1) {
+          o2Badge.textContent = 'عرضه O₂: کاهش‌یافته (~۳۰٪ لومن باز)';
+          o2Badge.style.color = 'var(--amber)';
+          csPercent.textContent = '~70% تنگی';
+          lSub.setAttribute('fill', '#fb923c');
+          lSubText.textContent = 'ساب‌اندوکارد در استراحت سالم • هنگام فعالیت دچار ایسکمی گذرا';
+          panel.innerHTML = '<strong>۲. پلاک پایدار (<span class="en">Stable CAD</span>):</strong> هسته چربی زرد با یک پوشش فیبروز ضخیم مهار شده است. بیمار در استراحت بی‌علامت است و تنها با فعالیت (افزایش تقاضای اکسیژن) دچار <strong>آنژین پایدار</strong> می‌شود.';
+        } else if (st === 2) {
+          o2Badge.textContent = 'عرضه O₂: بحرانی (انسداد ناکامل)';
+          o2Badge.style.color = 'var(--crimson)';
+          csPercent.textContent = 'ترومبوز ناکامل';
+          if (sub === 'UA') {
+            lSub.setAttribute('fill', '#6366f1');
+            lSubText.textContent = 'ایسکمی شدید ساب‌اندوکاردیال (بدون مرگ بافتی • تروپونین منفی)';
+            panel.innerHTML = '<strong>۳-الف. پارگی پلاک ← آنژین ناپایدار (<span class="en">UA</span>):</strong> پوشش فیبروز پاره شده و پلاکت‌ها ترومبوس ناکامل ساخته‌اند. لایه ساب‌اندوکارد دچار <strong>ایسکمی در استراحت</strong> است اما هنوز نکروز نشده (<strong>تروپونین منفی</strong>، دپرشن <span class="en">ST</span> یا وارونگی <span class="en">T</span>).';
+          } else {
+            lSub.setAttribute('fill', '#881337');
+            lSubText.textContent = 'انفارکتوس (نکروز) ساب‌اندوکاردیال • تروپونین مثبت (+)';
+            panel.innerHTML = '<strong>۳-ب. پارگی پلاک ← <span class="en">NSTEMI</span>:</strong> به دنبال تداوم انسداد ناکامل، سلول‌های لایه داخلی (<strong>ساب‌اندوکارد</strong>) دچار نکروز می‌شوند و <strong>تروپونین مثبت</strong> می‌گردد (همراه با دپرشن <span class="en">ST</span> یا وارونگی موج <span class="en">T</span>).';
+          }
+        } else {
+          o2Badge.textContent = 'عرضه O₂: ۰٪ (انسداد کامل!)';
+          o2Badge.style.color = 'var(--crimson)';
+          csPercent.textContent = '0% (مسدود)';
+          lEpi.setAttribute('fill', '#881337');
+          lMyo.setAttribute('fill', '#881337');
+          lSub.setAttribute('fill', '#881337');
+          lSubText.textContent = 'انفارکتوس ترانس‌مورال (تمام ضخامت دیواره نکروزه) • ST Elevation';
+          panel.innerHTML = '<strong>۴. انسداد کامل ۱۰۰٪ (<span class="en">STEMI</span>):</strong> ترومبوس کل لومن را بسته و جریان خون متوقف شده است. تمام ضخامت دیواره (اپیکارد تا اندوکارد) دچار <strong>انفارکتوس ترانس‌مورال</strong> می‌شود ← تروپونین بسیار بالا و <strong>صعود قطعه <span class="en">ST</span> (نمای سنگ قبر)</strong>.';
+        }
+      }
+
+      document.querySelectorAll('#plaqueStagePills .pill-btn').forEach(b => {
+        b.addEventListener('click', () => {
+          state.plaqueStage = Number(b.dataset.stage);
+          saveState();
+          renderPlaqueStage();
+        });
+      });
+      plaqueSlider.addEventListener('input', () => {
+        state.plaqueStage = Number(plaqueSlider.value);
+        saveState();
+        renderPlaqueStage();
+      });
+      document.querySelectorAll('#uaNstemiSubToggle .pill-btn').forEach(b => {
+        b.addEventListener('click', () => {
+          state.plaqueSub = b.dataset.sub;
+          saveState();
+          renderPlaqueStage();
+        });
+      });
+      renderPlaqueStage();
+
+      // O2 Supply / Demand Simulator
+      const hrSlider = document.getElementById('hrSlider');
+      const bpSlider = document.getElementById('bpSlider');
+      function updateSim() {
+        const hr = Number(hrSlider.value);
+        const bp = Number(bpSlider.value);
+        document.getElementById('hrVal').textContent = `${hr} bpm`;
+        document.getElementById('bpVal').textContent = `${bp} mmHg`;
+
+        const demandScore = Math.min(100, Math.round(((hr - 60) / 120) * 55 + ((bp - 110) / 90) * 45));
+        const fill = document.getElementById('simMeterFill');
+        const badge = document.getElementById('simStatusBadge');
+        const exp = document.getElementById('simExplanation');
+        fill.style.width = Math.max(12, demandScore) + '%';
+
+        if (demandScore < 42) {
+          fill.style.background = 'var(--teal)';
+          badge.textContent = 'متعادل (بی‌علامت در استراحت)';
+          badge.style.color = 'var(--teal)';
+          exp.className = 'callout teal';
+          exp.innerHTML = '<strong>تعادل برقرار است:</strong> با وجود تنگی لومن توسط پلاک پایدار، نیاز اکسیژن میوکارد پایین است؛ بنابراین بیمار در استراحت درد ندارد.';
+        } else if (demandScore < 68) {
+          fill.style.background = 'var(--amber)';
+          badge.textContent = 'آستانه ایسکمی (شروع فعالیت)';
+          badge.style.color = 'var(--amber)';
+          exp.className = 'callout amber';
+          exp.innerHTML = '<strong>نزدیک به عدم تعادل:</strong> بالا رفتن ضربان قلب یا پس‌بار (<span class="en">Afterload</span>) نیاز اکسیژن را افزایش داده و عرضه محدود به‌زودی ناکافی می‌شود.';
+        } else {
+          fill.style.background = 'var(--crimson)';
+          badge.textContent = 'ایسکمی و آنژین پایدار!';
+          badge.style.color = 'var(--crimson)';
+          exp.className = 'callout crimson';
+          exp.innerHTML = '<strong>عدم تعادل عرضه و تقاضا (<span class="en">Mismatch</span>):</strong> تقاضا از عرضه محدود عبور کرده و <strong>آنژین پایدار</strong> ایجاد شده است. با استراحت یا نیتروگلیسیرین، تقاضا کاهش یافته و درد برطرف می‌شود.';
+        }
+      }
+      hrSlider.addEventListener('input', updateSim);
+      bpSlider.addEventListener('input', updateSim);
+      updateSim();
+
+      /* ============================================================
+         STEP 5: ACS CLINICAL COMPARISON
+         ============================================================ */
+      function renderAcs(key) {
+        const d = acsComparisonData[key];
+        document.getElementById('acsDetailCard').innerHTML = `
+          <h3>${d.title}</h3>
+          <div class="table-wrap">
+            <table>
+              <tbody>
+                <tr><th>وضعیت لومن و پلاک</th><td>${d.occlusion}</td></tr>
+                <tr><th>آسیب میوکارد</th><td>${d.layer}</td></tr>
+                <tr><th>تروپونین</th><td>${d.troponin}</td></tr>
+                <tr><th>نوار قلب (<span class="en">ECG</span>)</th><td>${d.ecg}</td></tr>
+                <tr><th>ویژگی بالینی درد</th><td>${d.pain}</td></tr>
+              </tbody>
+            </table>
+          </div>
+        `;
+        document.querySelectorAll('#acsPills .pill-btn').forEach(b => b.classList.toggle('active', b.dataset.acs === key));
+      }
+      document.querySelectorAll('#acsPills .pill-btn').forEach(b => b.addEventListener('click', () => renderAcs(b.dataset.acs)));
+      renderAcs('STABLE');
+
+      /* ============================================================
+         STEP 6: ACCORDIONS & REVEAL
+         ============================================================ */
+      document.querySelectorAll('.acc-trigger').forEach(btn => {
+        btn.addEventListener('click', () => btn.parentElement.classList.toggle('open'));
+      });
+      document.querySelectorAll('[data-reveal]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = document.getElementById(btn.dataset.reveal);
+          const shown = target.classList.toggle('shown');
+          btn.textContent = shown ? 'پنهان کردن پاسخ' : 'نمایش پاسخ';
+        });
+      });
+
+      /* ============================================================
+         STEP 7: MECHANICAL COMPLICATIONS INTERACTIVE SVG
+         ============================================================ */
+      function renderMech(key) {
+        const d = mechData[key];
+        document.getElementById('mechDetailCard').innerHTML = `<h3>${d.title}</h3>${d.body}`;
+        document.querySelectorAll('#mechPills .pill-btn').forEach(b => b.classList.toggle('active', b.dataset.mech === key));
+
+        ['pericarditis', 'vsd', 'papillary', 'freewall', 'pseudo'].forEach(k => {
+          const ov = document.getElementById('ov-' + k);
+          if (ov) ov.style.display = k === key ? 'block' : 'none';
+        });
+        const normMitral = document.getElementById('mechNormalMitral');
+        if (normMitral) normMitral.style.display = key === 'papillary' ? 'none' : 'block';
+      }
+      document.querySelectorAll('#mechPills .pill-btn').forEach(b => b.addEventListener('click', () => renderMech(b.dataset.mech)));
+      renderMech('pericarditis');
+
+      /* ============================================================
+         STEP 8: INTERACTIVE ECG LAB (MORPHOLOGY + 12-LEAD + CHALLENGE)
+         ============================================================ */
+      // --- Part 1: Morphology Explorer ---
+      const morphData = {
+        normal: {
+          title: 'NORMAL SINUS • ISOELECTRIC ST',
+          path: 'M10,120 L95,120 C108,120 116,102 128,102 C140,102 148,120 160,120 L185,120 L196,134 L216,38 L234,148 L246,120 L306,120 C324,120 338,88 358,88 C378,88 392,120 412,120 L550,120',
+          stPos: [274, 120],
+          tPos: [358, 88],
+          calloutClass: 'callout teal',
+          clinical: '<strong>نوار قلب نرمال (یا آنژین پایدار در استراحت):</strong> قطعه <span class="en">ST</span> هم‌سطح خط ایزوالکتریک و موج <span class="en">T</span> مثبت است. تروپونین منفی است.',
+          spots: {
+            P: '<strong>موج P:</strong> دپلاریزاسیون طبیعی دهلیزها.',
+            QRS: '<strong>کمپلکس QRS:</strong> دپلاریزاسیون سریع بطن‌ها (معمولاً باریک و کمتر از ۱۲۰ میلی‌ثانیه).',
+            ST: '<strong>قطعه ST و نقطه J:</strong> کاملاً هم‌سطح خط ایزوالکتریک؛ نشانه نبود ایسکمی یا آسیب حاد در لحظه ثبت.',
+            T: '<strong>موج T:</strong> رپلاریزاسیون طبیعی بطن‌ها (مثبت و نامتقارن).'
+          }
+        },
+        nstemi: {
+          title: 'UA / NSTEMI • ST DEPRESSION & T INVERSION',
+          path: 'M10,120 L95,120 C108,120 116,102 128,102 C140,102 148,120 160,120 L185,120 L196,134 L216,38 L234,158 L246,144 L310,146 C326,146 340,174 358,174 C376,174 392,120 412,120 L550,120',
+          stPos: [276, 145],
+          tPos: [358, 174],
+          calloutClass: 'callout amber',
+          clinical: '<strong>افسردگی <span class="en">ST</span> و وارونگی موج <span class="en">T</span> (<span class="en">UA / NSTEMI</span>):</strong> نشانه ایسکمی یا انفارکتوس ساب‌اندوکاردیال در انسداد ناکامل. تفکیک <span class="en">UA</span> از <span class="en">NSTEMI</span> با <strong>تروپونین</strong> انجام می‌شود.',
+          spots: {
+            P: '<strong>موج P:</strong> دپلاریزاسیون دهلیزی طبیعی.',
+            QRS: '<strong>کمپلکس QRS:</strong> دپلاریزاسیون بطنی.',
+            ST: '<strong>افسردگی قطعه ST (<span class="en">ST Depression</span>):</strong> افت بیش از ۱ میلی‌متر زیر خط ایزوالکتریک ← نشانه کلاسیک ایسکمی/انفارکت ساب‌اندوکاردیال.',
+            T: '<strong>وارونگی موج T (<span class="en">T-wave Inversion</span>):</strong> معکوس شدن و عمیق شدن موج <span class="en">T</span> ناشی از اختلال رپلاریزاسیون ایسکمیک.'
+          }
+        },
+        stemi: {
+          title: 'STEMI • TOMBSTONE ST ELEVATION',
+          path: 'M10,120 L95,120 C108,120 116,102 128,102 C140,102 148,120 160,120 L185,120 L196,134 L216,38 L234,68 C252,58 310,56 346,72 C372,84 392,120 412,120 L550,120',
+          stPos: [274, 62],
+          tPos: [346, 72],
+          calloutClass: 'callout crimson',
+          clinical: '<strong>صعود قطعه <span class="en">ST</span> با نمای سنگ قبر (<span class="en">STEMI</span>):</strong> نشانه انسداد کامل ۱۰۰٪ شریان و انفارکتوس ترانس‌مورال. تروپونین بسیار بالاست و نیاز به <strong><span class="en">PCI</span> اورژانسی</strong> دارد.',
+          spots: {
+            P: '<strong>موج P:</strong> دپلاریزاسیون دهلیزی.',
+            QRS: '<strong>کمپلکس QRS:</strong> نقطه J مستقیماً از بالای شاخه نزولی موج R جدا می‌شود.',
+            ST: '<strong>صعود قطعه ST (<span class="en">Tombstone ST Elevation</span>):</strong> بالا رفتن محدب قطعه ST بیش از ۱ تا ۲ میلی‌متر ← آسیب ترانس‌مورال تمام ضخامت میوکارد.',
+            T: '<strong>ادغام موج T با ST:</strong> موج T با قطعه ST بالا رفته ترکیب شده و نمای کلاسیک سنگ قبر می‌سازد.'
+          }
+        },
+        prinzmetal: {
+          title: 'VASOSPASTIC (PRINZMETAL) • TRANSIENT ST ELEVATION',
+          path: 'M10,120 L95,120 C108,120 116,102 128,102 C140,102 148,120 160,120 L185,120 L196,134 L216,38 L234,76 C256,74 306,76 340,86 C368,94 392,120 412,120 L550,120',
+          stPos: [274, 76],
+          tPos: [344, 86],
+          calloutClass: 'callout blue',
+          clinical: '<strong>آنژین وازواسپاستیک (<span class="en">Prinzmetal</span>):</strong> صعود گذرای <span class="en">ST</span> ناشی از اسپاسم شدید کرونر با <strong>تروپونین منفی</strong>! معمولاً در افراد جوان‌تر با سابقه مصرف <strong>کوکائین، تریپتان‌ها یا سیگار</strong> رخ داده و به <strong><span class="en">CCB</span></strong> (مسدودکننده کانال کلسیم) پاسخ عالی می‌دهد.',
+          spots: {
+            P: '<strong>موج P:</strong> ریتم سینوسی طبیعی.',
+            QRS: '<strong>کمپلکس QRS:</strong> بدون موج Q پاتولوژیک.',
+            ST: '<strong>صعود گذرای ST:</strong> به دلیل وازواسپاسم شدید ایجاد شده اما با رفع اسپاسم یا مصرف نیترات/CCB به خط پایه برمی‌گردد.',
+            T: '<strong>تروپونین منفی:</strong> برخلاف STEMI واقعی، نکروز پایدار رخ نمی‌دهد و آنزیم قلبی منفی می‌ماند.'
+          }
+        }
+      };
+
+      let activeMorph = 'normal';
+      let activeSpot = 'ST';
+
+      function renderMorphology() {
+        const d = morphData[activeMorph];
+        document.getElementById('morphSvgTitle').textContent = d.title;
+        document.getElementById('morphWavePath').setAttribute('d', d.path);
+        document.getElementById('spotST').setAttribute('transform', `translate(${d.stPos[0]}, ${d.stPos[1]})`);
+        document.getElementById('spotT').setAttribute('transform', `translate(${d.tPos[0]}, ${d.tPos[1]})`);
+        const box = document.getElementById('morphClinicalBox');
+        box.className = d.calloutClass;
+        box.innerHTML = d.clinical;
+        document.getElementById('morphSpotTooltip').innerHTML = d.spots[activeSpot];
+
+        document.querySelectorAll('#ecgMorphPills .pill-btn').forEach(b => b.classList.toggle('active', b.dataset.morph === activeMorph));
+        document.querySelectorAll('.ecg-hotspot').forEach(h => h.classList.toggle('active', h.dataset.spot === activeSpot));
+      }
+
+      document.querySelectorAll('#ecgMorphPills .pill-btn').forEach(b => {
+        b.addEventListener('click', () => {
+          activeMorph = b.dataset.morph;
+          activeSpot = 'ST';
+          renderMorphology();
+        });
+      });
+      document.querySelectorAll('.ecg-hotspot').forEach(h => {
+        h.addEventListener('click', () => {
+          activeSpot = h.dataset.spot;
+          renderMorphology();
+        });
+      });
+      renderMorphology();
+
+      // --- Part 2: 12-Lead (+ V7-V9) STEMI Localization Simulator ---
+      const leadsMain = ['I', 'aVR', 'V1', 'V4', 'II', 'aVL', 'V2', 'V5', 'III', 'aVF', 'V3', 'V6'];
+      const leadsPost = ['V7', 'V8', 'V9'];
+
+      const terrConfigs = {
+        ant: {
+          elevated: ['V1', 'V2', 'V3', 'V4'],
+          reciprocal: [],
+          arteryLabel: 'LAD (Anterior)',
+          arteryColor: '#be123c',
+          title: 'انفارکتوس قدامی (Anterior STEMI)',
+          desc: '<strong>لیدهای درگیر:</strong> <span class="en">V1, V2, V3, V4</span> • <strong>شریان مسئول:</strong> <span class="en" style="color:var(--crimson);">LAD</span>.<br/>در اکوکاردیوگرافی با اختلال حرکتی دیواره قدامی و سپتوم هم‌خوانی دارد.'
+        },
+        inf: {
+          elevated: ['II', 'III', 'aVF'],
+          reciprocal: ['I', 'aVL'],
+          arteryLabel: 'RCA (Inferior)',
+          arteryColor: '#0f766e',
+          title: 'انفارکتوس تحتانی (Inferior STEMI)',
+          desc: '<strong>لیدهای درگیر:</strong> <span class="en">II, III, aVF</span> (همراه با دپرشن متقابل در <span class="en">I, aVL</span>) • <strong>شریان مسئول:</strong> <span class="en" style="color:var(--teal);">RCA</span>.<br/><strong>نکته حیاتی:</strong> حتماً <strong>لیدهای سمت راست قفسه سینه (<span class="en">V4R</span>)</strong> بگیرید تا درگیری بطن راست (<span class="en">RV</span>) مشخص شود.'
+        },
+        lat: {
+          elevated: ['I', 'aVL', 'V5', 'V6'],
+          reciprocal: ['III', 'aVF'],
+          arteryLabel: 'LCx (Lateral)',
+          arteryColor: '#e8742c',
+          title: 'انفارکتوس جانبی (Lateral STEMI)',
+          desc: '<strong>لیدهای درگیر:</strong> <span class="en">I, aVL, V5, V6</span> • <strong>شریان مسئول:</strong> <span class="en" style="color:var(--accent);">LCx</span>.<br/>در اکوکاردیوگرافی با اختلال حرکتی دیواره جانبی بطن چپ تطابق دارد.'
+        },
+        post: {
+          elevated: ['V7', 'V8', 'V9'],
+          reciprocal: ['V1', 'V2', 'V3'],
+          arteryLabel: 'PDA (Posterior)',
+          arteryColor: '#2563eb',
+          title: 'انفارکتوس خلفی (Posterior STEMI)',
+          desc: '<strong>نشانه کلیدی:</strong> دپرشن <span class="en">ST</span> متقابل در <span class="en">V1–V3</span> ← با اتصال لیدهای خلفی <strong><span class="en">V7–V9</span></strong>، صعود <span class="en">ST</span> آشکار می‌شود • <strong>شریان مسئول:</strong> <span class="en" style="color:var(--blue);">PDA</span>.'
+        }
+      };
+
+      function miniWaveSvg(mode) {
+        let d = 'M2,32 L18,32 C22,32 24,27 28,27 C32,27 34,32 38,32 L44,32 L47,36 L52,12 L57,38 L61,32 L72,32 C77,32 80,23 86,23 C92,23 95,32 100,32 L118,32';
+        let stroke = '#1e293b';
+        if (mode === 'ste') {
+          d = 'M2,32 L18,32 C22,32 24,27 28,27 C32,27 34,32 38,32 L44,32 L47,36 L52,10 L58,18 C64,14 78,14 88,20 C94,24 98,32 104,32 L118,32';
+          stroke = '#be123c';
+        } else if (mode === 'std') {
+          d = 'M2,32 L18,32 C22,32 24,27 28,27 C32,27 34,32 38,32 L44,32 L47,36 L52,14 L58,42 L74,42 C80,42 84,48 89,48 C94,48 98,32 104,32 L118,32';
+          stroke = '#b45309';
+        }
+        return `<svg viewBox="0 0 120 52" style="width:100%;height:auto;display:block;">
+          <line x1="0" y1="32" x2="120" y2="32" stroke="#f2b8c0" stroke-width="0.8" stroke-dasharray="2 2" />
+          <path d="${d}" fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>`;
+      }
+
+      function render12Lead(terrKey) {
+        const cfg = terrConfigs[terrKey];
+        const mainGrid = document.getElementById('ecg12Grid');
+        const postGrid = document.getElementById('ecgPostGrid');
+        mainGrid.innerHTML = '';
+        postGrid.innerHTML = '';
+
+        function makeLeadCard(name) {
+          const isSte = cfg.elevated.includes(name);
+          const isStd = cfg.reciprocal.includes(name);
+          const card = document.createElement('div');
+          card.className = 'ecg-lead-card' + (isSte ? ' elevated' : '') + (isStd ? ' reciprocal' : '');
+          const tagHtml = isSte ? '<span class="ecg-lead-tag ste">ST↑</span>' : (isStd ? '<span class="ecg-lead-tag std">ST↓</span>' : '');
+          card.innerHTML = `<div class="ecg-lead-label"><span>${name}</span>${tagHtml}</div>${miniWaveSvg(isSte ? 'ste' : (isStd ? 'std' : 'norm'))}`;
+          return card;
+        }
+
+        leadsMain.forEach(l => mainGrid.appendChild(makeLeadCard(l)));
+        leadsPost.forEach(l => postGrid.appendChild(makeLeadCard(l)));
+
+        // Sync mini heart
+        ['ant', 'inf', 'lat', 'post'].forEach(k => {
+          document.getElementById('miniZone-' + k).setAttribute('opacity', k === terrKey ? '0.85' : '0');
+          const v = document.getElementById('miniVess-' + k);
+          v.setAttribute('stroke', k === terrKey ? cfg.arteryColor : '#94a3b8');
+          v.setAttribute('stroke-width', k === terrKey ? '4.5' : '2.5');
+        });
+        const lbl = document.getElementById('miniArteryLabel');
+        lbl.textContent = cfg.arteryLabel;
+        lbl.setAttribute('fill', cfg.arteryColor);
+
+        document.getElementById('ecgTerrDetail').innerHTML = `<strong>${cfg.title}</strong><p style="margin-top:4px;">${cfg.desc}</p>`;
+        document.querySelectorAll('#ecgTerrPills .pill-btn').forEach(b => b.classList.toggle('active', b.dataset.terr === terrKey));
+      }
+
+      document.querySelectorAll('#ecgTerrPills .pill-btn').forEach(b => b.addEventListener('click', () => render12Lead(b.dataset.terr)));
+      render12Lead('ant');
+
+      // --- Part 3: Mini ECG Artery Challenge ---
+      const ecgChallenges = [
+        {
+          prompt: 'بیمار ۵۸ ساله با درد قفسه سینه و تعریق سرد. در نوار قلب صعود شدید ST در لیدهای <strong class="en">II, III, aVF</strong> دیده می‌شود:',
+          leads: ['II (ST↑)', 'III (ST↑)', 'aVF (ST↑)'],
+          mode: 'ste',
+          answer: 'RCA',
+          fb: 'دقیقاً! لیدهای II, III, aVF مربوط به دیواره تحتانی و شریان <strong>RCA</strong> هستند.'
+        },
+        {
+          prompt: 'در ECG بیمار دپرشن ST در <strong class="en">V1–V3</strong> و پس از اتصال لیدهای خلفی صعود ST در <strong class="en">V7–V9</strong> ثبت شد:',
+          leads: ['V1–V3 (ST↓)', 'V7 (ST↑)', 'V8–V9 (ST↑)'],
+          mode: 'post',
+          answer: 'PDA',
+          fb: 'آفرین! دپرشن V1–V3 به همراه صعود ST در V7–V9 نشان‌دهنده انفارکتوس خلفی و انسداد <strong>PDA</strong> است.'
+        },
+        {
+          prompt: 'نوار قلب صعود قطعه ST با نمای سنگ قبر را در لیدهای <strong class="en">I, aVL, V5, V6</strong> نشان می‌دهد:',
+          leads: ['I (ST↑)', 'aVL (ST↑)', 'V5–V6 (ST↑)'],
+          mode: 'ste',
+          answer: 'LCx',
+          fb: 'کاملاً صحیح! لیدهای جانبی (I, aVL, V5, V6) توسط شریان سیرکومفلکس چپ (<strong>LCx</strong>) خون‌رسانی می‌شوند.'
+        }
+      ];
+      let challIdx = 0;
+
+      function renderEcgChallenge() {
+        const c = ecgChallenges[challIdx];
+        document.getElementById('ecgChallCounter').textContent = `سناریو ${toFaNum(challIdx + 1)} از ${toFaNum(ecgChallenges.length)}`;
+        document.getElementById('ecgChallPrompt').innerHTML = c.prompt;
+        const svg = document.getElementById('ecgChallSvg');
+        let strips = `<rect width="420" height="90" fill="url(#ecgBigGrid)" />`;
+        c.leads.forEach((lbl, i) => {
+          const x0 = i * 140;
+          const isStd = lbl.includes('↓');
+          const d = isStd
+            ? `M${x0+8},54 L${x0+24},54 L${x0+34},46 L${x0+42},54 L${x0+50},24 L${x0+58},68 L${x0+86},68 C${x0+96},76 ${x0+106},54 ${x0+114},54 L${x0+132},54`
+            : `M${x0+8},56 L${x0+24},56 L${x0+34},48 L${x0+42},56 L${x0+50},20 L${x0+58},30 C${x0+72},24 ${x0+94},26 ${x0+108},56 L${x0+132},56`;
+          strips += `<text x="${x0+10}" y="16" font-size="10.5" font-weight="800" fill="${isStd ? '#b45309' : '#be123c'}" font-family="system-ui">${lbl}</text>`;
+          strips += `<path d="${d}" fill="none" stroke="${isStd ? '#b45309' : '#be123c'}" stroke-width="2.4" stroke-linejoin="round" />`;
+          if (i < 2) strips += `<line x1="${x0+140}" y1="0" x2="${x0+140}" y2="90" stroke="#e2a8b0" stroke-width="1.2" />`;
+        });
+        svg.innerHTML = strips;
+
+        const fb = document.getElementById('ecgChallFeedback');
+        fb.style.display = 'none';
+        document.querySelectorAll('#ecgChallOpts .pill-btn').forEach(b => b.classList.remove('active', 'crimson'));
+      }
+
+      document.querySelectorAll('#ecgChallOpts .pill-btn').forEach(b => {
+        b.addEventListener('click', () => {
+          const c = ecgChallenges[challIdx];
+          const fb = document.getElementById('ecgChallFeedback');
+          fb.style.display = 'block';
+          if (b.dataset.ans === c.answer) {
+            fb.className = 'callout teal';
+            fb.innerHTML = c.fb;
+          } else {
+            fb.className = 'callout crimson';
+            fb.innerHTML = `خیر؛ دوباره به لیدهای درگیر دقت کنید. پاسخ صحیح <strong><span class="en">${c.answer}</span></strong> است. ${c.fb}`;
+          }
+        });
+      });
+      document.getElementById('nextEcgChallBtn').addEventListener('click', () => {
+        challIdx = (challIdx + 1) % ecgChallenges.length;
+        renderEcgChallenge();
+      });
+      renderEcgChallenge();
+
+      /* ============================================================
+         STEP 9: STRESS TESTING & CORONARY STEAL SVG
+         ============================================================ */
+      function renderStress(key) {
+        const d = stressData[key];
+        document.getElementById('stressDetailCard').innerHTML = `<h3>${d.title}</h3>${d.body}`;
+        document.querySelectorAll('#stressPills .pill-btn').forEach(b => b.classList.toggle('active', b.dataset.stress === key));
+      }
+      document.querySelectorAll('#stressPills .pill-btn').forEach(b => b.addEventListener('click', () => renderStress(b.dataset.stress)));
+      renderStress('exercise');
+
+      function renderSteal() {
+        const active = !!state.stealActive;
+        const btn = document.getElementById('stealToggleBtn');
+        const box = document.getElementById('stealVisual');
+        const hOuter = document.getElementById('stealHealthyOuter');
+        const hFlow = document.getElementById('stealHealthyFlow');
+        const dFlow = document.getElementById('stealDiseasedFlow');
+        const hRes = document.getElementById('stealHealthyRes');
+        const dRes = document.getElementById('stealDiseasedRes');
+        const mpiD = document.getElementById('mpiDiseasedBox');
+        const mpiDTitle = document.getElementById('mpiDiseasedTitle');
+        const mpiDLabel = document.getElementById('mpiDiseasedLabel');
+        const mpiHLabel = document.getElementById('mpiHealthyLabel');
+
+        if (!active) {
+          btn.textContent = 'تزریق آدنوزین / دی‌پیریدامول (فعال‌سازی سرقت کرونری)';
+          hOuter.setAttribute('stroke-width', '22');
+          hFlow.setAttribute('class', 'flow-arrow');
+          hFlow.setAttribute('stroke-width', '4');
+          dFlow.setAttribute('opacity', '1');
+          hRes.textContent = 'مقاومت نرمال';
+          dRes.textContent = 'حداکثر اتساع قبلی';
+          mpiD.setAttribute('fill', '#fda4af');
+          mpiD.setAttribute('stroke', '#be123c');
+          mpiDTitle.setAttribute('fill', '#881337');
+          mpiDLabel.setAttribute('fill', '#881337');
+          mpiDLabel.textContent = 'پرفیوژن حداقلی در استراحت';
+          mpiHLabel.textContent = 'پرفیوژن طبیعی (گرم در MPI)';
+          box.innerHTML = '<strong>حالت پایه:</strong> شاخه سالم مقاومت طبیعی دارد و شاخه تنگ‌شده با پلاک به‌صورت جبرانی در حداکثر اتساع خود قرار دارد تا خون‌رسانی استراحت حفظ شود.';
+        } else {
+          btn.textContent = 'بازگشت به حالت پایه (Baseline)';
+          hOuter.setAttribute('stroke-width', '34');
+          hFlow.setAttribute('class', 'flow-arrow-fast');
+          hFlow.setAttribute('stroke-width', '6.5');
+          dFlow.setAttribute('opacity', '0.25');
+          hRes.textContent = 'اتساع شدید ↓ مقاومت';
+          dRes.textContent = 'ناتوان از اتساع بیشتر!';
+          mpiD.setAttribute('fill', '#334155');
+          mpiD.setAttribute('stroke', '#0f172a');
+          mpiDTitle.setAttribute('fill', '#f8fafc');
+          mpiDLabel.setAttribute('fill', '#93c5fd');
+          mpiDLabel.textContent = 'ایسکمی شدید (نقطه سرد در MPI)';
+          mpiHLabel.textContent = 'جریان خون بسیار بالا (سرقت‌شده!)';
+          box.innerHTML = '<strong style="color:var(--crimson);">سندرم سرقت کرونری فعال شد:</strong> آدنوزین شاخه <strong>سالم</strong> را به‌شدت گشاد کرده و مقاومت آن را پایین می‌آورد. خون به سمت مسیر کم‌مقاومت سالم هجوم برده و از شاخه تنگ‌شده «سرقت» می‌شود ← ایجاد <strong>نقاط سرد (ایسکمی) در <span class="en">MPI</span></strong>.';
+        }
+      }
+      document.getElementById('stealToggleBtn').addEventListener('click', () => {
+        state.stealActive = !state.stealActive;
+        saveState();
+        renderSteal();
+      });
+      renderSteal();
+
+      /* ============================================================
+         STEP 10: TREATMENT, PCI/CABG VISUALIZER & DECISION TOOL
+         ============================================================ */
+      document.querySelectorAll('#revascModePills .pill-btn').forEach(b => {
+        b.addEventListener('click', () => {
+          const isPci = b.dataset.mode === 'pci';
+          document.querySelectorAll('#revascModePills .pill-btn').forEach(x => x.classList.toggle('active', x === b));
+          document.getElementById('pciVizWrap').style.display = isPci ? 'block' : 'none';
+          document.getElementById('cabgVizWrap').style.display = isPci ? 'none' : 'block';
+        });
+      });
+
+      function renderPciStep() {
+        const s = state.pciStep % 3;
+        const topP = document.getElementById('pciPlaqueTop');
+        const botP = document.getElementById('pciPlaqueBot');
+        const cath = document.getElementById('pciCatheterGroup');
+        const bal = document.getElementById('pciBalloon');
+        const stent = document.getElementById('pciStentMesh');
+        const flow = document.getElementById('pciFlowArrow');
+        const cap = document.getElementById('pciStepCaption');
+        const btn = document.getElementById('pciStepBtn');
+
+        if (s === 0) {
+          topP.setAttribute('d', 'M180,46 C210,76 330,76 360,46 Z');
+          botP.setAttribute('d', 'M180,118 C210,88 330,88 360,118 Z');
+          cath.style.display = 'block';
+          bal.setAttribute('y', '75');
+          bal.setAttribute('height', '14');
+          stent.style.display = 'none';
+          flow.setAttribute('class', 'flow-arrow-slow');
+          cap.textContent = 'گام ۱: عبور کاتتر و بالون جمع‌شده از میان پلاک تنگ‌کننده';
+          btn.textContent = 'گام بعدی: باد کردن بالون و فشرده‌سازی پلاک ←';
+        } else if (s === 1) {
+          topP.setAttribute('d', 'M180,46 C210,56 330,56 360,46 Z');
+          botP.setAttribute('d', 'M180,118 C210,108 330,108 360,118 Z');
+          cath.style.display = 'block';
+          bal.setAttribute('y', '54');
+          bal.setAttribute('height', '56');
+          stent.style.display = 'block';
+          flow.setAttribute('class', 'flow-arrow');
+          cap.textContent = 'گام ۲: باد شدن بالون، کنار زدن پلاک و باز شدن شبکه استنت';
+          btn.textContent = 'گام بعدی: خروج بالون و تثبیت استنت باز ←';
+        } else {
+          topP.setAttribute('d', 'M180,46 C210,56 330,56 360,46 Z');
+          botP.setAttribute('d', 'M180,118 C210,108 330,108 360,118 Z');
+          cath.style.display = 'none';
+          stent.style.display = 'block';
+          flow.setAttribute('class', 'flow-arrow-fast');
+          cap.textContent = 'گام ۳: خروج کاتتر — استنت لومن را باز نگه داشته و خون‌رسانی برقرار است (+ ۱ سال DAPT)';
+          btn.textContent = 'شروع مجدد انیمیشن PCI ↺';
+        }
+      }
+      document.getElementById('pciStepBtn').addEventListener('click', () => {
+        state.pciStep = (state.pciStep + 1) % 3;
+        saveState();
+        renderPciStep();
+      });
+      renderPciStep();
+
+      // PCI vs CABG Decision Tool
+      function renderRevasc() {
+        document.querySelectorAll('[data-revasc]').forEach(btn => {
+          const k = btn.dataset.revasc;
+          const active = !!state.revascFlags[k];
+          btn.classList.toggle('checked', active);
+          btn.querySelector('.chip-state').textContent = active ? 'بله' : 'خیر';
+        });
+        const anyCabg = state.revascFlags.lm || state.revascFlags.v3 || state.revascFlags.ef;
+        const res = document.getElementById('revascResult');
+        if (anyCabg) {
+          res.className = 'callout crimson';
+          res.innerHTML = '<strong>روش ارجح: جراحی بای‌پس کرونر (<span class="en">CABG</span>)</strong><br/>وجود درگیری <span class="en">Left Main</span>، ۳ رگ یا بیشتر، یا <span class="en">LVEF</span> پایین اندیکاسیون ارجحیت <span class="en">CABG</span> است.';
+        } else {
+          res.className = 'callout teal';
+          res.innerHTML = '<strong>روش ارجح: آنژیوپلاستی و استنت (<span class="en">PCI</span>)</strong><br/>در نبود معیارهای فوق، <span class="en">PCI</span> ارجح است (+ حداقل ۱ سال <span class="en">DAPT</span>).';
+        }
+      }
+      document.querySelectorAll('[data-revasc]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const k = btn.dataset.revasc;
+          state.revascFlags[k] = !state.revascFlags[k];
+          saveState();
+          renderRevasc();
+        });
+      });
+      renderRevasc();
+
+      // ACS Treatment Tabs
+      function renderAcsTx(key) {
+        const d = acsTxData[key];
+        document.getElementById('acsTxCard').innerHTML = `<h3 style="margin-bottom:8px;">${d.title}</h3>${d.body}`;
+        document.querySelectorAll('#acsTxPills .pill-btn').forEach(b => b.classList.toggle('active', b.dataset.acstx === key));
+      }
+      document.querySelectorAll('#acsTxPills .pill-btn').forEach(b => b.addEventListener('click', () => renderAcsTx(b.dataset.acstx)));
+      renderAcsTx('nstemi');
+
+      /* ============================================================
+         STEP 11: FINAL QUIZ & EVALUATION
+         ============================================================ */
+      function renderQuiz() {
+        const container = document.getElementById('quizContainer');
+        container.innerHTML = '';
+        quizQuestions.forEach(item => {
+          const chosen = state.quizAnswers[item.id];
+          const answered = chosen !== undefined;
+          const card = document.createElement('div');
+          card.className = 'quiz-card';
+          card.innerHTML = `<div class="quiz-q">${item.q}</div><div class="quiz-opts"></div><div class="quiz-fb ${answered ? 'shown' : ''}">${item.fb}</div>`;
+          const optsWrap = card.querySelector('.quiz-opts');
+          item.opts.forEach((optText, idx) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'quiz-opt';
+            btn.textContent = optText;
+            if (answered) {
+              if (idx === item.correct) btn.classList.add('correct');
+              else if (idx === chosen) btn.classList.add('incorrect');
+            }
+            btn.addEventListener('click', () => {
+              state.quizAnswers[item.id] = idx;
+              saveState();
+              renderQuiz();
+              renderFinalEvaluation();
+            });
+            optsWrap.appendChild(btn);
+          });
+          container.appendChild(card);
+        });
+      }
+
+      function renderFinalEvaluation() {
+        let correctCount = 0;
+        let answeredCount = 0;
+        const weakSteps = new Set();
+
+        quizQuestions.forEach(item => {
+          const ans = state.quizAnswers[item.id];
+          if (ans !== undefined) {
+            answeredCount++;
+            if (ans === item.correct) correctCount++;
+            else weakSteps.add(item.stepToReview);
+          } else {
+            weakSteps.add(item.stepToReview);
+          }
+        });
+
+        document.getElementById('finalScoreText').textContent = `${toFaNum(correctCount)} از ${toFaNum(quizQuestions.length)}`;
+        const msg = document.getElementById('finalScoreMsg');
+        if (answeredCount < quizQuestions.length) {
+          msg.textContent = `هنوز به ${toFaNum(quizQuestions.length - answeredCount)} سؤال پاسخ نداده‌اید.`;
+        } else if (correctCount === quizQuestions.length) {
+          msg.textContent = 'عالی! تسلط کامل بر مباحث بالینی و ECG بیماری عروق کرونر.';
+        } else if (correctCount >= 4) {
+          msg.textContent = 'عملکرد بسیار خوبی داشتید؛ مرور بخش‌های زیر یادگیری شما را کامل می‌کند.';
+        } else {
+          msg.textContent = 'پیشنهاد می‌شود بخش‌های زیر را دوباره مرور کرده و آزمون را تکرار کنید.';
+        }
+
+        const recBox = document.getElementById('reviewRecommendations');
+        recBox.innerHTML = '';
+        if (weakSteps.size === 0) {
+          recBox.innerHTML = '<p style="color:var(--teal);font-weight:700;">تمام سؤالات را با موفقیت پاسخ دادید؛ نیازی به مرور اجباری نیست.</p>';
+        } else {
+          const stepTitles = {
+            4: 'شبیه‌ساز سیر پلاک و پارگی آن (UA / NSTEMI / STEMI)',
+            7: 'عوارض مکانیکی و پریکاردیت پس از MI',
+            8: 'آزمایشگاه ECG ۱۲ لید و آنژین وازواسپاستیک',
+            9: 'تست استرس و سندرم سرقت کرونری',
+            10: 'درمان Stable CAD، PCI در برابر CABG و ACS'
+          };
+          weakSteps.forEach(s => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'roadmap-item';
+            btn.style.marginBottom = '8px';
+            btn.innerHTML = `<span class="roadmap-title">${stepTitles[s]}</span><span class="roadmap-status">مرور بخش</span>`;
+            btn.addEventListener('click', () => goToStep(s));
+            recBox.appendChild(btn);
+          });
+        }
+      }
+      renderQuiz();
+      renderFinalEvaluation();
+
+      /* ============================================================
+         THEME, NAVIGATION & RESET MODAL CONTROLS
+         ============================================================ */
+      function applyTheme() {
+        document.documentElement.setAttribute('data-theme', state.theme);
+        document.getElementById('themeToggleBtn').textContent = state.theme === 'dark' ? 'حالت روز' : 'حالت شب';
+      }
+      applyTheme();
+
+      document.getElementById('themeToggleBtn').addEventListener('click', () => {
+        state.theme = state.theme === 'dark' ? 'light' : 'dark';
+        saveState();
+        applyTheme();
+      });
+
+      document.getElementById('brandHomeBtn').addEventListener('click', () => goToStep(0));
+      document.getElementById('openRoadmapBtn').addEventListener('click', () => goToStep(1));
+      document.getElementById('backToRoadmapFinal').addEventListener('click', () => goToStep(1));
+      document.getElementById('startCourseBtn').addEventListener('click', () => {
+        const furthest = state.visitedSteps.length > 1 ? Math.max(...state.visitedSteps) : 1;
+        goToStep(furthest);
+      });
+      prevBtn.addEventListener('click', () => goToStep(state.currentStep - 1));
+      nextBtn.addEventListener('click', () => goToStep(state.currentStep + 1));
+
+      const resetModal = document.getElementById('resetModal');
+      document.getElementById('openResetModalBtn').addEventListener('click', () => resetModal.classList.add('open'));
+      document.getElementById('cancelResetBtn').addEventListener('click', () => resetModal.classList.remove('open'));
+      document.getElementById('confirmResetBtn').addEventListener('click', () => {
+        const keepTheme = state.theme;
+        state = JSON.parse(JSON.stringify(defaultState));
+        state.theme = keepTheme;
+        saveState();
+        resetModal.classList.remove('open');
+        renderFlashcards();
+        renderPlaqueStage();
+        renderPciStep();
+        renderRevasc();
+        renderSteal();
+        renderQuiz();
+        renderFinalEvaluation();
+        goToStep(0);
+      });
+
+      renderStep();
+    })();
+  </script>
+</body>
+</html>
